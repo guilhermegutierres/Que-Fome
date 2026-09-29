@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getUsuario,
   logout,
@@ -7,10 +7,67 @@ import {
 } from "../services/auth";
 import "./Navbar.css";
 
+function TemaBotao({ modoEscuro, alternarModoEscuro }) {
+  return (
+    <button
+      type="button"
+      className="acao-botao"
+      onClick={alternarModoEscuro}
+      aria-label={
+        modoEscuro
+          ? "Ativar modo claro"
+          : "Ativar modo escuro"
+      }
+      title={
+        modoEscuro
+          ? "Ativar modo claro"
+          : "Ativar modo escuro"
+      }
+    >
+      <svg
+        width="19"
+        height="19"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        {modoEscuro ? (
+          <>
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+              stroke="currentColor"
+              strokeWidth="1.7"
+            />
+
+            <path
+              d="M12 2V4M12 20V22M4.93 4.93L6.34 6.34M17.66 17.66L19.07 19.07M2 12H4M20 12H22M4.93 19.07L6.34 17.66M17.66 6.34L19.07 4.93"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+            />
+          </>
+        ) : (
+          <path
+            d="M20 15.5C18.9 16.1 17.6 16.5 16.2 16.5C11.9 16.5 8.5 13.1 8.5 8.8C8.5 7.4 8.9 6.1 9.5 5C5.9 6.2 3.5 9.6 3.5 13.5C3.5 18.5 7.5 22.5 12.5 22.5C16.4 22.5 19.8 20.1 20.9 16.5C20.6 16.1 20.3 15.8 20 15.5Z"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        )}
+      </svg>
+    </button>
+  );
+}
+
 function Navbar({
   busca = "",
   onBuscaChange = () => {},
   onCategoriaChange = () => {},
+  compact = false,
 }) {
   const navigate = useNavigate();
 
@@ -18,7 +75,23 @@ function Navbar({
     estaLogado()
   );
 
+  const [modoEscuro, setModoEscuro] = useState(() => {
+    return localStorage.getItem("modoEscuro") === "true";
+  });
+
   const usuario = getUsuario();
+
+  useEffect(() => {
+    document.body.classList.toggle(
+      "modo-escuro",
+      modoEscuro
+    );
+
+    localStorage.setItem(
+      "modoEscuro",
+      modoEscuro
+    );
+  }, [modoEscuro]);
 
   function selecionarCategoria(categoria) {
     onCategoriaChange(categoria);
@@ -28,6 +101,51 @@ function Navbar({
     logout();
     setUsuarioLogado(false);
     navigate("/");
+  }
+
+  function alternarModoEscuro() {
+    setModoEscuro((estadoAtual) => !estadoAtual);
+  }
+
+  if (compact) {
+    return (
+      <header className="navbar navbar-compact">
+        <Link to="/" className="logo">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 3V10M8 3V10M11 3V10M8 10V21M17 3V21M17 3C19.2 3 21 4.8 21 7V10C21 12.2 19.2 14 17 14"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          <span>Que Fome!</span>
+        </Link>
+
+        <div className="navbar-compact-acoes">
+          <Link
+            to="/"
+            className="voltar-inicio"
+          >
+            ← Voltar para início
+          </Link>
+
+          <TemaBotao
+            modoEscuro={modoEscuro}
+            alternarModoEscuro={alternarModoEscuro}
+          />
+        </div>
+      </header>
+    );
   }
 
   return (
@@ -63,7 +181,10 @@ function Navbar({
         </button>
 
         <div className="dropdown">
-          <button type="button" className="menu-link">
+          <button
+            type="button"
+            className="menu-link"
+          >
             Entradas
             <span className="chevron" />
           </button>
@@ -71,21 +192,27 @@ function Navbar({
           <div className="dropdown-menu">
             <button
               type="button"
-              onClick={() => selecionarCategoria("Saladas")}
+              onClick={() =>
+                selecionarCategoria("Saladas")
+              }
             >
               Saladas
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Sopas")}
+              onClick={() =>
+                selecionarCategoria("Sopas")
+              }
             >
               Sopas
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Petiscos")}
+              onClick={() =>
+                selecionarCategoria("Petiscos")
+              }
             >
               Petiscos
             </button>
@@ -93,7 +220,10 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button type="button" className="menu-link">
+          <button
+            type="button"
+            className="menu-link"
+          >
             Principais
             <span className="chevron" />
           </button>
@@ -101,35 +231,45 @@ function Navbar({
           <div className="dropdown-menu">
             <button
               type="button"
-              onClick={() => selecionarCategoria("Massas")}
+              onClick={() =>
+                selecionarCategoria("Massas")
+              }
             >
               Massas
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Peixes")}
+              onClick={() =>
+                selecionarCategoria("Peixes")
+              }
             >
               Peixes
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Carnes")}
+              onClick={() =>
+                selecionarCategoria("Carnes")
+              }
             >
               Carnes
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Aves")}
+              onClick={() =>
+                selecionarCategoria("Aves")
+              }
             >
               Aves
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Vegetarianos")}
+              onClick={() =>
+                selecionarCategoria("Vegetarianos")
+              }
             >
               Vegetarianos
             </button>
@@ -137,7 +277,10 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button type="button" className="menu-link">
+          <button
+            type="button"
+            className="menu-link"
+          >
             Acompanhamentos
             <span className="chevron" />
           </button>
@@ -145,21 +288,27 @@ function Navbar({
           <div className="dropdown-menu">
             <button
               type="button"
-              onClick={() => selecionarCategoria("Arroz")}
+              onClick={() =>
+                selecionarCategoria("Arroz")
+              }
             >
               Arroz
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Legumes")}
+              onClick={() =>
+                selecionarCategoria("Legumes")
+              }
             >
               Legumes
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Batatas")}
+              onClick={() =>
+                selecionarCategoria("Batatas")
+              }
             >
               Batatas
             </button>
@@ -167,7 +316,10 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button type="button" className="menu-link">
+          <button
+            type="button"
+            className="menu-link"
+          >
             Sobremesas
             <span className="chevron" />
           </button>
@@ -175,21 +327,27 @@ function Navbar({
           <div className="dropdown-menu">
             <button
               type="button"
-              onClick={() => selecionarCategoria("Bolos")}
+              onClick={() =>
+                selecionarCategoria("Bolos")
+              }
             >
               Bolos
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Doces")}
+              onClick={() =>
+                selecionarCategoria("Doces")
+              }
             >
               Doces
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Tortas")}
+              onClick={() =>
+                selecionarCategoria("Tortas")
+              }
             >
               Tortas
             </button>
@@ -197,7 +355,10 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button type="button" className="menu-link">
+          <button
+            type="button"
+            className="menu-link"
+          >
             Bebidas
             <span className="chevron" />
           </button>
@@ -205,21 +366,27 @@ function Navbar({
           <div className="dropdown-menu">
             <button
               type="button"
-              onClick={() => selecionarCategoria("Sucos")}
+              onClick={() =>
+                selecionarCategoria("Sucos")
+              }
             >
               Sucos
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Drinks")}
+              onClick={() =>
+                selecionarCategoria("Drinks")
+              }
             >
               Drinks
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Cafés")}
+              onClick={() =>
+                selecionarCategoria("Cafés")
+              }
             >
               Cafés
             </button>
@@ -274,28 +441,10 @@ function Navbar({
           )}
         </div>
 
-        <button
-          type="button"
-          className="acao-botao"
-          aria-label="Ativar modo escuro"
-        >
-          <svg
-            width="19"
-            height="19"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 15.5C18.9 16.1 17.6 16.5 16.2 16.5C11.9 16.5 8.5 13.1 8.5 8.8C8.5 7.4 8.9 6.1 9.5 5C5.9 6.2 3.5 9.6 3.5 13.5C3.5 18.5 7.5 22.5 12.5 22.5C16.4 22.5 19.8 20.1 20.9 16.5C20.6 16.1 20.3 15.8 20 15.5Z"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        <TemaBotao
+          modoEscuro={modoEscuro}
+          alternarModoEscuro={alternarModoEscuro}
+        />
 
         {usuarioLogado && (
           <Link
@@ -370,6 +519,7 @@ function Navbar({
           to="/favoritos"
           className="acao-botao"
           aria-label="Favoritos"
+          title="Favoritos"
         >
           <svg
             width="19"

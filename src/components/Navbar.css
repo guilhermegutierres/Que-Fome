@@ -385,6 +385,118 @@
   color: #d9534f;
 }
 
+/* =========================
+   CABEÇALHO SIMPLES
+========================= */
+
+.navbar-compact {
+  justify-content: space-between;
+}
+
+.navbar-compact-acoes {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.voltar-inicio {
+  color: #666;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: color 0.2s ease;
+}
+
+.voltar-inicio:hover {
+  color: #64cd87;
+}
+
+/* =========================
+   MODO ESCURO
+========================= */
+
+body.modo-escuro .navbar {
+  background-color: #1d1d1d;
+  border-bottom-color: #2d2d2d;
+}
+
+body.modo-escuro .menu-link {
+  color: #dddddd;
+}
+
+body.modo-escuro .menu-link:hover {
+  color: #64cd87;
+}
+
+body.modo-escuro .dropdown-menu {
+  background-color: #222222;
+  border-color: #333333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.modo-escuro .dropdown-menu button {
+  color: #dddddd;
+}
+
+body.modo-escuro .dropdown-menu button:hover {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .campo-busca {
+  background-color: #222222;
+  border-color: #3a3a3a;
+}
+
+body.modo-escuro .campo-busca input {
+  color: #eeeeee;
+}
+
+body.modo-escuro .campo-busca input::placeholder {
+  color: #888888;
+}
+
+body.modo-escuro .limpar-busca:hover {
+  background-color: #333333;
+  color: #eeeeee;
+}
+
+body.modo-escuro .acao-botao {
+  color: #cccccc;
+}
+
+body.modo-escuro .acao-botao:hover {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .entrar-link {
+  color: #dddddd;
+}
+
+body.modo-escuro .cadastro-link {
+  background-color: transparent;
+}
+
+body.modo-escuro .usuario-nome {
+  color: #dddddd;
+}
+
+body.modo-escuro .usuario-icone {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .voltar-inicio {
+  color: #bbbbbb;
+}
+
+body.modo-escuro .voltar-inicio:hover {
+  color: #64cd87;
+}
+
 @media (max-width: 1200px) {
   .navbar {
     padding: 0 25px;
@@ -430,5 +542,13 @@
 
   .usuario-info {
     display: none;
+  }
+
+  .navbar-compact-acoes {
+    gap: 8px;
+  }
+
+  .voltar-inicio {
+    font-size: 12px;
   }
 }

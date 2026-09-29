@@ -4,7 +4,440 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
+  min-height: 100vh;
+
   font-family: Arial, sans-serif;
+
   background-color: #f5f5f5;
+  color: #222;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+body.modo-escuro {
+  background-color: #151515;
+  color: #f2f2f2;
+
+  color-scheme: dark;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+body.modo-escuro .navbar {
+  background-color: #1d1d1d;
+  border-bottom-color: #2d2d2d;
+}
+
+body.modo-escuro .menu-link {
+  color: #dddddd;
+}
+
+body.modo-escuro .menu-link:hover {
+  color: #64cd87;
+}
+
+body.modo-escuro .dropdown-menu {
+  background-color: #222222;
+  border-color: #333333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.modo-escuro .dropdown-menu button {
+  color: #dddddd;
+}
+
+body.modo-escuro .dropdown-menu button:hover {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .campo-busca {
+  background-color: #222222;
+  border-color: #3a3a3a;
+}
+
+body.modo-escuro .campo-busca input {
+  color: #eeeeee;
+}
+
+body.modo-escuro .campo-busca input::placeholder {
+  color: #888888;
+}
+
+body.modo-escuro .limpar-busca {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .limpar-busca:hover {
+  background-color: #333333;
+  color: #eeeeee;
+}
+
+body.modo-escuro .acao-botao {
+  color: #cccccc;
+}
+
+body.modo-escuro .acao-botao:hover {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .entrar-link {
+  color: #dddddd;
+}
+
+body.modo-escuro .entrar-link:hover {
+  color: #64cd87;
+}
+
+body.modo-escuro .cadastro-link {
+  background-color: transparent;
+  color: #64cd87;
+}
+
+body.modo-escuro .cadastro-link:hover {
+  background-color: #64cd87;
+  color: #ffffff;
+}
+
+body.modo-escuro .usuario-nome {
+  color: #dddddd;
+}
+
+body.modo-escuro .usuario-icone {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+/* =========================
+   HOME
+========================= */
+
+body.modo-escuro .home-header h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .home-header p {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .receitas-section-topo h2 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .receitas-section-topo > span {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .filtro-atual {
+  color: #64cd87;
+}
+
+body.modo-escuro .sem-resultados {
+  background-color: #202020;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+body.modo-escuro .sem-resultados h2 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .sem-resultados p {
+  color: #aaaaaa;
+}
+
+/* =========================
+   CARDS DE RECEITA
+========================= */
+
+body.modo-escuro .receita-card {
+  background-color: #202020;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+body.modo-escuro .receita-card:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+body.modo-escuro .favorito-botao {
+  background-color: rgba(30, 30, 30, 0.95);
+  color: #cccccc;
+}
+
+body.modo-escuro .favorito-botao:hover {
+  background-color: #2a2a2a;
+  color: #64cd87;
+}
+
+body.modo-escuro .receita-card-categoria {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .receita-card h2 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .receita-card p {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .receita-card-info {
+  color: #999999;
+}
+
+/* =========================
+   PÁGINA DA RECEITA
+========================= */
+
+body.modo-escuro .receita-voltar {
+  color: #bbbbbb;
+}
+
+body.modo-escuro .receita-voltar:hover {
+  color: #64cd87;
+}
+
+body.modo-escuro .receita-container {
+  background-color: #202020;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.modo-escuro .receita-categoria {
+  background-color: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .receita-conteudo h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .receita-descricao {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .receita-info {
+  border-top-color: #333333;
+  border-bottom-color: #333333;
+}
+
+body.modo-escuro .receita-info span {
+  color: #999999;
+}
+
+body.modo-escuro .receita-info strong {
+  color: #eeeeee;
+}
+
+body.modo-escuro .receita-secao h2 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .ingredientes-lista li {
+  color: #bbbbbb;
+}
+
+body.modo-escuro .preparo-lista li {
+  background-color: #292929;
+}
+
+body.modo-escuro .preparo-lista strong {
+  color: #eeeeee;
+}
+
+body.modo-escuro .preparo-lista p {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .receita-nao-encontrada {
+  background-color: #202020;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+body.modo-escuro .receita-nao-encontrada h1 {
+  color: #f2f2f2;
+}
+
+/* =========================
+   FAVORITOS
+========================= */
+
+body.modo-escuro .favoritos-header h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .favoritos-header p {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .favoritos-header > span {
+  color: #999999;
+}
+
+body.modo-escuro .favoritos-vazio {
+  background-color: #202020;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+body.modo-escuro .favoritos-vazio h1,
+body.modo-escuro .favoritos-vazio h2 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .favoritos-vazio p {
+  color: #aaaaaa;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+body.modo-escuro .login-page {
+  background-color: #151515;
+}
+
+body.modo-escuro .login-card {
+  background-color: #202020;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.modo-escuro .login-card h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .login-subtitulo {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .login-card label {
+  color: #dddddd;
+}
+
+body.modo-escuro .login-card input {
+  background-color: #292929;
+  border-color: #3a3a3a;
+  color: #eeeeee;
+}
+
+body.modo-escuro .login-card input::placeholder {
+  color: #888888;
+}
+
+body.modo-escuro .login-cadastro {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .login-card button {
+  color: #ffffff;
+}
+
+/* =========================
+   CADASTRO
+========================= */
+
+body.modo-escuro .cadastro-page {
+  background-color: #151515;
+}
+
+body.modo-escuro .cadastro-card {
+  background-color: #202020;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.modo-escuro .cadastro-card h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .cadastro-subtitulo {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .cadastro-card label {
+  color: #dddddd;
+}
+
+body.modo-escuro .cadastro-card input {
+  background-color: #292929;
+  border-color: #3a3a3a;
+  color: #eeeeee;
+}
+
+body.modo-escuro .cadastro-card input::placeholder {
+  color: #888888;
+}
+
+body.modo-escuro .cadastro-login {
+  color: #aaaaaa;
+}
+
+/* =========================
+   ADICIONAR RECEITA
+========================= */
+
+body.modo-escuro .adicionar-page {
+  background-color: #151515;
+}
+
+body.modo-escuro .adicionar-card {
+  background-color: #202020;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.modo-escuro .adicionar-voltar {
+  color: #bbbbbb;
+}
+
+body.modo-escuro .adicionar-voltar:hover {
+  color: #64cd87;
+}
+
+body.modo-escuro .adicionar-card h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .adicionar-subtitulo {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .campo label {
+  color: #dddddd;
+}
+
+body.modo-escuro .campo small {
+  color: #999999;
+}
+
+body.modo-escuro .campo input,
+body.modo-escuro .campo select,
+body.modo-escuro .campo textarea {
+  background-color: #292929;
+  border-color: #3a3a3a;
+  color: #eeeeee;
+}
+
+body.modo-escuro .campo input::placeholder,
+body.modo-escuro .campo textarea::placeholder {
+  color: #888888;
+}
+
+body.modo-escuro .adicionar-nao-autorizado {
+  background-color: #202020;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.modo-escuro .adicionar-nao-autorizado h1 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .adicionar-nao-autorizado p {
+  color: #aaaaaa;
 }
