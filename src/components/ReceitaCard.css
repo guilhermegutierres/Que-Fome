@@ -1,0 +1,148 @@
+.receita-card {
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.receita-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.receita-card-imagem-container {
+  position: relative;
+}
+
+.receita-card-imagem {
+  width: 100%;
+  height: 220px;
+
+  object-fit: cover;
+  display: block;
+}
+
+.favorito-botao {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: #555;
+
+  cursor: pointer;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.favorito-botao:hover {
+  transform: scale(1.05);
+
+  background: #ffffff;
+  color: #64cd87;
+}
+
+.favorito-botao.favoritado {
+  color: #64cd87;
+}
+
+.favorito-botao svg {
+  display: block;
+}
+
+.receita-card-conteudo {
+  padding: 20px;
+}
+
+.receita-card-categoria {
+  display: inline-block;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: #e5f8eb;
+  color: #4caf70;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.receita-card h2 {
+  margin: 12px 0 8px;
+
+  font-size: 21px;
+  color: #222;
+}
+
+.receita-card p {
+  margin: 0;
+
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.receita-card-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 16px;
+
+  color: #777;
+  font-size: 13px;
+}
+
+.receita-card-botao {
+  display: block;
+  width: 100%;
+
+  margin-top: 18px;
+  padding: 11px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #64cd87;
+  color: #ffffff;
+
+  text-align: center;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.receita-card-botao:hover {
+  background: #52b974;
+  transform: translateY(-1px);
+}

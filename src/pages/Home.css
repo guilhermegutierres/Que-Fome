@@ -1,0 +1,142 @@
+.home {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  padding: 50px 30px 60px;
+}
+
+.home-header {
+  margin-bottom: 45px;
+}
+
+.home-header h1 {
+  margin: 0 0 10px;
+
+  font-size: 38px;
+  line-height: 1.2;
+
+  color: #222;
+}
+
+.home-header p {
+  margin: 0;
+
+  font-size: 17px;
+  color: #666;
+}
+
+.receitas-section {
+  margin-top: 10px;
+}
+
+.receitas-section-topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.receitas-section-topo h2 {
+  margin: 0;
+
+  font-size: 25px;
+  color: #222;
+}
+
+.receitas-section-topo > span {
+  color: #777;
+  font-size: 14px;
+}
+
+.filtro-atual {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #64cd87;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.receitas-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+}
+
+.sem-resultados {
+  padding: 60px 20px;
+
+  text-align: center;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.sem-resultados h2 {
+  margin: 0 0 8px;
+
+  color: #222;
+  font-size: 22px;
+}
+
+.sem-resultados p {
+  margin: 0 0 20px;
+
+  color: #777;
+  font-size: 14px;
+}
+
+.sem-resultados button {
+  padding: 10px 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #64cd87;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.sem-resultados button:hover {
+  background: #52b974;
+}
+
+@media (max-width: 950px) {
+  .receitas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .home {
+    padding: 30px 20px 40px;
+  }
+
+  .home-header h1 {
+    font-size: 30px;
+  }
+
+  .receitas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .receitas-section-topo {
+    align-items: flex-start;
+    gap: 10px;
+
+    flex-direction: column;
+  }
+}
