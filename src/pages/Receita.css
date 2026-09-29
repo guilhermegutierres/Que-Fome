@@ -249,3 +249,81 @@
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 700px) {
+  .receita-imagem-container img {
+    height: 340px;
+  }
+}
+
+@media (max-width: 450px) {
+  .receita-page {
+    padding: 20px 12px 35px;
+  }
+
+  .receita-container {
+    padding: 16px;
+    gap: 28px;
+    border-radius: 16px;
+  }
+
+  .receita-imagem-container img {
+    height: 260px;
+    border-radius: 14px;
+  }
+
+  .receita-conteudo {
+    padding: 5px 0;
+  }
+
+  .receita-conteudo h1 {
+    font-size: 25px;
+  }
+
+  .receita-descricao {
+    font-size: 14px;
+  }
+
+  .receita-info {
+    margin: 24px 0;
+    padding: 16px 0;
+  }
+
+  .receita-secao {
+    margin-top: 26px;
+  }
+
+  .receita-secao h2 {
+    font-size: 21px;
+  }
+
+  .ingredientes-lista {
+    padding-left: 20px;
+  }
+
+  .ingredientes-lista li {
+    font-size: 14px;
+  }
+
+  .preparo-lista li {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .preparo-lista li::before {
+    min-width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .preparo-lista p {
+    font-size: 13px;
+  }
+
+  .receita-nao-encontrada {
+    padding: 55px 16px;
+  }
+
+  .receita-nao-encontrada h1 {
+    font-size: 24px;
+  }
+}

@@ -140,3 +140,29 @@
     flex-direction: column;
   }
 }
+@media (max-width: 450px) {
+  .home {
+    padding: 25px 15px 35px;
+  }
+
+  .home-header {
+    margin-bottom: 32px;
+  }
+
+  .home-header h1 {
+    font-size: 26px;
+  }
+
+  .home-header p {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .receitas-section-topo h2 {
+    font-size: 22px;
+  }
+
+  .sem-resultados {
+    padding: 45px 16px;
+  }
+}

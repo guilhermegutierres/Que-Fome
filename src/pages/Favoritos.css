@@ -116,3 +116,21 @@
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 450px) {
+  .favoritos-page {
+    padding: 25px 15px 35px;
+  }
+
+  .favoritos-header h1 {
+    font-size: 28px;
+  }
+
+  .favoritos-header p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .favoritos-vazio {
+    padding: 50px 18px;
+  }
+}

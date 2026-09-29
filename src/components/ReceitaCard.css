@@ -146,3 +146,46 @@
   background: #52b974;
   transform: translateY(-1px);
 }
+@media (max-width: 650px) {
+  .receita-card-imagem {
+    height: 200px;
+  }
+
+  .receita-card-conteudo {
+    padding: 16px;
+  }
+
+  .receita-card h2 {
+    font-size: 19px;
+  }
+
+  .receita-card p {
+    font-size: 13px;
+  }
+
+  .receita-card-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .receita-card-imagem {
+    height: 185px;
+  }
+
+  .receita-card-conteudo {
+    padding: 15px;
+  }
+
+  .favorito-botao {
+    top: 10px;
+    right: 10px;
+
+    width: 36px;
+    height: 36px;
+  }
+
+  .receita-card-botao {
+    padding: 10px;
+  }
+}

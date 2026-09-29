@@ -157,3 +157,26 @@
     padding: 30px 22px;
   }
 }
+@media (max-width: 400px) {
+  .login-page {
+    padding: 15px;
+  }
+
+  .login-card {
+    padding: 25px 18px;
+    border-radius: 16px;
+  }
+
+  .login-card h1 {
+    font-size: 25px;
+  }
+
+  .login-subtitulo {
+    font-size: 13px;
+  }
+
+  .login-card input,
+  .login-card button {
+    padding: 11px 12px;
+  }
+}

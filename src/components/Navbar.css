@@ -497,6 +497,10 @@ body.modo-escuro .voltar-inicio:hover {
   color: #64cd87;
 }
 
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
 @media (max-width: 1200px) {
   .navbar {
     padding: 0 25px;
@@ -516,16 +520,17 @@ body.modo-escuro .voltar-inicio:hover {
   }
 }
 
-@media (max-width: 950px) {
-  .menu {
-    display: none;
-  }
-}
-
-@media (max-width: 650px) {
+@media (max-width: 1050px) {
   .navbar {
-    min-height: 65px;
-    padding: 0 18px;
+    padding: 0 20px;
+  }
+
+  .menu {
+    gap: 10px;
+  }
+
+  .menu-link {
+    font-size: 13px;
   }
 
   .campo-busca {
@@ -533,6 +538,59 @@ body.modo-escuro .voltar-inicio:hover {
   }
 
   .adicionar-link {
+    padding: 8px 9px;
+    font-size: 10px;
+  }
+
+  .usuario-nome {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 950px) {
+  .menu {
+    display: none;
+  }
+
+  .navbar {
+    min-height: 68px;
+  }
+
+  .campo-busca {
+    width: 200px;
+  }
+
+  .navbar-compact {
+    min-height: 68px;
+  }
+}
+
+@media (max-width: 700px) {
+  .campo-busca {
+    width: 170px;
+  }
+
+  .usuario-nome {
+    display: none;
+  }
+
+  .usuario-icone {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    min-height: 64px;
+    padding: 0 15px;
+  }
+
+  .acoes {
+    gap: 5px;
+  }
+
+  .campo-busca {
     display: none;
   }
 
@@ -540,8 +598,12 @@ body.modo-escuro .voltar-inicio:hover {
     display: none;
   }
 
-  .usuario-info {
-    display: none;
+  .entrar-link {
+    font-size: 13px;
+  }
+
+  .usuario-area {
+    gap: 6px;
   }
 
   .navbar-compact-acoes {
@@ -549,6 +611,58 @@ body.modo-escuro .voltar-inicio:hover {
   }
 
   .voltar-inicio {
+    font-size: 12px;
+  }
+
+  .adicionar-link {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border-radius: 50%;
+
+    font-size: 0;
+  }
+
+  .adicionar-link::before {
+    content: "+";
+
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 450px) {
+  .logo {
+    font-size: 18px;
+  }
+
+  .logo svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sair-botao {
+    font-size: 11px;
+  }
+
+  .navbar-compact .logo {
+    font-size: 18px;
+  }
+
+  .navbar-compact .voltar-inicio {
+    font-size: 0;
+  }
+
+  .navbar-compact .voltar-inicio::after {
+    content: "← Voltar";
+
     font-size: 12px;
   }
 }

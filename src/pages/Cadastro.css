@@ -157,3 +157,26 @@
     padding: 30px 22px;
   }
 }
+@media (max-width: 400px) {
+  .cadastro-page {
+    padding: 15px;
+  }
+
+  .cadastro-card {
+    padding: 25px 18px;
+    border-radius: 16px;
+  }
+
+  .cadastro-card h1 {
+    font-size: 25px;
+  }
+
+  .cadastro-subtitulo {
+    font-size: 13px;
+  }
+
+  .cadastro-card input,
+  .cadastro-card button {
+    padding: 11px 12px;
+  }
+}

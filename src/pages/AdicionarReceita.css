@@ -212,3 +212,35 @@
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 450px) {
+  .adicionar-page {
+    padding: 20px 12px 30px;
+  }
+
+  .adicionar-card {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+
+  .adicionar-card h1 {
+    font-size: 26px;
+  }
+
+  .adicionar-subtitulo {
+    margin-bottom: 24px;
+  }
+
+  .adicionar-card form {
+    gap: 16px;
+  }
+
+  .campo input,
+  .campo select,
+  .campo textarea {
+    padding: 11px 12px;
+  }
+
+  .campo textarea {
+    min-height: 100px;
+  }
+}
