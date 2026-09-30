@@ -1,16 +1,10 @@
-// Integração com a TacoAPI (Tabela Brasileira de Composição de Alimentos),
-// acessada pelo gateway do RapidAPI. As credenciais ficam no .env.local.
 const RAPIDAPI_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
 const RAPIDAPI_HOST =
   import.meta.env.VITE_RAPIDAPI_HOST || "taco-api-br1.p.rapidapi.com";
 const URL_BASE = `https://${RAPIDAPI_HOST}`;
 
-// O plano gratuito permite poucas requisições por dia, então guardamos as
-// respostas no navegador para não repetir a mesma consulta.
 const CHAVE_CACHE = "cache_nutricao";
 
-// Consultas em andamento, para que chamadas iguais e simultâneas
-// compartilhem a mesma requisição.
 const consultasPendentes = new Map();
 
 function apiConfigurada() {
@@ -111,10 +105,6 @@ function consultarAlimentosPorPalavra(palavra) {
   });
 }
 
-// A busca da API diferencia maiúsculas de minúsculas e procura o texto
-// exato ("farinha de trigo" não encontra "Farinha, de trigo"). Por isso
-// buscamos só a primeira palavra, em minúsculas e com inicial maiúscula,
-// e filtramos o restante aqui. Continuar digitando não gasta requisições.
 async function buscarAlimentos(termo) {
   const palavras = termo.trim().split(/\s+/).filter(Boolean);
   if (palavras.length === 0) return [];
@@ -152,10 +142,6 @@ async function buscarAlimentos(termo) {
     .slice(0, 8);
 }
 
-// A TacoAPI devolve alguns micronutrientes em colunas deslocadas. Comparando
-// com a tabela TACO oficial (ex.: farinha de trigo), o campo "sodium" traz o
-// ferro, "iron" traz o fósforo e "vitaminC" traz o manganês; o sódio real não
-// vem no cálculo. Mantemos só os valores que conferem com a tabela.
 function corrigirMicronutrientes(dados) {
   const micros = dados.totals?.micros;
   if (!micros) return dados;
@@ -173,7 +159,6 @@ function corrigirMicronutrientes(dados) {
   };
 }
 
-// Recebe [{ id, grams }] e devolve as calorias de cada item e os totais.
 function calcularNutricao(itens) {
   return consultarComCache(`receita:${JSON.stringify(itens)}`, () =>
     requisitar("/foods/calculate-meal", {
