@@ -4,12 +4,17 @@ import { estaFavorito, alternarFavorito } from "../services/favoritos";
 import { estaLogado } from "../services/auth";
 import "./ReceitaCard.css";
 
+const IMAGEM_FALLBACK =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000"><rect width="800" height="1000" fill="#eeeeee"/><path d="M250 590l120-130 95 100 75-75 110 105H250z" fill="#c7c7c7"/><circle cx="520" cy="350" r="55" fill="#c7c7c7"/><text x="400" y="700" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" fill="#666666">Imagem indisponível</text></svg>',
+  );
+
 function ReceitaCard({ receita }) {
   const navigate = useNavigate();
+  const [imagemComErro, setImagemComErro] = useState(false);
 
-  const [favoritado, setFavoritado] = useState(
-    estaFavorito(receita.id)
-  );
+  const [favoritado, setFavoritado] = useState(estaFavorito(receita.id));
 
   function handleFavorito() {
     if (!estaLogado()) {
@@ -26,16 +31,19 @@ function ReceitaCard({ receita }) {
     <article className="receita-card">
       <div className="receita-card-imagem-container">
         <img
-          src={receita.imagem}
-          alt={receita.titulo}
+          src={imagemComErro ? IMAGEM_FALLBACK : receita.imagem}
+          alt={
+            imagemComErro
+              ? `Imagem indisponível para ${receita.titulo}`
+              : receita.titulo
+          }
           className="receita-card-imagem"
+          onError={() => setImagemComErro(true)}
         />
 
         <button
           type="button"
-          className={`favorito-botao ${
-            favoritado ? "favoritado" : ""
-          }`}
+          className={`favorito-botao ${favoritado ? "favoritado" : ""}`}
           onClick={handleFavorito}
           aria-label={
             favoritado
@@ -63,9 +71,7 @@ function ReceitaCard({ receita }) {
       </div>
 
       <div className="receita-card-conteudo">
-        <span className="receita-card-categoria">
-          {receita.categoria}
-        </span>
+        <span className="receita-card-categoria">{receita.categoria}</span>
 
         <h2>{receita.titulo}</h2>
 
@@ -77,10 +83,7 @@ function ReceitaCard({ receita }) {
           <span>{receita.dificuldade}</span>
         </div>
 
-        <Link
-          to={`/receita/${receita.id}`}
-          className="receita-card-botao"
-        >
+        <Link to={`/receita/${receita.id}`} className="receita-card-botao">
           Ver receita
         </Link>
       </div>

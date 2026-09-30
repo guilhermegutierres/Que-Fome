@@ -38,6 +38,7 @@ function AdicionarReceita() {
   const [erros, setErros] = useState({});
   const [erroGeral, setErroGeral] = useState("");
   const [sucesso, setSucesso] = useState("");
+  const [publicando, setPublicando] = useState(false);
   const imagemInputRef = useRef(null);
 
   if (!estaLogado()) {
@@ -178,6 +179,7 @@ function AdicionarReceita() {
     setErros(novosErros);
     if (Object.keys(novosErros).length > 0) return;
 
+    setPublicando(true);
     try {
       const imagemSalva = await lerArquivoComoDataUrl(arquivoImagem);
       const usuario = getUsuario();
@@ -209,6 +211,8 @@ function AdicionarReceita() {
         erro.message ||
           "Não foi possível salvar a receita. Verifique o espaço disponível no navegador e tente novamente.",
       );
+    } finally {
+      setPublicando(false);
     }
   }
 
@@ -479,9 +483,9 @@ function AdicionarReceita() {
               <button
                 type="submit"
                 className="adicionar-botao"
-                disabled={Boolean(sucesso)}
+                disabled={publicando || Boolean(sucesso)}
               >
-                Publicar receita
+                {publicando ? "Publicando..." : "Publicar receita"}
               </button>
             </div>
           </form>

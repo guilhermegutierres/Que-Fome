@@ -30,7 +30,7 @@ function Home() {
 
   const receitas = obterReceitas();
 
-  const termo = normalizarTexto(busca);
+  const termo = normalizarTexto(busca.trim());
 
   const receitasFiltradas = receitas.filter((receita) => {
     const correspondeCategoria =
@@ -53,7 +53,7 @@ function Home() {
     return correspondeCategoria && correspondeBusca;
   });
 
-  const possuiFiltro = busca.trim() !== "" || categoriaSelecionada !== "";
+  const possuiFiltro = termo !== "" || categoriaSelecionada !== "";
 
   function limparFiltros() {
     setSearchParams(
