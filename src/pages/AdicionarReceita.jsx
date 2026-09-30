@@ -1,9 +1,13 @@
 import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Select from "../components/Select";
 import { estaLogado, getUsuario } from "../services/auth";
-import { salvarReceita } from "../services/receitas";
+import {
+  atualizarReceita,
+  obterReceitaDoAutor,
+  salvarReceita,
+} from "../services/receitas";
 import "./AdicionarReceita.css";
 
 function transformarLista(texto) {
@@ -23,18 +27,67 @@ function lerArquivoComoDataUrl(arquivo) {
   });
 }
 
+function converterIngredientesParaFormulario(receita) {
+  if (Array.isArray(receita?.ingredientesDetalhados)) {
+    return receita.ingredientesDetalhados.map((ingrediente) => ({
+      nome: ingrediente.nome || "",
+      quantidade: ingrediente.quantidade || "",
+    }));
+  }
+
+  return (Array.isArray(receita?.ingredientes) ? receita.ingredientes : []).map(
+    (ingrediente) => {
+      const texto = String(ingrediente);
+      const separador = texto.search(/\s/);
+
+      if (separador === -1) {
+        return { quantidade: "", nome: texto };
+      }
+
+      return {
+        quantidade: texto.slice(0, separador),
+        nome: texto.slice(separador + 1).trim(),
+      };
+    },
+  );
+}
+
 function AdicionarReceita() {
   const navigate = useNavigate();
-  const [titulo, setTitulo] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [tempo, setTempo] = useState("");
-  const [dificuldade, setDificuldade] = useState("");
-  const [custo, setCusto] = useState("");
-  const [imagem, setImagem] = useState("");
+  const location = useLocation();
+  const origemNavegacao =
+    location.state?.origem === "/perfil" ? "/perfil" : "/";
+  const usuario = getUsuario();
+  const { id: idReceitaParam } = useParams();
+  const modoEdicao = Boolean(idReceitaParam);
+  const idReceita = Number(idReceitaParam);
+  const receitaOriginal = modoEdicao
+    ? obterReceitaDoAutor(idReceita, usuario?.id)
+    : null;
+  const ingredientesOriginais =
+    converterIngredientesParaFormulario(receitaOriginal);
+  const descricaoOriginal =
+    receitaOriginal?.descricaoCompleta || receitaOriginal?.descricao || "";
+  const tempoOriginal = String(receitaOriginal?.tempo || "").replace(
+    /\s*min$/i,
+    "",
+  );
+  const [titulo, setTitulo] = useState(receitaOriginal?.titulo || "");
+  const [categoria, setCategoria] = useState(receitaOriginal?.categoria || "");
+  const [tempo, setTempo] = useState(tempoOriginal);
+  const [dificuldade, setDificuldade] = useState(
+    receitaOriginal?.dificuldade || "",
+  );
+  const [custo, setCusto] = useState(receitaOriginal?.custo || "");
+  const [imagem, setImagem] = useState(receitaOriginal?.imagem || "");
   const [arquivoImagem, setArquivoImagem] = useState(null);
-  const [descricao, setDescricao] = useState("");
-  const [ingredientes, setIngredientes] = useState([]);
-  const [modoPreparo, setModoPreparo] = useState("");
+  const [descricao, setDescricao] = useState(descricaoOriginal);
+  const [ingredientes, setIngredientes] = useState(ingredientesOriginais);
+  const [modoPreparo, setModoPreparo] = useState(
+    Array.isArray(receitaOriginal?.modoPreparo)
+      ? receitaOriginal.modoPreparo.join("\n")
+      : "",
+  );
   const [erros, setErros] = useState({});
   const [erroGeral, setErroGeral] = useState("");
   const [sucesso, setSucesso] = useState("");
@@ -58,6 +111,25 @@ function AdicionarReceita() {
     );
   }
 
+  if (modoEdicao && !receitaOriginal) {
+    return (
+      <>
+        <Navbar />
+        <main className="adicionar-page">
+          <section className="adicionar-nao-autorizado">
+            <h1>Receita indisponível</h1>
+            <p>
+              Esta receita não existe ou você não tem permissão para editá-la.
+            </p>
+            <Link to="/perfil" className="adicionar-botao">
+              Voltar ao perfil
+            </Link>
+          </section>
+        </main>
+      </>
+    );
+  }
+
   const formularioVazio =
     !titulo.trim() &&
     !categoria &&
@@ -71,14 +143,30 @@ function AdicionarReceita() {
     ) &&
     !modoPreparo.trim();
 
+  const formularioAlterado = receitaOriginal
+    ? titulo !== receitaOriginal.titulo ||
+      categoria !== receitaOriginal.categoria ||
+      tempo !== tempoOriginal ||
+      dificuldade !== receitaOriginal.dificuldade ||
+      custo !== (receitaOriginal.custo || "") ||
+      imagem !== (receitaOriginal.imagem || "") ||
+      Boolean(arquivoImagem) ||
+      descricao !== descricaoOriginal ||
+      JSON.stringify(ingredientes) !== JSON.stringify(ingredientesOriginais) ||
+      modoPreparo !==
+        (Array.isArray(receitaOriginal.modoPreparo)
+          ? receitaOriginal.modoPreparo.join("\n")
+          : "")
+    : !formularioVazio;
+
   function cancelar() {
     if (
-      formularioVazio ||
+      !formularioAlterado ||
       window.confirm(
         "Deseja realmente sair e perder as informações preenchidas?",
       )
     ) {
-      navigate("/");
+      navigate(modoEdicao ? "/perfil" : origemNavegacao);
     }
   }
 
@@ -101,7 +189,7 @@ function AdicionarReceita() {
     if (!extensaoValida || !tipoValido) {
       if (imagem.startsWith("blob:")) URL.revokeObjectURL(imagem);
       setArquivoImagem(null);
-      setImagem("");
+      setImagem(modoEdicao ? receitaOriginal?.imagem || "" : "");
       setErros((atuais) => ({
         ...atuais,
         imagem: "Selecione uma imagem JPG, JPEG, PNG ou WEBP.",
@@ -149,7 +237,9 @@ function AdicionarReceita() {
     if (!categoria) {
       novosErros.categoria = "Selecione uma categoria.";
     }
-    if (!arquivoImagem || !imagem) {
+    const imagemExistentePodeSerMantida =
+      modoEdicao && Boolean(receitaOriginal?.imagem) && Boolean(imagem);
+    if ((!arquivoImagem && !imagemExistentePodeSerMantida) || !imagem) {
       novosErros.imagem = "Selecione uma imagem para a receita.";
     }
     if (!tempo.trim()) {
@@ -181,10 +271,16 @@ function AdicionarReceita() {
 
     setPublicando(true);
     try {
-      const imagemSalva = await lerArquivoComoDataUrl(arquivoImagem);
-      const usuario = getUsuario();
-      const novaReceita = {
-        id: Date.now(),
+      const imagemSalva = arquivoImagem
+        ? await lerArquivoComoDataUrl(arquivoImagem)
+        : imagem;
+      const ingredientesDetalhados = ingredientesValidos.map(
+        ({ nome, quantidade }) => ({
+          nome: nome.trim(),
+          quantidade: quantidade.trim(),
+        }),
+      );
+      const dadosReceita = {
         titulo: tituloLimpo,
         categoria,
         tempo: `${tempoNumerico} min`,
@@ -195,17 +291,45 @@ function AdicionarReceita() {
           descricao.trim() || "Receita publicada por um usuário do Que Fome!",
         descricaoCompleta: descricao.trim(),
         // Mantém strings para compatibilidade com os mocks e com Receita.jsx.
-        ingredientes: ingredientesValidos.map(
-          ({ nome, quantidade }) => `${quantidade.trim()} ${nome.trim()}`,
+        ingredientes: ingredientesDetalhados.map(
+          ({ nome, quantidade }) => `${quantidade} ${nome}`,
         ),
+        ingredientesDetalhados,
         modoPreparo: passos,
-        autorId: usuario?.id || null,
-        autorNome: usuario?.nome || "Usuário",
       };
 
-      salvarReceita(novaReceita);
-      setSucesso("Receita publicada com sucesso! Redirecionando...");
-      window.setTimeout(() => navigate(`/receita/${novaReceita.id}`), 1200);
+      if (modoEdicao) {
+        const atualizada = atualizarReceita(
+          receitaOriginal.id,
+          usuario.id,
+          dadosReceita,
+        );
+        if (!atualizada) {
+          throw new Error(
+            "Não foi possível atualizar esta receita. Verifique se ela ainda pertence à sua conta.",
+          );
+        }
+        setSucesso("Receita atualizada com sucesso! Voltando ao perfil...");
+        window.setTimeout(() => navigate("/perfil"), 1200);
+      } else {
+        const novaReceita = {
+          ...dadosReceita,
+          id: Date.now(),
+          autorId: usuario?.id || null,
+          autorNome: usuario?.nome || "Usuário",
+        };
+        salvarReceita(novaReceita);
+        setSucesso("Receita publicada com sucesso! Redirecionando...");
+        window.setTimeout(
+          () =>
+            navigate(
+              origemNavegacao === "/perfil"
+                ? "/perfil"
+                : `/receita/${novaReceita.id}`,
+            ),
+          1200,
+        );
+      }
     } catch (erro) {
       setErroGeral(
         erro.message ||
@@ -224,9 +348,11 @@ function AdicionarReceita() {
           <button type="button" className="adicionar-voltar" onClick={cancelar}>
             ← Voltar
           </button>
-          <h1>Adicionar receita</h1>
+          <h1>{modoEdicao ? "Editar receita" : "Adicionar receita"}</h1>
           <p className="adicionar-subtitulo">
-            Preencha as informações da sua receita para publicá-la.
+            {modoEdicao
+              ? "Atualize as informações da sua receita."
+              : "Preencha as informações da sua receita para publicá-la."}
           </p>
 
           <form onSubmit={handleSubmit} noValidate>
@@ -309,7 +435,7 @@ function AdicionarReceita() {
               {imagem && (
                 <div className="imagem-preview">
                   <img src={imagem} alt="Prévia da receita selecionada" />
-                  <span>{arquivoImagem?.name}</span>
+                  <span>{arquivoImagem?.name || "Imagem atual"}</span>
                   <button
                     type="button"
                     className="imagem-remover"
@@ -485,7 +611,13 @@ function AdicionarReceita() {
                 className="adicionar-botao"
                 disabled={publicando || Boolean(sucesso)}
               >
-                {publicando ? "Publicando..." : "Publicar receita"}
+                {publicando
+                  ? modoEdicao
+                    ? "Salvando..."
+                    : "Publicando..."
+                  : modoEdicao
+                    ? "Salvar alterações"
+                    : "Publicar receita"}
               </button>
             </div>
           </form>

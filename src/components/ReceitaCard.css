@@ -154,6 +154,53 @@
   background: #52b974;
   transform: translateY(-1px);
 }
+
+.receita-card-acoes-proprietario {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.receita-card-editar,
+.receita-card-excluir {
+  padding: 8px 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #555555;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.receita-card-editar:hover,
+.receita-card-excluir:hover {
+  background: #f5f5f5;
+}
+
+.receita-card-excluir {
+  border-color: #efc2c0;
+  color: #b84440;
+}
+
+body.modo-escuro .receita-card-editar,
+body.modo-escuro .receita-card-excluir {
+  border-color: #444444;
+  background: #292929;
+  color: #dddddd;
+}
+
+body.modo-escuro .receita-card-excluir {
+  border-color: #65403e;
+  color: #ffaaa6;
+}
+
+body.modo-escuro .receita-card-editar:hover,
+body.modo-escuro .receita-card-excluir:hover {
+  background: #353535;
+}
 @media (max-width: 650px) {
   .receita-card-imagem {
     height: 200px;

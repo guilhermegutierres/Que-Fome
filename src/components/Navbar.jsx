@@ -412,14 +412,22 @@ function Navbar({
         />
 
         {usuarioLogado && (
-          <Link to="/adicionar-receita" className="adicionar-link">
+          <Link
+            to="/adicionar-receita"
+            state={{ origem: "/" }}
+            className="adicionar-link"
+          >
             Adicionar receita
           </Link>
         )}
 
         {usuarioLogado ? (
           <div className="usuario-area">
-            <div className="usuario-info">
+            <Link
+              to="/perfil"
+              className="usuario-info usuario-perfil-link"
+              aria-label={`Abrir perfil de ${usuario?.nome || "Usuário"}`}
+            >
               <span className="usuario-icone">
                 <svg
                   width="16"
@@ -447,7 +455,7 @@ function Navbar({
               </span>
 
               <span className="usuario-nome">{usuario?.nome || "Usuário"}</span>
-            </div>
+            </Link>
 
             <button type="button" className="sair-botao" onClick={handleLogout}>
               Sair

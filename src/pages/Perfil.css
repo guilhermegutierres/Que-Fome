@@ -1,0 +1,180 @@
+.perfil-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 30px 60px;
+}
+
+.perfil-dados,
+.perfil-estado {
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.perfil-titulo,
+.perfil-minhas-receitas h2 {
+  margin: 0 0 8px;
+  color: #222222;
+}
+
+.perfil-titulo {
+  font-size: 30px;
+  margin-bottom: 16px;
+}
+
+.perfil-dados {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.perfil-dados .perfil-icone {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+}
+
+.perfil-nome {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.perfil-email,
+.perfil-cabecalho-receitas p,
+.perfil-estado p {
+  margin: 0;
+  color: #777777;
+  font-size: 14px;
+}
+
+.perfil-minhas-receitas {
+  margin-top: 30px;
+}
+
+.perfil-cabecalho-receitas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.perfil-minhas-receitas h2 {
+  font-size: 26px;
+}
+
+.perfil-receitas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.perfil-receitas-grid .receita-card h2 {
+  margin-top: 18px;
+}
+
+.perfil-estado {
+  text-align: center;
+}
+
+.perfil-estado h1,
+.perfil-estado h3 {
+  margin: 0 0 10px;
+  color: #222222;
+}
+
+.perfil-estado p {
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.perfil-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #64cd87;
+  color: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.perfil-botao:hover {
+  background: #52b974;
+}
+
+.perfil-erro {
+  margin: 0 0 16px;
+  color: #b84440;
+  font-size: 14px;
+}
+
+body.modo-escuro .perfil-dados,
+body.modo-escuro .perfil-estado {
+  background: #202020;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+body.modo-escuro .perfil-titulo,
+body.modo-escuro .perfil-minhas-receitas h2,
+body.modo-escuro .perfil-estado h1,
+body.modo-escuro .perfil-estado h3 {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .perfil-email,
+body.modo-escuro .perfil-cabecalho-receitas p,
+body.modo-escuro .perfil-estado p {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .perfil-erro {
+  color: #ffaaa6;
+}
+
+@media (max-width: 950px) {
+  .perfil-receitas-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .perfil-page {
+    padding: 30px 20px 40px;
+  }
+
+  .perfil-receitas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-cabecalho-receitas {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 450px) {
+  .perfil-page {
+    padding: 25px 15px 35px;
+  }
+
+  .perfil-estado {
+    padding: 24px 18px;
+  }
+
+  .perfil-titulo {
+    font-size: 27px;
+  }
+
+  .perfil-dados {
+    padding: 16px;
+    gap: 12px;
+  }
+}

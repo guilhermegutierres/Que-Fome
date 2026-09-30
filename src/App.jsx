@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Favoritos from "./pages/Favoritos";
 import AdicionarReceita from "./pages/AdicionarReceita";
+import Perfil from "./pages/Perfil";
 
 function App() {
   return (
@@ -30,6 +31,13 @@ function App() {
         <Route
           path="/favoritos"
           element={<Favoritos />}
+        />
+
+        <Route path="/perfil" element={<Perfil />} />
+
+        <Route
+          path="/perfil/receitas/:id/editar"
+          element={<AdicionarReceita />}
         />
 
         <Route

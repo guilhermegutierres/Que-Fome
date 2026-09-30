@@ -48,9 +48,34 @@ function alternarFavorito(id) {
   return favoritos.includes(id);
 }
 
+function removerReceitaDosFavoritos(id) {
+  const chavesFavoritos = Object.keys(localStorage).filter((chave) =>
+    chave.startsWith("favoritos_"),
+  );
+
+  chavesFavoritos.forEach((chave) => {
+    try {
+      const favoritos = JSON.parse(localStorage.getItem(chave)) || [];
+      if (Array.isArray(favoritos)) {
+        const favoritosAtualizados = favoritos.filter(
+          (idFavorito) => idFavorito !== id,
+        );
+        if (favoritosAtualizados.length !== favoritos.length) {
+          localStorage.setItem(chave, JSON.stringify(favoritosAtualizados));
+        }
+      }
+    } catch {
+      // Uma lista inválida não deve impedir a exclusão da receita.
+    }
+  });
+
+  window.dispatchEvent(new Event(EVENTO_FAVORITOS_ATUALIZADOS));
+}
+
 export {
   obterFavoritos,
   estaFavorito,
   alternarFavorito,
+  removerReceitaDosFavoritos,
   EVENTO_FAVORITOS_ATUALIZADOS,
 };

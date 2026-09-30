@@ -10,7 +10,7 @@ const IMAGEM_FALLBACK =
     '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000"><rect width="800" height="1000" fill="#eeeeee"/><path d="M250 590l120-130 95 100 75-75 110 105H250z" fill="#c7c7c7"/><circle cx="520" cy="350" r="55" fill="#c7c7c7"/><text x="400" y="700" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" fill="#666666">Imagem indisponível</text></svg>',
   );
 
-function ReceitaCard({ receita }) {
+function ReceitaCard({ receita, onEditar, onExcluir }) {
   const navigate = useNavigate();
   const [imagemComErro, setImagemComErro] = useState(false);
 
@@ -86,6 +86,25 @@ function ReceitaCard({ receita }) {
         <Link to={`/receita/${receita.id}`} className="receita-card-botao">
           Ver receita
         </Link>
+
+        {(onEditar || onExcluir) && (
+          <div className="receita-card-acoes-proprietario">
+            {onEditar && (
+              <Link to={onEditar} className="receita-card-editar">
+                Editar
+              </Link>
+            )}
+            {onExcluir && (
+              <button
+                type="button"
+                className="receita-card-excluir"
+                onClick={() => onExcluir(receita)}
+              >
+                Excluir
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </article>
   );
