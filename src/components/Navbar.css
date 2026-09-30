@@ -10,7 +10,8 @@
   background-color: #ffffff;
   border-bottom: 1px solid #eeeeee;
 
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 10;
 }
 
