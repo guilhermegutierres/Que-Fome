@@ -224,6 +224,19 @@ body.modo-escuro .imagem-remover:hover {
   align-items: start;
 }
 
+.ingrediente-nutricao {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #e2e2e2;
+}
+
+body.modo-escuro .ingrediente-nutricao {
+  border-bottom-color: #333333;
+}
+
 .ingrediente-adicionar,
 .ingrediente-remover,
 .adicionar-cancelar {

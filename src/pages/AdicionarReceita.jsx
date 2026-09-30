@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import BuscaAlimento from "../components/BuscaAlimento";
 import Navbar from "../components/Navbar";
 import Select from "../components/Select";
 import { estaLogado, getUsuario } from "../services/auth";
@@ -32,6 +33,10 @@ function converterIngredientesParaFormulario(receita) {
     return receita.ingredientesDetalhados.map((ingrediente) => ({
       nome: ingrediente.nome || "",
       quantidade: ingrediente.quantidade || "",
+      alimentoTaco: ingrediente.tacoId
+        ? { id: ingrediente.tacoId, descricao: ingrediente.tacoDescricao || "" }
+        : null,
+      gramas: ingrediente.gramas ? String(ingrediente.gramas) : "",
     }));
   }
 
@@ -41,12 +46,14 @@ function converterIngredientesParaFormulario(receita) {
       const separador = texto.search(/\s/);
 
       if (separador === -1) {
-        return { quantidade: "", nome: texto };
+        return { quantidade: "", nome: texto, alimentoTaco: null, gramas: "" };
       }
 
       return {
         quantidade: texto.slice(0, separador),
         nome: texto.slice(separador + 1).trim(),
+        alimentoTaco: null,
+        gramas: "",
       };
     },
   );
@@ -139,7 +146,8 @@ function AdicionarReceita() {
     !arquivoImagem &&
     !descricao.trim() &&
     ingredientes.every(
-      ({ nome, quantidade }) => !nome.trim() && !quantidade.trim(),
+      ({ nome, quantidade, alimentoTaco, gramas }) =>
+        !nome.trim() && !quantidade.trim() && !alimentoTaco && !gramas.trim(),
     ) &&
     !modoPreparo.trim();
 
@@ -219,13 +227,21 @@ function AdicionarReceita() {
     const tituloLimpo = titulo.trim();
     const tempoNumerico = Number(tempo);
     const ingredientesPreenchidos = ingredientes.filter(
-      ({ nome, quantidade }) => nome.trim() || quantidade.trim(),
+      ({ nome, quantidade, alimentoTaco, gramas }) =>
+        nome.trim() || quantidade.trim() || alimentoTaco || gramas.trim(),
     );
     const ingredientesValidos = ingredientesPreenchidos.filter(
       ({ nome, quantidade }) => nome.trim() && quantidade.trim(),
     );
     const existeIngredienteParcial = ingredientesPreenchidos.some(
       ({ nome, quantidade }) => !nome.trim() || !quantidade.trim(),
+    );
+    const existeGramasInvalida = ingredientesValidos.some(
+      ({ alimentoTaco, gramas }) =>
+        alimentoTaco && !(Number(gramas.replace(",", ".")) > 0),
+    );
+    const existeGramasSemAlimento = ingredientesValidos.some(
+      ({ alimentoTaco, gramas }) => !alimentoTaco && gramas.trim(),
     );
     const passos = transformarLista(modoPreparo);
 
@@ -261,6 +277,12 @@ function AdicionarReceita() {
     } else if (ingredientesValidos.length === 0) {
       novosErros.ingredientes =
         "Adicione ao menos um ingrediente com nome e quantidade.";
+    } else if (existeGramasInvalida) {
+      novosErros.ingredientes =
+        "Informe o peso em gramas dos ingredientes vinculados à tabela nutricional.";
+    } else if (existeGramasSemAlimento) {
+      novosErros.ingredientes =
+        "Selecione o alimento na tabela nutricional para os ingredientes com peso informado.";
     }
     if (passos.length === 0) {
       novosErros.modoPreparo = "Adicione pelo menos um passo do preparo.";
@@ -275,9 +297,14 @@ function AdicionarReceita() {
         ? await lerArquivoComoDataUrl(arquivoImagem)
         : imagem;
       const ingredientesDetalhados = ingredientesValidos.map(
-        ({ nome, quantidade }) => ({
+        ({ nome, quantidade, alimentoTaco, gramas }) => ({
           nome: nome.trim(),
           quantidade: quantidade.trim(),
+          ...(alimentoTaco && {
+            tacoId: alimentoTaco.id,
+            tacoDescricao: alimentoTaco.descricao,
+            gramas: Number(gramas.replace(",", ".")),
+          }),
         }),
       );
       const dadosReceita = {
@@ -506,7 +533,9 @@ function AdicionarReceita() {
             <div className="campo">
               <label>Ingredientes *</label>
               <small>
-                Informe a quantidade e o ingrediente em campos separados.
+                Informe a quantidade e o ingrediente em campos separados. Para
+                calcular as calorias, vincule cada ingrediente a um alimento da
+                tabela nutricional e informe o peso em gramas.
               </small>
               <div className="ingredientes-formulario">
                 {ingredientes.map((ingrediente, index) => (
@@ -553,6 +582,38 @@ function AdicionarReceita() {
                     >
                       Remover
                     </button>
+                    <div className="ingrediente-nutricao">
+                      <BuscaAlimento
+                        id={`alimento-taco-${index}`}
+                        alimento={ingrediente.alimentoTaco}
+                        invalid={Boolean(
+                          erros.ingredientes &&
+                          ingrediente.gramas.trim() &&
+                          !ingrediente.alimentoTaco,
+                        )}
+                        onSelecionar={(alimento) =>
+                          atualizarIngrediente(index, "alimentoTaco", alimento)
+                        }
+                      />
+                      <input
+                        aria-label={`Peso em gramas do ingrediente ${index + 1}`}
+                        inputMode="decimal"
+                        placeholder="Peso (g)"
+                        value={ingrediente.gramas}
+                        aria-invalid={Boolean(
+                          erros.ingredientes &&
+                          ingrediente.alimentoTaco &&
+                          !(Number(ingrediente.gramas.replace(",", ".")) > 0),
+                        )}
+                        onChange={(event) =>
+                          atualizarIngrediente(
+                            index,
+                            "gramas",
+                            event.target.value,
+                          )
+                        }
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -562,7 +623,12 @@ function AdicionarReceita() {
                 onClick={() =>
                   setIngredientes((atuais) => [
                     ...atuais,
-                    { nome: "", quantidade: "" },
+                    {
+                      nome: "",
+                      quantidade: "",
+                      alimentoTaco: null,
+                      gramas: "",
+                    },
                   ])
                 }
               >

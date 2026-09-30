@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import InformacaoNutricional from "../components/InformacaoNutricional";
 import Navbar from "../components/Navbar";
 import { estaLogado } from "../services/auth";
 import { alternarFavorito, estaFavorito } from "../services/favoritos";
@@ -54,6 +55,12 @@ function Receita() {
   const modoPreparo = Array.isArray(receita.modoPreparo)
     ? receita.modoPreparo
     : [];
+  const ingredientesNutricao = Array.isArray(receita.ingredientesDetalhados)
+    ? receita.ingredientesDetalhados
+    : ingredientes.map((ingrediente) => ({
+        nome: ingrediente,
+        quantidade: "",
+      }));
 
   function handleFavorito() {
     if (!estaLogado()) {
@@ -180,6 +187,8 @@ function Receita() {
                 </p>
               )}
             </section>
+
+            <InformacaoNutricional ingredientes={ingredientesNutricao} />
           </div>
         </article>
       </main>
