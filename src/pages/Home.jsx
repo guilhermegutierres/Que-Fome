@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ReceitaCard from "../components/ReceitaCard";
 import { obterReceitas } from "../services/receitas";
@@ -12,9 +12,21 @@ function normalizarTexto(texto) {
 }
 
 function Home() {
-  const [busca, setBusca] = useState("");
-  const [categoriaSelecionada, setCategoriaSelecionada] =
-    useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const busca = searchParams.get("busca") || "";
+  const categoriaSelecionada = searchParams.get("categoria") || "";
+
+  function atualizarParametro(nome, valor) {
+    setSearchParams(
+      (atuais) => {
+        const proximos = new URLSearchParams(atuais);
+        if (valor) proximos.set(nome, valor);
+        else proximos.delete(nome);
+        return proximos;
+      },
+      { replace: true },
+    );
+  }
 
   const receitas = obterReceitas();
 
@@ -28,13 +40,9 @@ function Home() {
 
     const titulo = normalizarTexto(receita.titulo);
 
-    const descricao = normalizarTexto(
-      receita.descricao || ""
-    );
+    const descricao = normalizarTexto(receita.descricao || "");
 
-    const ingredientes = normalizarTexto(
-      receita.ingredientes.join(" ")
-    );
+    const ingredientes = normalizarTexto(receita.ingredientes.join(" "));
 
     const correspondeBusca =
       !termo ||
@@ -42,28 +50,30 @@ function Home() {
       descricao.includes(termo) ||
       ingredientes.includes(termo);
 
-    return (
-      correspondeCategoria &&
-      correspondeBusca
-    );
+    return correspondeCategoria && correspondeBusca;
   });
 
-  const possuiFiltro =
-    busca.trim() !== "" ||
-    categoriaSelecionada !== "";
+  const possuiFiltro = busca.trim() !== "" || categoriaSelecionada !== "";
 
   function limparFiltros() {
-    setBusca("");
-    setCategoriaSelecionada("");
+    setSearchParams(
+      (atuais) => {
+        const proximos = new URLSearchParams(atuais);
+        proximos.delete("busca");
+        proximos.delete("categoria");
+        return proximos;
+      },
+      { replace: true },
+    );
   }
 
   return (
     <>
       <Navbar
         busca={busca}
-        onBuscaChange={setBusca}
-        onCategoriaChange={
-          setCategoriaSelecionada
+        onBuscaChange={(termo) => atualizarParametro("busca", termo)}
+        onCategoriaChange={(categoria) =>
+          atualizarParametro("categoria", categoria)
         }
       />
 
@@ -71,18 +81,14 @@ function Home() {
         <section className="home-header">
           <h1>Encontre sua próxima receita</h1>
 
-          <p>
-            Explore receitas simples, deliciosas e para todos os momentos.
-          </p>
+          <p>Explore receitas simples, deliciosas e para todos os momentos.</p>
         </section>
 
         <section className="receitas-section">
           <div className="receitas-section-topo">
             <div>
               <h2>
-                {possuiFiltro
-                  ? "Resultados da busca"
-                  : "Receitas em destaque"}
+                {possuiFiltro ? "Resultados da busca" : "Receitas em destaque"}
               </h2>
 
               {categoriaSelecionada && (
@@ -94,33 +100,23 @@ function Home() {
 
             <span>
               {receitasFiltradas.length}{" "}
-              {receitasFiltradas.length === 1
-                ? "receita"
-                : "receitas"}
+              {receitasFiltradas.length === 1 ? "receita" : "receitas"}
             </span>
           </div>
 
           {receitasFiltradas.length > 0 ? (
             <div className="receitas-grid">
               {receitasFiltradas.map((receita) => (
-                <ReceitaCard
-                  key={receita.id}
-                  receita={receita}
-                />
+                <ReceitaCard key={receita.id} receita={receita} />
               ))}
             </div>
           ) : (
             <div className="sem-resultados">
               <h2>Nenhuma receita encontrada</h2>
 
-              <p>
-                Tente buscar por outro nome, ingrediente ou categoria.
-              </p>
+              <p>Tente buscar por outro nome, ingrediente ou categoria.</p>
 
-              <button
-                type="button"
-                onClick={limparFiltros}
-              >
+              <button type="button" onClick={limparFiltros}>
                 Limpar filtros
               </button>
             </div>

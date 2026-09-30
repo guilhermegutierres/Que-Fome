@@ -1,4 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUsuario, logout, estaLogado } from "../services/auth";
 import {
@@ -62,6 +67,12 @@ function Navbar({
   compact = false,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const estaNaHome = location.pathname === "/";
+  const [buscaLocal, setBuscaLocal] = useState(
+    () => searchParams.get("busca") || "",
+  );
 
   const [usuarioLogado, setUsuarioLogado] = useState(estaLogado());
   const [possuiFavoritos, setPossuiFavoritos] = useState(
@@ -73,6 +84,7 @@ function Navbar({
   });
 
   const usuario = getUsuario();
+  const termoBusca = estaNaHome ? busca : buscaLocal;
 
   useEffect(() => {
     document.body.classList.toggle("modo-escuro", modoEscuro);
@@ -101,7 +113,42 @@ function Navbar({
   }, []);
 
   function selecionarCategoria(categoria) {
-    onCategoriaChange(categoria);
+    if (estaNaHome) {
+      onCategoriaChange(categoria);
+      return;
+    }
+
+    const proximos = new URLSearchParams(searchParams);
+    if (categoria) proximos.set("categoria", categoria);
+    else proximos.delete("categoria");
+    if (buscaLocal.trim()) proximos.set("busca", buscaLocal.trim());
+    const query = proximos.toString();
+
+    navigate({
+      pathname: "/",
+      search: query ? `?${query}` : "",
+    });
+  }
+
+  function atualizarBusca(valor) {
+    if (estaNaHome) onBuscaChange(valor);
+    else setBuscaLocal(valor);
+  }
+
+  function confirmarBusca(event) {
+    event.preventDefault();
+    if (estaNaHome) return;
+
+    const proximos = new URLSearchParams(searchParams);
+    const termo = buscaLocal.trim();
+    if (termo) proximos.set("busca", termo);
+    else proximos.delete("busca");
+    const query = proximos.toString();
+
+    navigate({
+      pathname: "/",
+      search: query ? `?${query}` : "",
+    });
   }
 
   function handleLogout() {
@@ -315,7 +362,7 @@ function Navbar({
       </nav>
 
       <div className="acoes">
-        <div className="campo-busca">
+        <form className="campo-busca" role="search" onSubmit={confirmarBusca}>
           <svg
             width="17"
             height="17"
@@ -343,21 +390,21 @@ function Navbar({
           <input
             type="text"
             placeholder="O que quer cozinhar?"
-            value={busca}
-            onChange={(event) => onBuscaChange(event.target.value)}
+            value={termoBusca}
+            onChange={(event) => atualizarBusca(event.target.value)}
           />
 
-          {busca && (
+          {termoBusca && (
             <button
               type="button"
               className="limpar-busca"
-              onClick={() => onBuscaChange("")}
+              onClick={() => atualizarBusca("")}
               aria-label="Limpar busca"
             >
               ×
             </button>
           )}
-        </div>
+        </form>
 
         <TemaBotao
           modoEscuro={modoEscuro}
