@@ -11,7 +11,7 @@ const receitas = [
     dificuldade: "Fácil",
     custo: "Baixo",
     imagem:
-      "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=1000&q=80",
+      "https://images.pexels.com/photos/30616885/pexels-photo-30616885/free-photo-of-elegant-lemon-mousse-in-vintage-glassware.jpeg?auto=compress&dpr=1&h=750&w=1260",
     ingredientes: [
       "1 lata de leite condensado",
       "1 lata de creme de leite",
@@ -39,7 +39,7 @@ const receitas = [
     dificuldade: "Médio",
     custo: "Médio",
     imagem:
-      "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1770908811367-e1232962e81b?auto=format&fit=crop&w=1000&q=80",
     ingredientes: [
       "500 g de carne moída",
       "1 pacote de massa para lasanha",
