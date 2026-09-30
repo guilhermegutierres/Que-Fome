@@ -1,3 +1,5 @@
+const EVENTO_FAVORITOS_ATUALIZADOS = "favoritos-atualizados";
+
 function obterChaveFavoritos() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
@@ -41,6 +43,7 @@ function alternarFavorito(id) {
   }
 
   localStorage.setItem(chave, JSON.stringify(favoritos));
+  window.dispatchEvent(new Event(EVENTO_FAVORITOS_ATUALIZADOS));
 
   return favoritos.includes(id);
 }
@@ -49,4 +52,5 @@ export {
   obterFavoritos,
   estaFavorito,
   alternarFavorito,
+  EVENTO_FAVORITOS_ATUALIZADOS,
 };

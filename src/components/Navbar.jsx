@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { getUsuario, logout, estaLogado } from "../services/auth";
 import {
-  getUsuario,
-  logout,
-  estaLogado,
-} from "../services/auth";
+  EVENTO_FAVORITOS_ATUALIZADOS,
+  obterFavoritos,
+} from "../services/favoritos";
 import "./Navbar.css";
 
 function TemaBotao({ modoEscuro, alternarModoEscuro }) {
@@ -13,16 +13,8 @@ function TemaBotao({ modoEscuro, alternarModoEscuro }) {
       type="button"
       className="acao-botao"
       onClick={alternarModoEscuro}
-      aria-label={
-        modoEscuro
-          ? "Ativar modo claro"
-          : "Ativar modo escuro"
-      }
-      title={
-        modoEscuro
-          ? "Ativar modo claro"
-          : "Ativar modo escuro"
-      }
+      aria-label={modoEscuro ? "Ativar modo claro" : "Ativar modo escuro"}
+      title={modoEscuro ? "Ativar modo claro" : "Ativar modo escuro"}
     >
       <svg
         width="19"
@@ -71,8 +63,9 @@ function Navbar({
 }) {
   const navigate = useNavigate();
 
-  const [usuarioLogado, setUsuarioLogado] = useState(
-    estaLogado()
+  const [usuarioLogado, setUsuarioLogado] = useState(estaLogado());
+  const [possuiFavoritos, setPossuiFavoritos] = useState(
+    () => obterFavoritos().length > 0,
   );
 
   const [modoEscuro, setModoEscuro] = useState(() => {
@@ -82,16 +75,30 @@ function Navbar({
   const usuario = getUsuario();
 
   useEffect(() => {
-    document.body.classList.toggle(
-      "modo-escuro",
-      modoEscuro
-    );
+    document.body.classList.toggle("modo-escuro", modoEscuro);
 
-    localStorage.setItem(
-      "modoEscuro",
-      modoEscuro
-    );
+    localStorage.setItem("modoEscuro", modoEscuro);
   }, [modoEscuro]);
+
+  useEffect(() => {
+    function atualizarIndicadorFavoritos() {
+      setPossuiFavoritos(obterFavoritos().length > 0);
+    }
+
+    window.addEventListener(
+      EVENTO_FAVORITOS_ATUALIZADOS,
+      atualizarIndicadorFavoritos,
+    );
+    window.addEventListener("storage", atualizarIndicadorFavoritos);
+
+    return () => {
+      window.removeEventListener(
+        EVENTO_FAVORITOS_ATUALIZADOS,
+        atualizarIndicadorFavoritos,
+      );
+      window.removeEventListener("storage", atualizarIndicadorFavoritos);
+    };
+  }, []);
 
   function selecionarCategoria(categoria) {
     onCategoriaChange(categoria);
@@ -100,6 +107,7 @@ function Navbar({
   function handleLogout() {
     logout();
     setUsuarioLogado(false);
+    setPossuiFavoritos(false);
     navigate("/");
   }
 
@@ -132,10 +140,7 @@ function Navbar({
         </Link>
 
         <div className="navbar-compact-acoes">
-          <Link
-            to="/"
-            className="voltar-inicio"
-          >
+          <Link to="/" className="voltar-inicio">
             ← Voltar para início
           </Link>
 
@@ -181,10 +186,7 @@ function Navbar({
         </button>
 
         <div className="dropdown">
-          <button
-            type="button"
-            className="menu-link"
-          >
+          <button type="button" className="menu-link">
             Entradas
             <span className="chevron" />
           </button>
@@ -192,27 +194,18 @@ function Navbar({
           <div className="dropdown-menu">
             <button
               type="button"
-              onClick={() =>
-                selecionarCategoria("Saladas")
-              }
+              onClick={() => selecionarCategoria("Saladas")}
             >
               Saladas
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Sopas")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Sopas")}>
               Sopas
             </button>
 
             <button
               type="button"
-              onClick={() =>
-                selecionarCategoria("Petiscos")
-              }
+              onClick={() => selecionarCategoria("Petiscos")}
             >
               Petiscos
             </button>
@@ -220,56 +213,31 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button
-            type="button"
-            className="menu-link"
-          >
+          <button type="button" className="menu-link">
             Principais
             <span className="chevron" />
           </button>
 
           <div className="dropdown-menu">
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Massas")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Massas")}>
               Massas
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Peixes")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Peixes")}>
               Peixes
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Carnes")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Carnes")}>
               Carnes
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Aves")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Aves")}>
               Aves
             </button>
 
             <button
               type="button"
-              onClick={() =>
-                selecionarCategoria("Vegetarianos")
-              }
+              onClick={() => selecionarCategoria("Vegetarianos")}
             >
               Vegetarianos
             </button>
@@ -277,38 +245,26 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button
-            type="button"
-            className="menu-link"
-          >
+          <button type="button" className="menu-link">
             Acompanhamentos
             <span className="chevron" />
           </button>
 
           <div className="dropdown-menu">
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Arroz")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Arroz")}>
               Arroz
             </button>
 
             <button
               type="button"
-              onClick={() =>
-                selecionarCategoria("Legumes")
-              }
+              onClick={() => selecionarCategoria("Legumes")}
             >
               Legumes
             </button>
 
             <button
               type="button"
-              onClick={() =>
-                selecionarCategoria("Batatas")
-              }
+              onClick={() => selecionarCategoria("Batatas")}
             >
               Batatas
             </button>
@@ -316,78 +272,42 @@ function Navbar({
         </div>
 
         <div className="dropdown">
-          <button
-            type="button"
-            className="menu-link"
-          >
+          <button type="button" className="menu-link">
             Sobremesas
             <span className="chevron" />
           </button>
 
           <div className="dropdown-menu">
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Bolos")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Bolos")}>
               Bolos
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Doces")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Doces")}>
               Doces
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Tortas")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Tortas")}>
               Tortas
             </button>
           </div>
         </div>
 
         <div className="dropdown">
-          <button
-            type="button"
-            className="menu-link"
-          >
+          <button type="button" className="menu-link">
             Bebidas
             <span className="chevron" />
           </button>
 
           <div className="dropdown-menu">
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Sucos")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Sucos")}>
               Sucos
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Drinks")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Drinks")}>
               Drinks
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                selecionarCategoria("Cafés")
-              }
-            >
+            <button type="button" onClick={() => selecionarCategoria("Cafés")}>
               Cafés
             </button>
           </div>
@@ -424,9 +344,7 @@ function Navbar({
             type="text"
             placeholder="O que quer cozinhar?"
             value={busca}
-            onChange={(event) =>
-              onBuscaChange(event.target.value)
-            }
+            onChange={(event) => onBuscaChange(event.target.value)}
           />
 
           {busca && (
@@ -447,10 +365,7 @@ function Navbar({
         />
 
         {usuarioLogado && (
-          <Link
-            to="/adicionar-receita"
-            className="adicionar-link"
-          >
+          <Link to="/adicionar-receita" className="adicionar-link">
             Adicionar receita
           </Link>
         )}
@@ -484,32 +399,20 @@ function Navbar({
                 </svg>
               </span>
 
-              <span className="usuario-nome">
-                {usuario?.nome || "Usuário"}
-              </span>
+              <span className="usuario-nome">{usuario?.nome || "Usuário"}</span>
             </div>
 
-            <button
-              type="button"
-              className="sair-botao"
-              onClick={handleLogout}
-            >
+            <button type="button" className="sair-botao" onClick={handleLogout}>
               Sair
             </button>
           </div>
         ) : (
           <div className="auth-acoes">
-            <Link
-              to="/login"
-              className="entrar-link"
-            >
+            <Link to="/login" className="entrar-link">
               Entrar
             </Link>
 
-            <Link
-              to="/cadastro"
-              className="cadastro-link"
-            >
+            <Link to="/cadastro" className="cadastro-link">
               Criar conta
             </Link>
           </div>
@@ -517,7 +420,7 @@ function Navbar({
 
         <Link
           to="/favoritos"
-          className="acao-botao"
+          className={`acao-botao${possuiFavoritos ? " favorito-indicador-ativo" : ""}`}
           aria-label="Favoritos"
           title="Favoritos"
         >
@@ -525,7 +428,7 @@ function Navbar({
             width="19"
             height="19"
             viewBox="0 0 24 24"
-            fill="none"
+            fill={possuiFavoritos ? "currentColor" : "none"}
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >

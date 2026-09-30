@@ -254,6 +254,10 @@
   color: #64cd87;
 }
 
+.acao-botao.favorito-indicador-ativo {
+  color: #64cd87;
+}
+
 .acao-botao svg {
   display: block;
 }
@@ -466,6 +470,10 @@ body.modo-escuro .limpar-busca:hover {
 
 body.modo-escuro .acao-botao {
   color: #cccccc;
+}
+
+body.modo-escuro .acao-botao.favorito-indicador-ativo {
+  color: #64cd87;
 }
 
 body.modo-escuro .acao-botao:hover {

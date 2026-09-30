@@ -75,6 +75,72 @@
   color: #222;
 }
 
+.receita-titulo-linha {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.receita-titulo-linha h1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.receita-favorito-botao {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  border: 0;
+  border-radius: 50%;
+  background: #f7f7f7;
+  color: #555555;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.receita-favorito-botao:hover {
+  transform: scale(1.05);
+  background: #eaf7ee;
+  color: #64cd87;
+}
+
+.receita-favorito-botao.favoritado {
+  color: #64cd87;
+}
+
+.receita-favorito-botao:focus-visible {
+  outline: 3px solid rgba(100, 205, 135, 0.45);
+  outline-offset: 2px;
+}
+
+body.modo-escuro .receita-favorito-botao {
+  background: #292929;
+  color: #cccccc;
+}
+
+body.modo-escuro .receita-favorito-botao:hover {
+  background: #1f3326;
+  color: #64cd87;
+}
+
+body.modo-escuro .receita-favorito-botao.favoritado {
+  color: #64cd87;
+}
+
+.receita-autor {
+  margin: -4px 0 12px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .receita-descricao {
   margin: 0;
 
@@ -140,6 +206,13 @@
   color: #555;
 
   font-size: 15px;
+  line-height: 1.5;
+}
+
+.receita-lista-vazia {
+  color: inherit;
+  opacity: 0.7;
+  font-size: 14px;
   line-height: 1.5;
 }
 
