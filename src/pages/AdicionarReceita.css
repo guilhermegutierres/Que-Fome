@@ -217,6 +217,62 @@ body.modo-escuro .imagem-remover:hover {
   gap: 10px;
 }
 
+.nutricao-form-intro {
+  margin: 8px 0 12px;
+  padding: 13px 15px;
+  border: 1px solid #e2eee5;
+  border-radius: 10px;
+  background: #f7fbf8;
+}
+
+.nutricao-form-intro strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #267541;
+  font-size: 13px;
+}
+
+.nutricao-form-intro p {
+  margin: 0;
+  color: #777777;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.nutricao-como-funciona {
+  margin-top: 8px;
+}
+
+.nutricao-como-funciona summary {
+  width: fit-content;
+  color: #328b50;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nutricao-como-funciona summary:focus-visible {
+  outline: 2px solid #64cd87;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.nutricao-como-funciona-conteudo {
+  padding: 8px 0 0;
+}
+
+.nutricao-como-funciona-conteudo ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #777777;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.nutricao-como-funciona-conteudo p {
+  margin-top: 7px;
+}
+
 .ingrediente-linha {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
@@ -227,14 +283,61 @@ body.modo-escuro .imagem-remover:hover {
 .ingrediente-nutricao {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 1fr 110px;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 0.55fr);
+  gap: 14px;
+  align-items: start;
   padding-bottom: 10px;
   border-bottom: 1px dashed #e2e2e2;
 }
 
+.ingrediente-taco-campo,
+.ingrediente-peso-campo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ingrediente-taco-campo > label,
+.ingrediente-peso-campo > label {
+  margin-bottom: 6px;
+  color: #555555;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ingrediente-peso-campo > small {
+  margin: 5px 0 0;
+  color: #888888;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 body.modo-escuro .ingrediente-nutricao {
   border-bottom-color: #333333;
+}
+
+body.modo-escuro .nutricao-form-intro {
+  border-color: #304538;
+  background: #202b23;
+}
+
+body.modo-escuro .nutricao-form-intro strong {
+  color: #7ddc9c;
+}
+
+body.modo-escuro .nutricao-form-intro p,
+body.modo-escuro .ingrediente-peso-campo > small,
+body.modo-escuro .nutricao-como-funciona-conteudo ol {
+  color: #aaaaaa;
+}
+
+body.modo-escuro .nutricao-como-funciona summary {
+  color: #7ddc9c;
+}
+
+body.modo-escuro .ingrediente-taco-campo > label,
+body.modo-escuro .ingrediente-peso-campo > label {
+  color: #dddddd;
 }
 
 .ingrediente-adicionar,
@@ -452,6 +555,11 @@ body.modo-escuro .adicionar-cancelar:hover {
   .ingrediente-remover {
     grid-column: 1 / -1;
     justify-self: start;
+  }
+
+  .ingrediente-nutricao {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .adicionar-acoes-formulario {

@@ -81,16 +81,20 @@ function Receita() {
         </Link>
 
         <article className="receita-container">
-          <div className="receita-imagem-container">
-            <img
-              src={imagemIndisponivel ? IMAGEM_FALLBACK : imagemOriginal}
-              alt={
-                imagemIndisponivel
-                  ? `Imagem indisponível para ${receita.titulo}`
-                  : receita.titulo
-              }
-              onError={() => setImagemComErro(imagemOriginal)}
-            />
+          <div className="receita-coluna-imagem">
+            <div className="receita-imagem-container">
+              <img
+                src={imagemIndisponivel ? IMAGEM_FALLBACK : imagemOriginal}
+                alt={
+                  imagemIndisponivel
+                    ? `Imagem indisponível para ${receita.titulo}`
+                    : receita.titulo
+                }
+                onError={() => setImagemComErro(imagemOriginal)}
+              />
+            </div>
+
+            <InformacaoNutricional ingredientes={ingredientesNutricao} />
           </div>
 
           <div className="receita-conteudo">
@@ -187,8 +191,6 @@ function Receita() {
                 </p>
               )}
             </section>
-
-            <InformacaoNutricional ingredientes={ingredientesNutricao} />
           </div>
         </article>
       </main>

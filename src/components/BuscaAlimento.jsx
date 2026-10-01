@@ -5,10 +5,17 @@ import "./BuscaAlimento.css";
 const TAMANHO_MINIMO_BUSCA = 3;
 const ATRASO_BUSCA_MS = 500;
 
-function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
+function BuscaAlimento({
+  id,
+  alimento,
+  nomeIngrediente = "",
+  onSelecionar,
+  invalid = false,
+}) {
   const [termo, setTermo] = useState("");
   const [resultados, setResultados] = useState([]);
   const [aberto, setAberto] = useState(false);
+  const [consultaIniciada, setConsultaIniciada] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const [indiceAtivo, setIndiceAtivo] = useState(-1);
@@ -33,6 +40,10 @@ function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
 
     let cancelado = false;
     const temporizador = window.setTimeout(async () => {
+      if (cancelado) return;
+      setConsultaIniciada(true);
+      setCarregando(true);
+
       try {
         const encontrados = await buscarAlimentos(termoLimpo);
         if (cancelado) return;
@@ -97,7 +108,13 @@ function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
   if (alimento) {
     return (
       <div className="busca-alimento-selecionado">
-        <span title={alimento.descricao}>{alimento.descricao}</span>
+        <span className="busca-alimento-vinculo">
+          <span aria-hidden="true">✓</span>
+          <span className="busca-alimento-vinculo-texto">
+            <small>Alimento vinculado</small>
+            <strong title={alimento.descricao}>{alimento.descricao}</strong>
+          </span>
+        </span>
         <button type="button" onClick={() => onSelecionar(null)}>
           Trocar
         </button>
@@ -105,7 +122,7 @@ function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
     );
   }
 
-  const mostrarLista = aberto && termoValido;
+  const mostrarLista = aberto && termoValido && consultaIniciada;
 
   return (
     <div className="busca-alimento" ref={containerRef}>
@@ -114,7 +131,11 @@ function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
         type="text"
         role="combobox"
         autoComplete="off"
-        placeholder="Buscar na tabela TACO (ex.: farinha de trigo)"
+        placeholder={
+          nomeIngrediente.trim()
+            ? `Buscar “${nomeIngrediente.trim()}” na TACO...`
+            : "Buscar alimento na TACO..."
+        }
         value={termo}
         aria-invalid={invalid}
         aria-expanded={mostrarLista}
@@ -125,13 +146,19 @@ function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
             : undefined
         }
         onChange={(event) => {
-          setTermo(event.target.value);
-          setCarregando(
-            event.target.value.trim().length >= TAMANHO_MINIMO_BUSCA,
-          );
-          setAberto(true);
+          const novoTermo = event.target.value;
+          const novoTermoValido =
+            novoTermo.trim().length >= TAMANHO_MINIMO_BUSCA;
+
+          setTermo(novoTermo);
+          setResultados([]);
+          setErro("");
+          setIndiceAtivo(-1);
+          setCarregando(false);
+          setConsultaIniciada(false);
+          setAberto(novoTermoValido);
         }}
-        onFocus={() => setAberto(true)}
+        onFocus={() => setAberto(termoValido)}
         onKeyDown={handleKeyDown}
       />
 
@@ -141,7 +168,9 @@ function BuscaAlimento({ id, alimento, onSelecionar, invalid = false }) {
           id={`${id}-resultados`}
           role="listbox"
         >
-          {carregando && <p className="busca-alimento-status">Buscando...</p>}
+          {carregando && (
+            <p className="busca-alimento-status">Buscando alimentos...</p>
+          )}
 
           {!carregando && erro && (
             <p className="busca-alimento-status erro">{erro}</p>

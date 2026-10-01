@@ -60,10 +60,14 @@ async function requisitar(caminho, opcoes = {}) {
   }
 
   if (!resposta.ok) {
-    throw new Error("A API de nutrição não conseguiu responder no momento.");
+    throw new Error("Não foi possível consultar a tabela TACO no momento.");
   }
 
-  return resposta.json();
+  try {
+    return await resposta.json();
+  } catch {
+    throw new Error("Não foi possível consultar a tabela TACO no momento.");
+  }
 }
 
 function consultarComCache(chave, consultar) {
@@ -110,11 +114,38 @@ async function buscarAlimentos(termo) {
   if (palavras.length === 0) return [];
 
   const primeira = palavras[0].toLowerCase();
-  const variantes = [
+  const variantes = [...new Set([
     primeira,
     primeira.charAt(0).toUpperCase() + primeira.slice(1),
-  ];
-  const listas = await Promise.all(variantes.map(consultarAlimentosPorPalavra));
+  ])];
+  const consultas = await Promise.allSettled(
+    variantes.map(consultarAlimentosPorPalavra),
+  );
+  const consultasValidas = consultas.filter(
+    (consulta) => consulta.status === "fulfilled",
+  );
+
+  if (consultasValidas.length === 0) {
+    const primeiraFalha = consultas.find(
+      (consulta) => consulta.status === "rejected",
+    );
+    const mensagemFalha = primeiraFalha.reason?.message;
+    const mensagensAmigaveis = [
+      "A chave da API de nutrição não foi configurada.",
+      "Não foi possível conectar à API de nutrição.",
+      "A chave da API de nutrição é inválida ou não tem acesso.",
+      "Limite diário de consultas da API de nutrição atingido. Tente novamente amanhã.",
+      "Não foi possível consultar a tabela TACO no momento.",
+    ];
+
+    if (mensagensAmigaveis.includes(mensagemFalha)) {
+      throw primeiraFalha.reason;
+    }
+
+    throw new Error("Não foi possível consultar a tabela TACO no momento.");
+  }
+
+  const listas = consultasValidas.map((consulta) => consulta.value);
 
   const palavrasNormalizadas = palavras.map(normalizarTexto);
   const encontrados = new Map();

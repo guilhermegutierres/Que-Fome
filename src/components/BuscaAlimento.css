@@ -66,11 +66,43 @@
 }
 
 .busca-alimento-selecionado span {
-  flex: 1;
   min-width: 0;
+}
+
+.busca-alimento-vinculo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 8px;
+  color: inherit;
+  font-weight: 600;
+}
+
+.busca-alimento-vinculo > span:first-child {
+  flex-shrink: 0;
+}
+
+.busca-alimento-vinculo-texto {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.busca-alimento-vinculo-texto small {
+  color: inherit;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.busca-alimento-vinculo-texto strong {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .busca-alimento-selecionado button {

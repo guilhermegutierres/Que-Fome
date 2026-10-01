@@ -533,10 +533,35 @@ function AdicionarReceita() {
             <div className="campo">
               <label>Ingredientes *</label>
               <small>
-                Informe a quantidade e o ingrediente em campos separados. Para
-                calcular as calorias, vincule cada ingrediente a um alimento da
-                tabela nutricional e informe o peso em gramas.
+                Informe a quantidade culinária e o ingrediente em campos
+                separados.
               </small>
+              <div className="nutricao-form-intro">
+                <strong>Informação nutricional (opcional)</strong>
+                <p>
+                  A TACO reúne informações nutricionais de alimentos. Se
+                  quiser, vincule seus ingredientes para estimar os nutrientes;
+                  você pode publicar a receita sem usar a TACO.
+                </p>
+                <details className="nutricao-como-funciona">
+                  <summary>Como funciona?</summary>
+                  <div className="nutricao-como-funciona-conteudo">
+                    <ol>
+                      <li>Informe a quantidade e o ingrediente normalmente.</li>
+                      <li>Escolha o alimento correspondente na TACO.</li>
+                      <li>Informe o peso total desse ingrediente em gramas.</li>
+                      <li>
+                        O Que-Fome usa esses dados para estimar os nutrientes
+                        na página da receita.
+                      </li>
+                    </ol>
+                    <p>
+                      A informação nutricional é opcional. Você pode publicar a
+                      receita sem vincular ingredientes à TACO.
+                    </p>
+                  </div>
+                </details>
+              </div>
               <div className="ingredientes-formulario">
                 {ingredientes.map((ingrediente, index) => (
                   <div className="ingrediente-linha" key={index}>
@@ -583,36 +608,54 @@ function AdicionarReceita() {
                       Remover
                     </button>
                     <div className="ingrediente-nutricao">
-                      <BuscaAlimento
-                        id={`alimento-taco-${index}`}
-                        alimento={ingrediente.alimentoTaco}
-                        invalid={Boolean(
-                          erros.ingredientes &&
-                          ingrediente.gramas.trim() &&
-                          !ingrediente.alimentoTaco,
-                        )}
-                        onSelecionar={(alimento) =>
-                          atualizarIngrediente(index, "alimentoTaco", alimento)
-                        }
-                      />
-                      <input
-                        aria-label={`Peso em gramas do ingrediente ${index + 1}`}
-                        inputMode="decimal"
-                        placeholder="Peso (g)"
-                        value={ingrediente.gramas}
-                        aria-invalid={Boolean(
-                          erros.ingredientes &&
-                          ingrediente.alimentoTaco &&
-                          !(Number(ingrediente.gramas.replace(",", ".")) > 0),
-                        )}
-                        onChange={(event) =>
-                          atualizarIngrediente(
-                            index,
-                            "gramas",
-                            event.target.value,
-                          )
-                        }
-                      />
+                      <div className="ingrediente-taco-campo">
+                        <label htmlFor={`alimento-taco-${index}`}>
+                          Alimento para cálculo nutricional
+                        </label>
+                        <BuscaAlimento
+                          id={`alimento-taco-${index}`}
+                          alimento={ingrediente.alimentoTaco}
+                          nomeIngrediente={ingrediente.nome}
+                          invalid={Boolean(
+                            erros.ingredientes &&
+                            ingrediente.gramas.trim() &&
+                            !ingrediente.alimentoTaco,
+                          )}
+                          onSelecionar={(alimento) =>
+                            atualizarIngrediente(index, "alimentoTaco", alimento)
+                          }
+                        />
+                      </div>
+                      <div className="ingrediente-peso-campo">
+                        <label htmlFor={`peso-taco-${index}`}>
+                          Peso usado no cálculo (g)
+                        </label>
+                        <input
+                          id={`peso-taco-${index}`}
+                          aria-label={`Peso usado no cálculo para o ingrediente ${index + 1}, em gramas`}
+                          inputMode="decimal"
+                          placeholder="Ex.: 300"
+                          value={ingrediente.gramas}
+                          aria-invalid={Boolean(
+                            erros.ingredientes &&
+                            ingrediente.alimentoTaco &&
+                            !(Number(ingrediente.gramas.replace(",", ".")) > 0),
+                          )}
+                          onChange={(event) =>
+                            atualizarIngrediente(
+                              index,
+                              "gramas",
+                              event.target.value,
+                            )
+                          }
+                        />
+                        <small>
+                          Informe o peso total desse ingrediente para o
+                          cálculo. A quantidade culinária continua na receita;
+                          xícaras, colheres e unidades não são convertidas
+                          automaticamente para gramas.
+                        </small>
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -31,6 +31,7 @@ function estaVinculado(ingrediente) {
 
 function InformacaoNutricional({ ingredientes }) {
   const vinculados = ingredientes.filter(estaVinculado);
+  const possuiIngredienteSemVinculo = vinculados.length < ingredientes.length;
   const itens = vinculados.map((ingrediente) => ({
     id: ingrediente.tacoId,
     grams: Number(ingrediente.gramas),
@@ -77,7 +78,8 @@ function InformacaoNutricional({ ingredientes }) {
   if (vinculados.length === 0) {
     conteudo = (
       <p className="receita-lista-vazia">
-        Nenhum ingrediente desta receita está vinculado à tabela nutricional.
+        Nenhum ingrediente foi vinculado à tabela TACO. A receita continua
+        disponível, mas não há dados para estimar seus nutrientes.
       </p>
     );
   } else if (!apiConfigurada()) {
@@ -96,55 +98,55 @@ function InformacaoNutricional({ ingredientes }) {
     conteudo = <p className="nutricao-erro">{resultado.erro}</p>;
   } else {
     const { items: itensCalculados = [], totals } = resultado.dados;
-    let indiceVinculado = 0;
 
     conteudo = (
       <>
-        <table className="nutricao-tabela">
-          <thead>
-            <tr>
-              <th scope="col">Ingrediente</th>
-              <th scope="col">Peso</th>
-              <th scope="col">Calorias</th>
-            </tr>
-          </thead>
+        <div className="nutricao-tabela-container">
+          <table className="nutricao-tabela">
+            <thead>
+              <tr>
+                <th scope="col">Ingrediente</th>
+                <th scope="col">Quantidade na receita</th>
+                <th scope="col">Peso</th>
+                <th scope="col">Calorias estimadas</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {ingredientes.map((ingrediente, index) => {
-              // A API devolve os itens na mesma ordem em que foram enviados.
-              const calculado = estaVinculado(ingrediente)
-                ? itensCalculados[indiceVinculado++]
-                : null;
+            <tbody>
+              {vinculados.map((ingrediente, index) => {
+                const calculado = itensCalculados[index];
 
-              return (
-                <tr key={index}>
-                  <td>
-                    {ingrediente.quantidade} {ingrediente.nome}
-                    {ingrediente.tacoDescricao && (
-                      <small>TACO: {ingrediente.tacoDescricao}</small>
-                    )}
-                  </td>
-                  <td>
-                    {calculado ? `${formatarNumero(calculado.grams)} g` : "—"}
-                  </td>
-                  <td>
-                    {calculado
-                      ? `${formatarNumero(calculado.kcal, 0)} kcal`
-                      : "—"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+                return (
+                  <tr key={`${ingrediente.tacoId}-${index}`}>
+                    <td>
+                      {ingrediente.nome}
+                      {ingrediente.tacoDescricao && (
+                        <small>Alimento TACO: {ingrediente.tacoDescricao}</small>
+                      )}
+                    </td>
+                    <td>{ingrediente.quantidade || "—"}</td>
+                    <td>{formatarNumero(Number(ingrediente.gramas))} g</td>
+                    <td>
+                      {calculado
+                        ? `${formatarNumero(calculado.kcal, 0)} kcal`
+                        : "—"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
 
-          <tfoot>
-            <tr>
-              <th scope="row">Total</th>
-              <td>{formatarNumero(totals.grams)} g</td>
-              <td>{formatarNumero(totals.macros.kcal, 0)} kcal</td>
-            </tr>
-          </tfoot>
-        </table>
+            <tfoot>
+              <tr>
+                <th scope="row" colSpan="2">
+                  Totais da receita
+                </th>
+                <td>{formatarNumero(totals.grams)} g no cálculo</td>
+                <td>{formatarNumero(totals.macros.kcal, 0)} kcal</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
 
         <h3 className="nutricao-subtitulo">Total de nutrientes</h3>
 
@@ -164,9 +166,10 @@ function InformacaoNutricional({ ingredientes }) {
           ))}
         </dl>
 
-        {vinculados.length < ingredientes.length && (
+        {possuiIngredienteSemVinculo && (
           <p className="nutricao-observacao">
-            Ingredientes marcados com “—” não entram no cálculo.
+            Alguns ingredientes não foram incluídos na estimativa porque não
+            foram vinculados à tabela TACO.
           </p>
         )}
       </>
@@ -176,6 +179,10 @@ function InformacaoNutricional({ ingredientes }) {
   return (
     <section className="receita-secao informacao-nutricional">
       <h2>Informação nutricional</h2>
+      <p className="nutricao-introducao">
+        Valores estimados com base nos alimentos selecionados e nos pesos
+        informados.
+      </p>
       {conteudo}
       <p className="nutricao-fonte">
         Valores calculados com base na Tabela Brasileira de Composição de
