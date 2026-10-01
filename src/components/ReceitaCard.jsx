@@ -73,7 +73,7 @@ function ReceitaCard({ receita, onEditar, onExcluir }) {
       <div className="receita-card-conteudo">
         <span className="receita-card-categoria">{receita.categoria}</span>
 
-        <h2>{receita.titulo}</h2>
+        <h2 title={receita.titulo}>{receita.titulo}</h2>
 
         <p>{receita.descricao}</p>
 
