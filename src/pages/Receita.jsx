@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import InformacaoNutricional from "../components/InformacaoNutricional";
 import Navbar from "../components/Navbar";
 import { estaLogado } from "../services/auth";
 import { alternarFavorito, estaFavorito } from "../services/favoritos";
@@ -54,6 +55,12 @@ function Receita() {
   const modoPreparo = Array.isArray(receita.modoPreparo)
     ? receita.modoPreparo
     : [];
+  const ingredientesNutricao = Array.isArray(receita.ingredientesDetalhados)
+    ? receita.ingredientesDetalhados
+    : ingredientes.map((ingrediente) => ({
+        nome: ingrediente,
+        quantidade: "",
+      }));
 
   function handleFavorito() {
     if (!estaLogado()) {
@@ -74,16 +81,20 @@ function Receita() {
         </Link>
 
         <article className="receita-container">
-          <div className="receita-imagem-container">
-            <img
-              src={imagemIndisponivel ? IMAGEM_FALLBACK : imagemOriginal}
-              alt={
-                imagemIndisponivel
-                  ? `Imagem indisponível para ${receita.titulo}`
-                  : receita.titulo
-              }
-              onError={() => setImagemComErro(imagemOriginal)}
-            />
+          <div className="receita-coluna-imagem">
+            <div className="receita-imagem-container">
+              <img
+                src={imagemIndisponivel ? IMAGEM_FALLBACK : imagemOriginal}
+                alt={
+                  imagemIndisponivel
+                    ? `Imagem indisponível para ${receita.titulo}`
+                    : receita.titulo
+                }
+                onError={() => setImagemComErro(imagemOriginal)}
+              />
+            </div>
+
+            <InformacaoNutricional ingredientes={ingredientesNutricao} />
           </div>
 
           <div className="receita-conteudo">

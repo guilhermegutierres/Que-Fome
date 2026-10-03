@@ -1,0 +1,155 @@
+.nutricao-introducao {
+  margin: -4px 0 14px;
+  color: #777777;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.nutricao-tabela-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.nutricao-tabela {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.nutricao-tabela th,
+.nutricao-tabela td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eeeeee;
+  color: #555555;
+  text-align: right;
+  vertical-align: top;
+}
+
+.nutricao-tabela th:first-child,
+.nutricao-tabela td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.nutricao-tabela th:last-child,
+.nutricao-tabela td:last-child {
+  padding-right: 0;
+  white-space: nowrap;
+}
+
+.nutricao-tabela thead th {
+  color: #888888;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nutricao-tabela td small {
+  display: block;
+  margin-top: 3px;
+  color: #999999;
+  font-size: 12px;
+}
+
+.nutricao-tabela tfoot th,
+.nutricao-tabela tfoot td {
+  border-bottom: 0;
+  color: #222222;
+  font-weight: 700;
+}
+
+.nutricao-subtitulo {
+  margin: 26px 0 14px;
+  color: #222222;
+  font-size: 17px;
+}
+
+.nutricao-nutrientes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 0;
+}
+
+.nutricao-nutrientes div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f7f7f7;
+}
+
+.nutricao-nutrientes dt {
+  color: #888888;
+  font-size: 12px;
+}
+
+.nutricao-nutrientes dd {
+  margin: 0;
+  color: #222222;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.nutricao-nutrientes .nutricao-destaque {
+  background: #e5f8eb;
+}
+
+.nutricao-nutrientes .nutricao-destaque dd {
+  color: #267541;
+}
+
+.nutricao-erro {
+  color: #d9534f;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+body.modo-escuro .nutricao-introducao {
+  color: #aaaaaa;
+}
+
+.nutricao-observacao,
+.nutricao-fonte {
+  margin-top: 14px;
+  color: #999999;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.modo-escuro .nutricao-tabela th,
+body.modo-escuro .nutricao-tabela td {
+  border-bottom-color: #333333;
+  color: #cccccc;
+}
+
+body.modo-escuro .nutricao-tabela thead th,
+body.modo-escuro .nutricao-tabela td small {
+  color: #999999;
+}
+
+body.modo-escuro .nutricao-tabela tfoot th,
+body.modo-escuro .nutricao-tabela tfoot td,
+body.modo-escuro .nutricao-subtitulo,
+body.modo-escuro .nutricao-nutrientes dd {
+  color: #f2f2f2;
+}
+
+body.modo-escuro .nutricao-nutrientes div {
+  background: #242424;
+}
+
+body.modo-escuro .nutricao-nutrientes .nutricao-destaque {
+  background: #1f3326;
+}
+
+body.modo-escuro .nutricao-nutrientes .nutricao-destaque dd {
+  color: #7ddc9c;
+}
+
+@media (max-width: 550px) {
+  .nutricao-nutrientes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
