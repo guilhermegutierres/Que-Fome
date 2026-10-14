@@ -1,16 +1,16 @@
-# React + Vite
+# Que Fome!
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Projeto React + Vite com backend REST NestJS/TypeScript em migração gradual.
 
-Currently, two official plugins are available:
+**Para começar sem banco de dados**, veja **[MIGRACAO-NESTJS.md](./MIGRACAO-NESTJS.md)**. O backend pode consumir o arquivo TACO local antes de configurar PostgreSQL/Supabase.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Frontend: pasta `src/` (`npm install && npm run dev`, na raiz).
+- Backend: pasta `backend/src/` (`cd backend && npm install && npm run dev`).
+- Dados de desenvolvimento: `backend/data/taco/TACO.json`.
+- Persistência futura: `supabase/migrations/` e `backend/scripts/importar-taco.ts`.
 
-## React Compiler
+Nesta fase, apenas o módulo **alimentos/nutrição** foi migrado para a API. Receitas, favoritos e autenticação seguem no frontend até as próximas etapas.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Integração com Supabase + RapidAPI
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Para configurar as duas fontes sem expor senhas no frontend, consulte [CONECTAR-SUPABASE-E-RAPIDAPI.md](CONECTAR-SUPABASE-E-RAPIDAPI.md). Nesta etapa o backend oferece duas rotas de consulta independentes e o React escolhe uma delas por `VITE_ALIMENTOS_SOURCE`.
