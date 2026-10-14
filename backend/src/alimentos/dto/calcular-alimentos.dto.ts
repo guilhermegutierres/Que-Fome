@@ -1,5 +1,14 @@
-import { Type } from 'class-transformer';
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsInt, IsNumber, Max, Min, ValidateNested } from 'class-validator';
+import { Type } from "class-transformer";
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsInt,
+  IsNumber,
+  Max,
+  Min,
+  ValidateNested,
+} from "class-validator";
 
 export class ItemAlimentoDto {
   @Type(() => Number)

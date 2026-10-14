@@ -3,7 +3,10 @@ const URL_API = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
 // `supabase` (padrão): usa os alimentos do PostgreSQL via NestJS.
 // `rapidapi`: usa a API externa via proxy seguro do NestJS.
 // Não misture IDs entre fontes em uma mesma receita.
-const FONTE = import.meta.env.VITE_ALIMENTOS_SOURCE === "rapidapi" ? "/alimentos/rapidapi" : "/alimentos";
+const FONTE =
+  import.meta.env.VITE_ALIMENTOS_SOURCE === "rapidapi"
+    ? "/alimentos/rapidapi"
+    : "/alimentos";
 const consultasPendentes = new Map();
 
 // Mantém a assinatura pública dos componentes enquanto migramos os serviços.
@@ -27,10 +30,14 @@ async function requisitar(caminho, opcoes = {}) {
 
   if (!resposta.ok) {
     if (resposta.status >= 500) {
-      throw new Error("O servidor não conseguiu consultar os alimentos. Verifique a conexão com o banco.");
+      throw new Error(
+        "O servidor não conseguiu consultar os alimentos. Verifique a conexão com o banco.",
+      );
     }
     if (resposta.status === 400) {
-      throw new Error("Os dados enviados para a consulta nutricional são inválidos.");
+      throw new Error(
+        "Os dados enviados para a consulta nutricional são inválidos.",
+      );
     }
     throw new Error("Não foi possível consultar a tabela TACO no momento.");
   }
