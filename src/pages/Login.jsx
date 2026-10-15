@@ -44,50 +44,34 @@ function Login() {
           </p>
 
           <form onSubmit={handleSubmit}>
-            <label htmlFor="email">
-              E-mail
-            </label>
+            <label htmlFor="email">E-mail</label>
 
             <input
               id="email"
               type="email"
               placeholder="seuemail@exemplo.com"
               value={email}
-              onChange={(event) =>
-                setEmail(event.target.value)
-              }
+              onChange={(event) => setEmail(event.target.value)}
             />
 
-            <label htmlFor="senha">
-              Senha
-            </label>
+            <label htmlFor="senha">Senha</label>
 
             <input
               id="senha"
               type="password"
               placeholder="Digite sua senha"
               value={senha}
-              onChange={(event) =>
-                setSenha(event.target.value)
-              }
+              onChange={(event) => setSenha(event.target.value)}
             />
 
-            {erro && (
-              <p className="login-erro">
-                {erro}
-              </p>
-            )}
+            {erro && <p className="login-erro">{erro}</p>}
 
-            <button type="submit">
-              Entrar
-            </button>
+            <button type="submit">Entrar</button>
           </form>
 
           <p className="login-cadastro">
             Ainda não possui uma conta?
-            <Link to="/cadastro">
-              {" "}Criar conta
-            </Link>
+            <Link to="/cadastro"> Criar conta</Link>
           </p>
         </section>
       </main>

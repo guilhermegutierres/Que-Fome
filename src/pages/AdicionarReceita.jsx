@@ -539,9 +539,9 @@ function AdicionarReceita() {
               <div className="nutricao-form-intro">
                 <strong>Informação nutricional (opcional)</strong>
                 <p>
-                  A TACO reúne informações nutricionais de alimentos. Se
-                  quiser, vincule seus ingredientes para estimar os nutrientes;
-                  você pode publicar a receita sem usar a TACO.
+                  A TACO reúne informações nutricionais de alimentos. Se quiser,
+                  vincule seus ingredientes para estimar os nutrientes; você
+                  pode publicar a receita sem usar a TACO.
                 </p>
                 <details className="nutricao-como-funciona">
                   <summary>Como funciona?</summary>
@@ -551,8 +551,8 @@ function AdicionarReceita() {
                       <li>Escolha o alimento correspondente na TACO.</li>
                       <li>Informe o peso total desse ingrediente em gramas.</li>
                       <li>
-                        O Que-Fome usa esses dados para estimar os nutrientes
-                        na página da receita.
+                        O Que-Fome usa esses dados para estimar os nutrientes na
+                        página da receita.
                       </li>
                     </ol>
                     <p>
@@ -622,7 +622,11 @@ function AdicionarReceita() {
                             !ingrediente.alimentoTaco,
                           )}
                           onSelecionar={(alimento) =>
-                            atualizarIngrediente(index, "alimentoTaco", alimento)
+                            atualizarIngrediente(
+                              index,
+                              "alimentoTaco",
+                              alimento,
+                            )
                           }
                         />
                       </div>
@@ -650,9 +654,9 @@ function AdicionarReceita() {
                           }
                         />
                         <small>
-                          Informe o peso total desse ingrediente para o
-                          cálculo. A quantidade culinária continua na receita;
-                          xícaras, colheres e unidades não são convertidas
+                          Informe o peso total desse ingrediente para o cálculo.
+                          A quantidade culinária continua na receita; xícaras,
+                          colheres e unidades não são convertidas
                           automaticamente para gramas.
                         </small>
                       </div>

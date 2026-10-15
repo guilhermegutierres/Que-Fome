@@ -121,7 +121,9 @@ function InformacaoNutricional({ ingredientes }) {
                     <td>
                       {ingrediente.nome}
                       {ingrediente.tacoDescricao && (
-                        <small>Alimento TACO: {ingrediente.tacoDescricao}</small>
+                        <small>
+                          Alimento TACO: {ingrediente.tacoDescricao}
+                        </small>
                       )}
                     </td>
                     <td>{ingrediente.quantidade || "—"}</td>

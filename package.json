@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/scripts/**/*.{js,jsx,ts,tsx,mjs}\" \"vite.config.js\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/scripts/**/*.{js,jsx,ts,tsx,mjs}\" \"vite.config.js\""
   },
   "dependencies": {
     "react": "^19.2.8",

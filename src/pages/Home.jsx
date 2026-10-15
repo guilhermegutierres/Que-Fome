@@ -17,7 +17,9 @@ function normalizarTexto(texto) {
 }
 
 function converterTempoParaMinutos(tempo) {
-  const valor = String(tempo || "").trim().toLowerCase();
+  const valor = String(tempo || "")
+    .trim()
+    .toLowerCase();
   const minutos = valor.match(/^(\d+)\s*min$/);
   if (minutos) return Number(minutos[1]);
 
@@ -112,8 +114,7 @@ function Home() {
     const correspondeCusto =
       !custoSelecionado || receita.custo === custoSelecionado;
     const correspondeDificuldade =
-      !dificuldadeSelecionada ||
-      receita.dificuldade === dificuldadeSelecionada;
+      !dificuldadeSelecionada || receita.dificuldade === dificuldadeSelecionada;
 
     return (
       correspondeCategoria &&
@@ -153,7 +154,10 @@ function Home() {
 
   const filtrosAtivos = [];
   if (busca.trim()) {
-    filtrosAtivos.push({ parametro: "busca", rotulo: `Busca: ${busca.trim()}` });
+    filtrosAtivos.push({
+      parametro: "busca",
+      rotulo: `Busca: ${busca.trim()}`,
+    });
   }
   if (categoriaSelecionada) {
     filtrosAtivos.push({
@@ -236,7 +240,10 @@ function Home() {
         >
           ›
         </button>
-        <div className="home-carrossel-indicadores" aria-label="Selecionar imagem">
+        <div
+          className="home-carrossel-indicadores"
+          aria-label="Selecionar imagem"
+        >
           {imagensHero.map((imagem, indice) => (
             <button
               key={imagem.src}
@@ -259,7 +266,9 @@ function Home() {
         >
           <section className="home-header">
             <h1>Encontre sua próxima receita</h1>
-            <p>Explore receitas simples, deliciosas e para todos os momentos.</p>
+            <p>
+              Explore receitas simples, deliciosas e para todos os momentos.
+            </p>
             <button
               className="sortear-receita-botao"
               type="button"
@@ -321,7 +330,10 @@ function Home() {
                         onClick={() => atualizarParametro(parametro, "")}
                       >
                         <span>{rotulo}</span>
-                        <span className="filtro-ativo-remover" aria-hidden="true">
+                        <span
+                          className="filtro-ativo-remover"
+                          aria-hidden="true"
+                        >
                           ×
                         </span>
                       </button>

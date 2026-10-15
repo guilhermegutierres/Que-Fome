@@ -13,25 +13,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        <Route
-          path="/receita/:id"
-          element={<Receita />}
-        />
+        <Route path="/receita/:id" element={<Receita />} />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/cadastro"
-          element={<Cadastro />}
-        />
+        <Route path="/cadastro" element={<Cadastro />} />
 
-        <Route
-          path="/favoritos"
-          element={<Favoritos />}
-        />
+        <Route path="/favoritos" element={<Favoritos />} />
 
         <Route path="/perfil" element={<Perfil />} />
 
@@ -40,10 +28,7 @@ function App() {
           element={<AdicionarReceita />}
         />
 
-        <Route
-          path="/adicionar-receita"
-          element={<AdicionarReceita />}
-        />
+        <Route path="/adicionar-receita" element={<AdicionarReceita />} />
       </Routes>
     </BrowserRouter>
   );

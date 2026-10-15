@@ -3,8 +3,7 @@ const receitas = [
     id: 1,
     titulo: "Mousse de Limão",
     categoria: "Doces",
-    descricao:
-      "Sobremesa cremosa, refrescante e fácil de preparar.",
+    descricao: "Sobremesa cremosa, refrescante e fácil de preparar.",
     descricaoCompleta:
       "Uma sobremesa simples e refrescante, perfeita para depois do almoço ou para um momento especial.",
     tempo: "15 min",
@@ -31,8 +30,7 @@ const receitas = [
     id: 2,
     titulo: "Lasanha à Bolonhesa",
     categoria: "Massas",
-    descricao:
-      "Lasanha tradicional com molho à bolonhesa e queijo.",
+    descricao: "Lasanha tradicional com molho à bolonhesa e queijo.",
     descricaoCompleta:
       "Uma lasanha clássica e saborosa para reunir a família em volta da mesa.",
     tempo: "50 min",
@@ -65,8 +63,7 @@ const receitas = [
     id: 3,
     titulo: "Frango Assado",
     categoria: "Aves",
-    descricao:
-      "Frango dourado e suculento para o almoço em família.",
+    descricao: "Frango dourado e suculento para o almoço em família.",
     descricaoCompleta:
       "Um frango assado simples, bem temperado e perfeito para acompanhar arroz, batatas ou salada.",
     tempo: "1h",
@@ -98,8 +95,7 @@ const receitas = [
     id: 4,
     titulo: "Salada Mediterrânea",
     categoria: "Saladas",
-    descricao:
-      "Uma salada leve e colorida com ingredientes frescos.",
+    descricao: "Uma salada leve e colorida com ingredientes frescos.",
     descricaoCompleta:
       "Uma opção leve e saudável para acompanhar as refeições ou servir como uma refeição rápida.",
     tempo: "10 min",
@@ -132,8 +128,7 @@ const receitas = [
     id: 5,
     titulo: "Bolo de Chocolate",
     categoria: "Bolos",
-    descricao:
-      "Bolo fofinho de chocolate para qualquer momento.",
+    descricao: "Bolo fofinho de chocolate para qualquer momento.",
     descricaoCompleta:
       "Um bolo de chocolate simples, macio e perfeito para o café da tarde ou para comemorações.",
     tempo: "45 min",
@@ -164,8 +159,7 @@ const receitas = [
     id: 6,
     titulo: "Suco de Laranja",
     categoria: "Sucos",
-    descricao:
-      "Bebida gelada, simples e perfeita para dias quentes.",
+    descricao: "Bebida gelada, simples e perfeita para dias quentes.",
     descricaoCompleta:
       "Um suco natural e refrescante que combina com o café da manhã, almoço ou lanche da tarde.",
     tempo: "5 min",

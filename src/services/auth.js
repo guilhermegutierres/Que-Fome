@@ -6,7 +6,7 @@ function cadastrar(nome, email, senha) {
   const usuarios = obterUsuarios();
 
   const emailExiste = usuarios.some(
-    (usuario) => usuario.email.toLowerCase() === email.toLowerCase()
+    (usuario) => usuario.email.toLowerCase() === email.toLowerCase(),
   );
 
   if (emailExiste) {
@@ -38,8 +38,7 @@ function login(email, senha) {
 
   const usuario = usuarios.find(
     (item) =>
-      item.email.toLowerCase() === email.toLowerCase() &&
-      item.senha === senha
+      item.email.toLowerCase() === email.toLowerCase() && item.senha === senha,
   );
 
   if (!usuario) {
@@ -52,7 +51,7 @@ function login(email, senha) {
       id: usuario.id,
       nome: usuario.nome,
       email: usuario.email,
-    })
+    }),
   );
 
   return true;
@@ -70,10 +69,4 @@ function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
 }
 
-export {
-  cadastrar,
-  login,
-  logout,
-  estaLogado,
-  getUsuario,
-};
+export { cadastrar, login, logout, estaLogado, getUsuario };
