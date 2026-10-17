@@ -97,6 +97,13 @@
   font-weight: 700;
 }
 
+.receita-tags-card {
+  min-height: 24px;
+  margin-top: 8px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
 .receita-card h2 {
   margin: 12px 0 4px;
 
@@ -200,6 +207,11 @@ body.modo-escuro .receita-card-editar,
 body.modo-escuro .receita-card-excluir {
   border-color: #444444;
   background: #292929;
+  color: #dddddd;
+}
+
+body.modo-escuro .receita-tag-mais {
+  background: #353535;
   color: #dddddd;
 }
 

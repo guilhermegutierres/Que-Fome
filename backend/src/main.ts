@@ -1,8 +1,18 @@
 import "reflect-metadata";
-import "dotenv/config";
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import dotenv from "dotenv";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { AppModule } from "./app.module.js";
+
+const backendDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({
+  path: [
+    resolve(backendDirectory, ".env.local"),
+    resolve(backendDirectory, ".env"),
+  ],
+});
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);

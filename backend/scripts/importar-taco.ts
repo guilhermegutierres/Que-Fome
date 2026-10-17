@@ -1,8 +1,17 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import { readFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import pg from "pg";
 
 const { Client } = pg;
+const backendDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({
+  path: [
+    resolve(backendDirectory, ".env.local"),
+    resolve(backendDirectory, ".env"),
+  ],
+});
 
 const QUANTIDADE_ESPERADA = 597;
 const TAMANHO_LOTE = 100;

@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy } from "@nestjs/common";
 import pg from "pg";
-import type { QueryResult, QueryResultRow } from "pg";
+import type { PoolClient, QueryResult, QueryResultRow } from "pg";
 
 const { Pool } = pg;
 
@@ -9,18 +9,14 @@ export class DatabaseService implements OnModuleDestroy {
   private readonly pool: pg.Pool | null;
 
   constructor() {
-    // Sem banco, a API pode rodar diretamente do TACO.json para desenvolvimento.
-    if ((process.env.ALIMENTOS_SOURCE || "taco").toLowerCase() !== "postgres") {
-      this.pool = null;
-      return;
-    }
     const connectionString = process.env.DATABASE_URL;
-    if (!connectionString) {
-      throw new Error(
-        "Para ALIMENTOS_SOURCE=postgres, configure DATABASE_URL em backend/.env.",
-      );
-    }
-    this.pool = new Pool({ connectionString, max: 10 });
+    this.pool = connectionString
+      ? new Pool({ connectionString, max: 10 })
+      : null;
+  }
+
+  isConfigured(): boolean {
+    return this.pool !== null;
   }
 
   query<T extends QueryResultRow>(
@@ -28,10 +24,28 @@ export class DatabaseService implements OnModuleDestroy {
     params: unknown[] = [],
   ): Promise<QueryResult<T>> {
     if (!this.pool)
-      throw new Error(
-        "Consulta ao PostgreSQL indisponível no modo TACO local.",
-      );
+      throw new Error("PostgreSQL indisponível. Configure DATABASE_URL.");
     return this.pool.query<T>(sql, params);
+  }
+
+  async transaction<T>(
+    operation: (client: PoolClient) => Promise<T>,
+  ): Promise<T> {
+    if (!this.pool)
+      throw new Error("PostgreSQL indisponível. Configure DATABASE_URL.");
+
+    const client = await this.pool.connect();
+    try {
+      await client.query("BEGIN");
+      const result = await operation(client);
+      await client.query("COMMIT");
+      return result;
+    } catch (error) {
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   async onModuleDestroy(): Promise<void> {

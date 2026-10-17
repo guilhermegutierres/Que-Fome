@@ -9,8 +9,7 @@ const receitas = [
     tempo: "15 min",
     dificuldade: "Fácil",
     custo: "Baixo",
-    imagem:
-      "https://images.pexels.com/photos/30616885/pexels-photo-30616885/free-photo-of-elegant-lemon-mousse-in-vintage-glassware.jpeg?auto=compress&dpr=1&h=750&w=1260",
+    imagem: "/images/receitas/mousse-de-limao.jpg",
     ingredientes: [
       "1 lata de leite condensado",
       "1 lata de creme de leite",
@@ -36,8 +35,7 @@ const receitas = [
     tempo: "50 min",
     dificuldade: "Médio",
     custo: "Médio",
-    imagem:
-      "https://images.unsplash.com/photo-1770908811367-e1232962e81b?auto=format&fit=crop&w=1000&q=80",
+    imagem: "/images/receitas/lasanha.jpg",
     ingredientes: [
       "500 g de carne moída",
       "1 pacote de massa para lasanha",

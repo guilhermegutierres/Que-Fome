@@ -1,5 +1,16 @@
 // Com o NestJS iniciado (npm run dev), execute: npm run test:api
 import assert from "node:assert/strict";
+import dotenv from "dotenv";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const backendDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({
+  path: [
+    resolve(backendDirectory, ".env.local"),
+    resolve(backendDirectory, ".env"),
+  ],
+});
 
 const base = process.env.TEST_API_URL || "http://localhost:3000";
 

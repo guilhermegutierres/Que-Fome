@@ -1,13 +1,16 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BuscaAlimento from "../components/BuscaAlimento";
 import Navbar from "../components/Navbar";
 import Select from "../components/Select";
-import { estaLogado, getUsuario } from "../services/auth";
+import TagSelector from "../components/TagSelector";
+import { CATEGORIAS_RECEITAS } from "../data/categoriasReceitas";
+import { useAuth } from "../contexts/auth-context";
 import {
   atualizarReceita,
-  obterReceitaDoAutor,
+  obterReceitasPorAutor,
   salvarReceita,
+  enviarImagem,
 } from "../services/receitas";
 import "./AdicionarReceita.css";
 
@@ -18,25 +21,17 @@ function transformarLista(texto) {
     .filter((item) => item !== "");
 }
 
-function lerArquivoComoDataUrl(arquivo) {
-  return new Promise((resolve, reject) => {
-    const leitor = new FileReader();
-    leitor.onload = () => resolve(leitor.result);
-    leitor.onerror = () =>
-      reject(new Error("Não foi possível ler a imagem selecionada."));
-    leitor.readAsDataURL(arquivo);
-  });
-}
-
 function converterIngredientesParaFormulario(receita) {
   if (Array.isArray(receita?.ingredientesDetalhados)) {
     return receita.ingredientesDetalhados.map((ingrediente) => ({
       nome: ingrediente.nome || "",
       quantidade: ingrediente.quantidade || "",
+      textoExibicao: ingrediente.textoExibicao || null,
       alimentoTaco: ingrediente.tacoId
         ? { id: ingrediente.tacoId, descricao: ingrediente.tacoDescricao || "" }
         : null,
       gramas: ingrediente.gramas ? String(ingrediente.gramas) : "",
+      gramasEstimadas: Boolean(ingrediente.gramasEstimadas),
     }));
   }
 
@@ -46,62 +41,45 @@ function converterIngredientesParaFormulario(receita) {
       const separador = texto.search(/\s/);
 
       if (separador === -1) {
-        return { quantidade: "", nome: texto, alimentoTaco: null, gramas: "" };
+        return {
+          quantidade: "",
+          nome: texto,
+          textoExibicao: null,
+          alimentoTaco: null,
+          gramas: "",
+          gramasEstimadas: false,
+        };
       }
 
       return {
         quantidade: texto.slice(0, separador),
         nome: texto.slice(separador + 1).trim(),
+        textoExibicao: null,
         alimentoTaco: null,
         gramas: "",
+        gramasEstimadas: false,
       };
     },
   );
 }
 
 function AdicionarReceita() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const origemNavegacao =
-    location.state?.origem === "/perfil" ? "/perfil" : "/";
-  const usuario = getUsuario();
-  const { id: idReceitaParam } = useParams();
-  const modoEdicao = Boolean(idReceitaParam);
-  const idReceita = Number(idReceitaParam);
-  const receitaOriginal = modoEdicao
-    ? obterReceitaDoAutor(idReceita, usuario?.id)
-    : null;
-  const ingredientesOriginais =
-    converterIngredientesParaFormulario(receitaOriginal);
-  const descricaoOriginal =
-    receitaOriginal?.descricaoCompleta || receitaOriginal?.descricao || "";
-  const tempoOriginal = String(receitaOriginal?.tempo || "").replace(
-    /\s*min$/i,
-    "",
-  );
-  const [titulo, setTitulo] = useState(receitaOriginal?.titulo || "");
-  const [categoria, setCategoria] = useState(receitaOriginal?.categoria || "");
-  const [tempo, setTempo] = useState(tempoOriginal);
-  const [dificuldade, setDificuldade] = useState(
-    receitaOriginal?.dificuldade || "",
-  );
-  const [custo, setCusto] = useState(receitaOriginal?.custo || "");
-  const [imagem, setImagem] = useState(receitaOriginal?.imagem || "");
-  const [arquivoImagem, setArquivoImagem] = useState(null);
-  const [descricao, setDescricao] = useState(descricaoOriginal);
-  const [ingredientes, setIngredientes] = useState(ingredientesOriginais);
-  const [modoPreparo, setModoPreparo] = useState(
-    Array.isArray(receitaOriginal?.modoPreparo)
-      ? receitaOriginal.modoPreparo.join("\n")
-      : "",
-  );
-  const [erros, setErros] = useState({});
-  const [erroGeral, setErroGeral] = useState("");
-  const [sucesso, setSucesso] = useState("");
-  const [publicando, setPublicando] = useState(false);
-  const imagemInputRef = useRef(null);
+  const { usuario, carregando } = useAuth();
 
-  if (!estaLogado()) {
+  if (carregando) {
+    return (
+      <>
+        <Navbar />
+        <main className="adicionar-page">
+          <section className="adicionar-nao-autorizado">
+            <p>Verificando sua sessão...</p>
+          </section>
+        </main>
+      </>
+    );
+  }
+
+  if (!usuario) {
     return (
       <>
         <Navbar />
@@ -118,7 +96,59 @@ function AdicionarReceita() {
     );
   }
 
-  if (modoEdicao && !receitaOriginal) {
+  return <FormularioReceita usuario={usuario} />;
+}
+
+function FormularioReceita({ usuario }) {
+  const { id } = useParams();
+  const [receitaOriginal, setReceitaOriginal] = useState(null);
+  const [receitaCarregadaId, setReceitaCarregadaId] = useState(null);
+  const [erroCarregamento, setErroCarregamento] = useState("");
+  const carregandoReceita = Boolean(id) && receitaCarregadaId !== id;
+
+  useEffect(() => {
+    if (!id) return undefined;
+
+    let ativo = true;
+    obterReceitasPorAutor()
+      .then((receitas) => {
+        if (!ativo) return;
+        const encontrada = receitas.find(
+          (receita) =>
+            receita.id === id &&
+            receita.tipo === "usuario" &&
+            receita.autorId === usuario.id,
+        );
+        setReceitaOriginal(encontrada || null);
+        setErroCarregamento("");
+        setReceitaCarregadaId(id);
+      })
+      .catch((erro) => {
+        if (!ativo) return;
+        setErroCarregamento(erro.message);
+        setReceitaOriginal(null);
+        setReceitaCarregadaId(id);
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, [id, usuario.id]);
+
+  if (id && carregandoReceita) {
+    return (
+      <>
+        <Navbar />
+        <main className="adicionar-page">
+          <section className="adicionar-nao-autorizado" role="status">
+            <p>Carregando sua receita...</p>
+          </section>
+        </main>
+      </>
+    );
+  }
+
+  if (id && (erroCarregamento || !receitaOriginal)) {
     return (
       <>
         <Navbar />
@@ -126,7 +156,8 @@ function AdicionarReceita() {
           <section className="adicionar-nao-autorizado">
             <h1>Receita indisponível</h1>
             <p>
-              Esta receita não existe ou você não tem permissão para editá-la.
+              {erroCarregamento ||
+                "Esta receita não existe ou você não tem permissão para editá-la."}
             </p>
             <Link to="/perfil" className="adicionar-botao">
               Voltar ao perfil
@@ -137,6 +168,62 @@ function AdicionarReceita() {
     );
   }
 
+  return (
+    <FormularioReceitaCampos
+      key={id || "nova-receita"}
+      usuario={usuario}
+      receitaOriginal={receitaOriginal}
+    />
+  );
+}
+
+function FormularioReceitaCampos({ usuario, receitaOriginal }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const origemNavegacao =
+    location.state?.origem === "/perfil" ? "/perfil" : "/";
+  const modoEdicao = Boolean(receitaOriginal);
+  const ingredientesOriginais =
+    converterIngredientesParaFormulario(receitaOriginal);
+  const descricaoOriginal =
+    receitaOriginal?.descricaoCompleta || receitaOriginal?.descricao || "";
+  const tempoOriginal = String(
+    receitaOriginal?.tempoMinutos ??
+      String(receitaOriginal?.tempo || "").replace(/\s*min$/i, ""),
+  );
+  const modoPreparoOriginal = Array.isArray(receitaOriginal?.modoPreparo)
+    ? receitaOriginal.modoPreparo.join("\n")
+    : "";
+  const tagsOriginais = Array.isArray(receitaOriginal?.tags)
+    ? receitaOriginal.tags
+    : [];
+  const [titulo, setTitulo] = useState(receitaOriginal?.titulo || "");
+  const [categoria, setCategoria] = useState(receitaOriginal?.categoria || "");
+  const [tempo, setTempo] = useState(tempoOriginal);
+  const [dificuldade, setDificuldade] = useState(
+    receitaOriginal?.dificuldade || "",
+  );
+  const [custo, setCusto] = useState(receitaOriginal?.custo || "");
+  const [imagem, setImagem] = useState(receitaOriginal?.imagem || "");
+  const [imagemAlterada, setImagemAlterada] = useState(false);
+  const [arquivoImagem, setArquivoImagem] = useState(null);
+  const [descricao, setDescricao] = useState(descricaoOriginal);
+  const [ingredientes, setIngredientes] = useState(ingredientesOriginais);
+  const [modoPreparo, setModoPreparo] = useState(modoPreparoOriginal);
+  const [tags, setTags] = useState(tagsOriginais);
+  const [erros, setErros] = useState({});
+  const [erroGeral, setErroGeral] = useState("");
+  const [sucesso, setSucesso] = useState("");
+  const [publicando, setPublicando] = useState(false);
+  const imagemInputRef = useRef(null);
+
+  useEffect(
+    () => () => {
+      if (imagem.startsWith("blob:")) URL.revokeObjectURL(imagem);
+    },
+    [imagem],
+  );
+
   const formularioVazio =
     !titulo.trim() &&
     !categoria &&
@@ -145,6 +232,7 @@ function AdicionarReceita() {
     !custo &&
     !arquivoImagem &&
     !descricao.trim() &&
+    tags.length === 0 &&
     ingredientes.every(
       ({ nome, quantidade, alimentoTaco, gramas }) =>
         !nome.trim() && !quantidade.trim() && !alimentoTaco && !gramas.trim(),
@@ -161,10 +249,8 @@ function AdicionarReceita() {
       Boolean(arquivoImagem) ||
       descricao !== descricaoOriginal ||
       JSON.stringify(ingredientes) !== JSON.stringify(ingredientesOriginais) ||
-      modoPreparo !==
-        (Array.isArray(receitaOriginal.modoPreparo)
-          ? receitaOriginal.modoPreparo.join("\n")
-          : "")
+      JSON.stringify(tags) !== JSON.stringify(tagsOriginais) ||
+      modoPreparo !== modoPreparoOriginal
     : !formularioVazio;
 
   function cancelar() {
@@ -181,7 +267,18 @@ function AdicionarReceita() {
   function atualizarIngrediente(index, campo, valor) {
     setIngredientes((atuais) =>
       atuais.map((ingrediente, itemIndex) =>
-        itemIndex === index ? { ...ingrediente, [campo]: valor } : ingrediente,
+        itemIndex === index
+          ? {
+              ...ingrediente,
+              [campo]: valor,
+              ...(["nome", "quantidade"].includes(campo)
+                ? { textoExibicao: null }
+                : {}),
+              ...(["alimentoTaco", "gramas"].includes(campo)
+                ? { gramasEstimadas: false }
+                : {}),
+            }
+          : ingrediente,
       ),
     );
   }
@@ -198,6 +295,7 @@ function AdicionarReceita() {
       if (imagem.startsWith("blob:")) URL.revokeObjectURL(imagem);
       setArquivoImagem(null);
       setImagem(modoEdicao ? receitaOriginal?.imagem || "" : "");
+      setImagemAlterada(false);
       setErros((atuais) => ({
         ...atuais,
         imagem: "Selecione uma imagem JPG, JPEG, PNG ou WEBP.",
@@ -209,6 +307,7 @@ function AdicionarReceita() {
     if (imagem.startsWith("blob:")) URL.revokeObjectURL(imagem);
     setArquivoImagem(arquivo);
     setImagem(URL.createObjectURL(arquivo));
+    setImagemAlterada(true);
     setErros((atuais) => ({ ...atuais, imagem: "" }));
   }
 
@@ -216,6 +315,7 @@ function AdicionarReceita() {
     if (imagem.startsWith("blob:")) URL.revokeObjectURL(imagem);
     setArquivoImagem(null);
     setImagem("");
+    setImagemAlterada(true);
     if (imagemInputRef.current) imagemInputRef.current.value = "";
   }
 
@@ -254,7 +354,10 @@ function AdicionarReceita() {
       novosErros.categoria = "Selecione uma categoria.";
     }
     const imagemExistentePodeSerMantida =
-      modoEdicao && Boolean(receitaOriginal?.imagem) && Boolean(imagem);
+      modoEdicao &&
+      !imagemAlterada &&
+      Boolean(receitaOriginal?.imagemPath) &&
+      Boolean(imagem);
     if ((!arquivoImagem && !imagemExistentePodeSerMantida) || !imagem) {
       novosErros.imagem = "Selecione uma imagem para a receita.";
     }
@@ -293,59 +396,67 @@ function AdicionarReceita() {
 
     setPublicando(true);
     try {
-      const imagemSalva = arquivoImagem
-        ? await lerArquivoComoDataUrl(arquivoImagem)
-        : imagem;
-      const ingredientesDetalhados = ingredientesValidos.map(
-        ({ nome, quantidade, alimentoTaco, gramas }) => ({
-          nome: nome.trim(),
-          quantidade: quantidade.trim(),
-          ...(alimentoTaco && {
-            tacoId: alimentoTaco.id,
-            tacoDescricao: alimentoTaco.descricao,
-            gramas: Number(gramas.replace(",", ".")),
-          }),
-        }),
-      );
+      const imagemPath = arquivoImagem
+        ? await enviarImagem(arquivoImagem, usuario.id)
+        : undefined;
+      const ingredientesDetalhados =
+        modoEdicao &&
+        JSON.stringify(ingredientes) === JSON.stringify(ingredientesOriginais)
+          ? receitaOriginal.ingredientesDetalhados
+          : ingredientesValidos.map(
+              ({
+                nome,
+                quantidade,
+                textoExibicao,
+                alimentoTaco,
+                gramas,
+                gramasEstimadas,
+              }) => ({
+                nome: nome.trim(),
+                quantidade: quantidade.trim(),
+                ...(textoExibicao && { textoExibicao }),
+                ...(alimentoTaco && {
+                  tacoId: alimentoTaco.id,
+                  gramas: Number(gramas.replace(",", ".")),
+                  gramasEstimadas: Boolean(gramasEstimadas),
+                }),
+              }),
+            );
+      const descricaoReceita =
+        modoEdicao && descricao === descricaoOriginal
+          ? {
+              descricao: receitaOriginal.descricao,
+              descricaoCompleta: receitaOriginal.descricaoCompleta,
+            }
+          : {
+              descricao:
+                descricao.trim() ||
+                "Receita publicada por um usuário do Que Fome!",
+              descricaoCompleta: descricao.trim(),
+            };
+      const modoPreparoSalvo =
+        modoEdicao && modoPreparo === modoPreparoOriginal
+          ? receitaOriginal.modoPreparo
+          : passos;
       const dadosReceita = {
         titulo: tituloLimpo,
         categoria,
-        tempo: `${tempoNumerico} min`,
+        tempo: tempoNumerico,
         dificuldade,
-        custo,
-        imagem: imagemSalva,
-        descricao:
-          descricao.trim() || "Receita publicada por um usuário do Que Fome!",
-        descricaoCompleta: descricao.trim(),
-        // Mantém strings para compatibilidade com os mocks e com Receita.jsx.
-        ingredientes: ingredientesDetalhados.map(
-          ({ nome, quantidade }) => `${quantidade} ${nome}`,
-        ),
+        custo: custo || null,
+        ...descricaoReceita,
         ingredientesDetalhados,
-        modoPreparo: passos,
+        modoPreparo: modoPreparoSalvo,
+        tags,
+        ...(imagemPath && { imagemPath }),
       };
 
       if (modoEdicao) {
-        const atualizada = atualizarReceita(
-          receitaOriginal.id,
-          usuario.id,
-          dadosReceita,
-        );
-        if (!atualizada) {
-          throw new Error(
-            "Não foi possível atualizar esta receita. Verifique se ela ainda pertence à sua conta.",
-          );
-        }
+        await atualizarReceita(receitaOriginal.id, dadosReceita);
         setSucesso("Receita atualizada com sucesso! Voltando ao perfil...");
         window.setTimeout(() => navigate("/perfil"), 1200);
       } else {
-        const novaReceita = {
-          ...dadosReceita,
-          id: Date.now(),
-          autorId: usuario?.id || null,
-          autorNome: usuario?.nome || "Usuário",
-        };
-        salvarReceita(novaReceita);
+        const novaReceita = await salvarReceita(dadosReceita);
         setSucesso("Receita publicada com sucesso! Redirecionando...");
         window.setTimeout(
           () =>
@@ -413,30 +524,21 @@ function AdicionarReceita() {
                 placeholder="Selecione uma categoria"
                 invalid={Boolean(erros.categoria)}
                 onChange={setCategoria}
-                options={[
-                  "Saladas",
-                  "Sopas",
-                  "Petiscos",
-                  "Massas",
-                  "Peixes",
-                  "Carnes",
-                  "Aves",
-                  "Vegetarianos",
-                  "Arroz",
-                  "Legumes",
-                  "Batatas",
-                  "Bolos",
-                  "Doces",
-                  "Tortas",
-                  "Sucos",
-                  "Drinks",
-                  "Cafés",
-                ].map((item) => ({ value: item, label: item }))}
+                options={CATEGORIAS_RECEITAS.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
               />
               {erros.categoria && (
                 <p className="campo-erro">{erros.categoria}</p>
               )}
             </div>
+
+            <TagSelector
+              value={tags}
+              onChange={setTags}
+              disabled={publicando}
+            />
 
             <div className="campo">
               <label htmlFor="imagem">Imagem da receita *</label>
@@ -673,8 +775,10 @@ function AdicionarReceita() {
                     {
                       nome: "",
                       quantidade: "",
+                      textoExibicao: null,
                       alimentoTaco: null,
                       gramas: "",
+                      gramasEstimadas: false,
                     },
                   ])
                 }

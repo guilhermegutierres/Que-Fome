@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { estaFavorito, alternarFavorito } from "../services/favoritos";
-import { estaLogado } from "../services/auth";
+import { useAuth } from "../contexts/auth-context";
+import TagBadges from "./TagBadges";
+import {
+  alternarFavorito,
+  estaFavorito,
+  EVENTO_FAVORITOS_ATUALIZADOS,
+} from "../services/favoritos";
 import "./ReceitaCard.css";
 
 const IMAGEM_FALLBACK =
@@ -12,26 +17,43 @@ const IMAGEM_FALLBACK =
 
 function ReceitaCard({ receita, onEditar, onExcluir }) {
   const navigate = useNavigate();
+  const { usuario, carregando } = useAuth();
   const [imagemComErro, setImagemComErro] = useState(false);
+  const [, atualizarFavoritos] = useState(0);
 
-  const [favoritado, setFavoritado] = useState(estaFavorito(receita.id));
+  useEffect(() => {
+    function atualizar() {
+      atualizarFavoritos((versao) => versao + 1);
+    }
+
+    window.addEventListener(EVENTO_FAVORITOS_ATUALIZADOS, atualizar);
+    window.addEventListener("storage", atualizar);
+    return () => {
+      window.removeEventListener(EVENTO_FAVORITOS_ATUALIZADOS, atualizar);
+      window.removeEventListener("storage", atualizar);
+    };
+  }, []);
+
+  const favoritado = estaFavorito(receita.id, usuario?.email);
+  const podeGerenciar = receita.tipo === "usuario" && Boolean(receita.autorId);
 
   function handleFavorito() {
-    if (!estaLogado()) {
+    if (carregando) return;
+    if (!usuario) {
       navigate("/login");
       return;
     }
 
-    const novoEstado = alternarFavorito(receita.id);
-
-    setFavoritado(novoEstado);
+    alternarFavorito(receita.id, usuario.email);
   }
 
   return (
     <article className="receita-card">
       <div className="receita-card-imagem-container">
         <img
-          src={imagemComErro ? IMAGEM_FALLBACK : receita.imagem}
+          src={
+            imagemComErro || !receita.imagem ? IMAGEM_FALLBACK : receita.imagem
+          }
           alt={
             imagemComErro
               ? `Imagem indisponível para ${receita.titulo}`
@@ -45,6 +67,7 @@ function ReceitaCard({ receita, onEditar, onExcluir }) {
           type="button"
           className={`favorito-botao ${favoritado ? "favoritado" : ""}`}
           onClick={handleFavorito}
+          disabled={carregando}
           aria-label={
             favoritado
               ? `Remover ${receita.titulo} dos favoritos`
@@ -72,6 +95,7 @@ function ReceitaCard({ receita, onEditar, onExcluir }) {
 
       <div className="receita-card-conteudo">
         <span className="receita-card-categoria">{receita.categoria}</span>
+        <TagBadges tags={receita.tags} limit={2} context="card" />
 
         <h2 title={receita.titulo}>{receita.titulo}</h2>
 
@@ -87,7 +111,7 @@ function ReceitaCard({ receita, onEditar, onExcluir }) {
           Ver receita
         </Link>
 
-        {(onEditar || onExcluir) && (
+        {podeGerenciar && (onEditar || onExcluir) && (
           <div className="receita-card-acoes-proprietario">
             {onEditar && (
               <Link to={onEditar} className="receita-card-editar">

@@ -5,7 +5,8 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUsuario, logout, estaLogado } from "../services/auth";
+import { useAuth } from "../contexts/auth-context";
+import { logout } from "../services/auth";
 import {
   EVENTO_FAVORITOS_ATUALIZADOS,
   obterFavoritos,
@@ -63,6 +64,7 @@ function TemaBotao({ modoEscuro, alternarModoEscuro }) {
 function Navbar({
   busca = "",
   onBuscaChange = () => {},
+  onTagAtalho = () => {},
   onCategoriaChange = () => {},
   compact = false,
 }) {
@@ -74,16 +76,14 @@ function Navbar({
     () => searchParams.get("busca") || "",
   );
 
-  const [usuarioLogado, setUsuarioLogado] = useState(estaLogado());
-  const [possuiFavoritos, setPossuiFavoritos] = useState(
-    () => obterFavoritos().length > 0,
-  );
+  const { usuario, carregando: carregandoSessao } = useAuth();
+  const usuarioLogado = Boolean(usuario);
+  const [possuiFavoritos, setPossuiFavoritos] = useState(false);
 
   const [modoEscuro, setModoEscuro] = useState(() => {
     return localStorage.getItem("modoEscuro") === "true";
   });
 
-  const usuario = getUsuario();
   const termoBusca = estaNaHome ? busca : buscaLocal;
 
   useEffect(() => {
@@ -94,9 +94,10 @@ function Navbar({
 
   useEffect(() => {
     function atualizarIndicadorFavoritos() {
-      setPossuiFavoritos(obterFavoritos().length > 0);
+      setPossuiFavoritos(obterFavoritos(usuario?.email).length > 0);
     }
 
+    atualizarIndicadorFavoritos();
     window.addEventListener(
       EVENTO_FAVORITOS_ATUALIZADOS,
       atualizarIndicadorFavoritos,
@@ -110,7 +111,7 @@ function Navbar({
       );
       window.removeEventListener("storage", atualizarIndicadorFavoritos);
     };
-  }, []);
+  }, [usuario?.email]);
 
   function selecionarCategoria(categoria) {
     if (estaNaHome) {
@@ -122,6 +123,22 @@ function Navbar({
     if (categoria) proximos.set("categoria", categoria);
     else proximos.delete("categoria");
     if (buscaLocal.trim()) proximos.set("busca", buscaLocal.trim());
+    const query = proximos.toString();
+
+    navigate({
+      pathname: "/",
+      search: query ? `?${query}` : "",
+    });
+  }
+
+  function selecionarAtalhoTag(tag) {
+    if (estaNaHome) {
+      onTagAtalho(tag);
+      return;
+    }
+
+    const proximos = new URLSearchParams(searchParams);
+    proximos.set("tag", tag);
     const query = proximos.toString();
 
     navigate({
@@ -151,10 +168,12 @@ function Navbar({
     });
   }
 
-  function handleLogout() {
-    logout();
-    setUsuarioLogado(false);
-    setPossuiFavoritos(false);
+  async function handleLogout() {
+    const resultado = await logout();
+    if (!resultado.sucesso) {
+      window.alert(resultado.mensagem);
+      return;
+    }
     navigate("/");
   }
 
@@ -266,6 +285,13 @@ function Navbar({
           </button>
 
           <div className="dropdown-menu">
+            <button
+              type="button"
+              onClick={() => selecionarCategoria("Pratos principais")}
+            >
+              Pratos principais
+            </button>
+
             <button type="button" onClick={() => selecionarCategoria("Massas")}>
               Massas
             </button>
@@ -274,7 +300,7 @@ function Navbar({
               Peixes
             </button>
 
-            <button type="button" onClick={() => selecionarCategoria("Carnes")}>
+            <button type="button" onClick={() => selecionarAtalhoTag("carnes")}>
               Carnes
             </button>
 
@@ -284,7 +310,7 @@ function Navbar({
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Vegetarianos")}
+              onClick={() => selecionarAtalhoTag("vegetarianos")}
             >
               Vegetarianos
             </button>
@@ -298,20 +324,20 @@ function Navbar({
           </button>
 
           <div className="dropdown-menu">
-            <button type="button" onClick={() => selecionarCategoria("Arroz")}>
+            <button type="button" onClick={() => selecionarAtalhoTag("arroz")}>
               Arroz
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Legumes")}
+              onClick={() => selecionarAtalhoTag("legumes")}
             >
               Legumes
             </button>
 
             <button
               type="button"
-              onClick={() => selecionarCategoria("Batatas")}
+              onClick={() => selecionarAtalhoTag("batatas")}
             >
               Batatas
             </button>
@@ -332,10 +358,6 @@ function Navbar({
             <button type="button" onClick={() => selecionarCategoria("Doces")}>
               Doces
             </button>
-
-            <button type="button" onClick={() => selecionarCategoria("Tortas")}>
-              Tortas
-            </button>
           </div>
         </div>
 
@@ -346,16 +368,15 @@ function Navbar({
           </button>
 
           <div className="dropdown-menu">
+            <button
+              type="button"
+              onClick={() => selecionarCategoria("Bebidas")}
+            >
+              Bebidas
+            </button>
+
             <button type="button" onClick={() => selecionarCategoria("Sucos")}>
               Sucos
-            </button>
-
-            <button type="button" onClick={() => selecionarCategoria("Drinks")}>
-              Drinks
-            </button>
-
-            <button type="button" onClick={() => selecionarCategoria("Cafés")}>
-              Cafés
             </button>
           </div>
         </div>
@@ -411,7 +432,7 @@ function Navbar({
           alternarModoEscuro={alternarModoEscuro}
         />
 
-        {usuarioLogado && (
+        {!carregandoSessao && usuarioLogado && (
           <Link
             to="/adicionar-receita"
             state={{ origem: "/" }}
@@ -421,7 +442,7 @@ function Navbar({
           </Link>
         )}
 
-        {usuarioLogado ? (
+        {carregandoSessao ? null : usuarioLogado ? (
           <div className="usuario-area">
             <Link
               to="/perfil"

@@ -1,46 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ReceitaCard from "../components/ReceitaCard";
-import { estaLogado, getUsuario } from "../services/auth";
-import {
-  excluirReceita as excluirReceitaSalva,
-  obterReceitasPorAutor,
-} from "../services/receitas";
-import { removerReceitaDosFavoritos } from "../services/favoritos";
+import { useAuth } from "../contexts/auth-context";
+import { excluirReceita, obterReceitasPorAutor } from "../services/receitas";
 import "./Perfil.css";
 
 function Perfil() {
-  const usuario = getUsuario();
-  const [receitas, setReceitas] = useState(() =>
-    obterReceitasPorAutor(usuario?.id),
-  );
+  const { usuario, carregando } = useAuth();
+  const [receitas, setReceitas] = useState([]);
+  const [revisaoReceitas, setRevisaoReceitas] = useState(0);
+  const [chaveReceitasCarregadas, setChaveReceitasCarregadas] = useState("");
   const [erro, setErro] = useState("");
+  const usuarioId = usuario?.id;
+  const chaveCarregamento = `${usuarioId || ""}:${revisaoReceitas}`;
+  const carregandoReceitas =
+    Boolean(usuarioId) && chaveReceitasCarregadas !== chaveCarregamento;
 
-  function excluir(receita) {
+  useEffect(() => {
+    if (!usuarioId) return undefined;
+
+    let ativo = true;
+    obterReceitasPorAutor()
+      .then((dados) => {
+        if (!ativo) return;
+        setReceitas(dados);
+        setErro("");
+        setChaveReceitasCarregadas(chaveCarregamento);
+      })
+      .catch((falha) => {
+        if (!ativo) return;
+        setReceitas([]);
+        setErro(falha.message);
+        setChaveReceitasCarregadas(chaveCarregamento);
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, [usuarioId, chaveCarregamento]);
+
+  async function excluir(receita) {
+    if (receita.tipo !== "usuario" || receita.autorId !== usuarioId) {
+      setErro("Somente suas próprias receitas podem ser excluídas.");
+      return;
+    }
     const confirmou = window.confirm(
       `Deseja realmente excluir a receita "${receita.titulo}"?`,
     );
     if (!confirmou) return;
 
-    const removida = excluirReceitaSalva(receita.id, usuario?.id);
-    if (!removida) {
-      setErro(
-        "Não foi possível excluir esta receita. Atualize a página e tente novamente.",
-      );
-      return;
+    try {
+      await excluirReceita(receita.id);
+      setReceitas((atuais) => atuais.filter((item) => item.id !== receita.id));
+      setErro("");
+    } catch (falha) {
+      setErro(falha.message || "Não foi possível excluir esta receita.");
     }
+  }
 
-    removerReceitaDosFavoritos(receita.id);
-    setReceitas((atuais) => atuais.filter((item) => item.id !== receita.id));
-    setErro("");
+  if (carregando) {
+    return (
+      <>
+        <Navbar />
+        <main className="perfil-page">
+          <section className="perfil-estado">
+            <p>Carregando sessão...</p>
+          </section>
+        </main>
+      </>
+    );
   }
 
   return (
     <>
       <Navbar />
       <main className="perfil-page">
-        {!estaLogado() || !usuario ? (
+        {!usuario ? (
           <section className="perfil-estado">
             <h1>Perfil do usuário</h1>
             <p>Entre na sua conta para acessar seu perfil e suas receitas.</p>
@@ -102,7 +138,25 @@ function Perfil() {
                 </p>
               )}
 
-              {receitas.length > 0 ? (
+              {carregandoReceitas ? (
+                <section className="perfil-estado" role="status">
+                  <p>Carregando suas receitas...</p>
+                </section>
+              ) : erro && receitas.length === 0 ? (
+                <section className="perfil-estado">
+                  <p>Não foi possível carregar suas receitas.</p>
+                  <button
+                    type="button"
+                    className="perfil-botao"
+                    onClick={() => {
+                      setErro("");
+                      setRevisaoReceitas((revisao) => revisao + 1);
+                    }}
+                  >
+                    Tentar novamente
+                  </button>
+                </section>
+              ) : receitas.length > 0 ? (
                 <div className="perfil-receitas-grid">
                   {receitas.map((receita) => (
                     <ReceitaCard

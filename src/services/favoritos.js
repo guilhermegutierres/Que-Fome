@@ -1,17 +1,15 @@
 const EVENTO_FAVORITOS_ATUALIZADOS = "favoritos-atualizados";
 
-function obterChaveFavoritos() {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-
-  if (!usuario) {
+function obterChaveFavoritos(email) {
+  if (!email) {
     return null;
   }
 
-  return `favoritos_${usuario.email}`;
+  return `favoritos_${email}`;
 }
 
-function obterFavoritos() {
-  const chave = obterChaveFavoritos();
+function obterFavoritos(email) {
+  const chave = obterChaveFavoritos(email);
 
   if (!chave) {
     return [];
@@ -20,20 +18,20 @@ function obterFavoritos() {
   return JSON.parse(localStorage.getItem(chave)) || [];
 }
 
-function estaFavorito(id) {
-  const favoritos = obterFavoritos();
+function estaFavorito(id, email) {
+  const favoritos = obterFavoritos(email);
 
   return favoritos.includes(id);
 }
 
-function alternarFavorito(id) {
-  const chave = obterChaveFavoritos();
+function alternarFavorito(id, email) {
+  const chave = obterChaveFavoritos(email);
 
   if (!chave) {
     return false;
   }
 
-  const favoritos = obterFavoritos();
+  const favoritos = obterFavoritos(email);
   const indice = favoritos.indexOf(id);
 
   if (indice >= 0) {

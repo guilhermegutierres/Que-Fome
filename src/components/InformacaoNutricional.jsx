@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiConfigurada, calcularNutricao } from "../services/nutricao";
+import { avaliarCompletudeNutricional } from "../services/nutricao-completude";
 import "./InformacaoNutricional.css";
 
 const NUTRIENTES = [
@@ -16,6 +17,17 @@ const NUTRIENTES = [
   { grupo: "micros", chave: "iron", nome: "Ferro", unidade: "mg" },
   { grupo: "micros", chave: "phosphorus", nome: "Fósforo", unidade: "mg" },
 ];
+
+const NOMES_NUTRIENTES = {
+  kcal: "calorias",
+  protein: "proteínas",
+  carbohydrate: "carboidratos",
+  lipids: "gorduras",
+  fiber: "fibras",
+  calcium: "cálcio",
+  iron: "ferro",
+  phosphorus: "fósforo",
+};
 
 function formatarNumero(valor, casasDecimais = 1) {
   if (typeof valor !== "number" || !Number.isFinite(valor)) return "—";
@@ -98,6 +110,10 @@ function InformacaoNutricional({ ingredientes }) {
     conteudo = <p className="nutricao-erro">{resultado.erro}</p>;
   } else {
     const { items: itensCalculados = [], totals } = resultado.dados;
+    const completude = avaliarCompletudeNutricional(
+      resultado.dados,
+      possuiIngredienteSemVinculo,
+    );
 
     conteudo = (
       <>
@@ -129,9 +145,14 @@ function InformacaoNutricional({ ingredientes }) {
                     <td>{ingrediente.quantidade || "—"}</td>
                     <td>{formatarNumero(Number(ingrediente.gramas))} g</td>
                     <td>
-                      {calculado
-                        ? `${formatarNumero(calculado.kcal, 0)} kcal`
-                        : "—"}
+                      {calculado?.kcal === null ||
+                      calculado?.kcal === undefined ? (
+                        <>
+                          —<small>Valor numérico indisponível na TACO</small>
+                        </>
+                      ) : (
+                        `${formatarNumero(calculado.kcal, 0)} kcal`
+                      )}
                     </td>
                   </tr>
                 );
@@ -141,7 +162,9 @@ function InformacaoNutricional({ ingredientes }) {
             <tfoot>
               <tr>
                 <th scope="row" colSpan="2">
-                  Totais da receita
+                  {completude.incompleto
+                    ? "Subtotal dos dados nutricionais disponíveis"
+                    : "Totais da receita"}
                 </th>
                 <td>{formatarNumero(totals.grams)} g no cálculo</td>
                 <td>{formatarNumero(totals.macros.kcal, 0)} kcal</td>
@@ -150,7 +173,11 @@ function InformacaoNutricional({ ingredientes }) {
           </table>
         </div>
 
-        <h3 className="nutricao-subtitulo">Total de nutrientes</h3>
+        <h3 className="nutricao-subtitulo">
+          {completude.incompleto
+            ? "Nutrientes disponíveis no cálculo"
+            : "Total de nutrientes"}
+        </h3>
 
         <dl className="nutricao-nutrientes">
           <div className="nutricao-destaque">
@@ -170,8 +197,25 @@ function InformacaoNutricional({ ingredientes }) {
 
         {possuiIngredienteSemVinculo && (
           <p className="nutricao-observacao">
-            Alguns ingredientes não foram incluídos na estimativa porque não
-            foram vinculados à tabela TACO.
+            Cálculo parcial: considera somente os ingredientes vinculados à
+            tabela TACO. Não representa o total nutricional completo da receita.
+          </p>
+        )}
+        {completude.nutrientesAusentes.length > 0 && (
+          <p className="nutricao-observacao">
+            A TACO não fornece valores numéricos de{" "}
+            {completude.nutrientesAusentes
+              .map((chave) => NOMES_NUTRIENTES[chave])
+              .join(", ")}{" "}
+            para todos os alimentos vinculados. Os subtotais consideram apenas
+            os valores numéricos disponíveis; campos sem valor numérico não
+            foram convertidos em zero.
+          </p>
+        )}
+        {!completude.metadataValida && (
+          <p className="nutricao-observacao">
+            A fonte não informou se há valores numéricos ausentes. Trate os
+            valores exibidos como potencialmente parciais.
           </p>
         )}
       </>

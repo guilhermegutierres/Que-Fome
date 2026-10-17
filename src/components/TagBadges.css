@@ -1,0 +1,41 @@
+.receita-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.receita-tag {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e5f8eb;
+  color: #4caf70;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.receita-tag-mais {
+  background: #f1f1f1;
+  color: #666666;
+}
+
+.receita-tags-card {
+  min-height: 24px;
+  margin-top: 8px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.receita-tags-detalhe {
+  margin-top: 10px;
+}
+
+body.modo-escuro .receita-tag-mais {
+  background: #353535;
+  color: #dddddd;
+}

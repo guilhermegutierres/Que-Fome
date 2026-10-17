@@ -20,8 +20,14 @@ import { RapidApiAlimentosService } from "./rapidapi-alimentos.service.js";
       useFactory: (database: DatabaseService): AlimentosRepository => {
         const fonte = (process.env.ALIMENTOS_SOURCE || "taco").toLowerCase();
         if (fonte === "taco") return new AlimentosTacoRepository();
-        if (fonte === "postgres")
+        if (fonte === "postgres") {
+          if (!database.isConfigured()) {
+            throw new Error(
+              "Para ALIMENTOS_SOURCE=postgres, configure DATABASE_URL em backend/.env.",
+            );
+          }
           return new AlimentosPostgresRepository(database);
+        }
         throw new Error('ALIMENTOS_SOURCE deve ser "taco" ou "postgres".');
       },
     },

@@ -9,6 +9,8 @@
     "start": "node dist/main.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "import:taco": "tsx scripts/importar-taco.ts",
+    "test:auth": "tsx --test test/supabase-auth.guard.spec.ts test/supabase-auth.service.spec.ts test/profiles.spec.ts",
+    "test:recipes": "tsx --test test/recipes.spec.ts test/recipe-tags-catalog.spec.mjs test/receitas-oficiais-nutricao.test.mjs",
     "test:api": "node scripts/testar-api.mjs",
     "test:supabase": "node scripts/testar-supabase.mjs",
     "test:rapidapi": "node scripts/testar-rapidapi.mjs"

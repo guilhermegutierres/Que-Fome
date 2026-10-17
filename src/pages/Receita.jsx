@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import InformacaoNutricional from "../components/InformacaoNutricional";
 import Navbar from "../components/Navbar";
-import { estaLogado } from "../services/auth";
-import { alternarFavorito, estaFavorito } from "../services/favoritos";
-import { obterReceitas } from "../services/receitas";
+import TagBadges from "../components/TagBadges";
+import { useAuth } from "../contexts/auth-context";
+import {
+  alternarFavorito,
+  estaFavorito,
+  EVENTO_FAVORITOS_ATUALIZADOS,
+} from "../services/favoritos";
+import { obterReceita } from "../services/receitas";
 import "./Receita.css";
 
 const IMAGEM_FALLBACK =
@@ -16,23 +21,68 @@ const IMAGEM_FALLBACK =
 function Receita() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { usuario, carregando } = useAuth();
 
-  const receitas = obterReceitas();
-
-  const receita = receitas.find((item) => item.id === Number(id));
+  const [receita, setReceita] = useState(null);
+  const [receitaCarregadaId, setReceitaCarregadaId] = useState(null);
+  const [erroReceita, setErroReceita] = useState("");
   const [imagemComErro, setImagemComErro] = useState("");
-  const [favoritado, setFavoritado] = useState(() =>
-    receita ? estaFavorito(receita.id) : false,
-  );
+  const [, atualizarFavoritos] = useState(0);
+  const carregandoReceita = receitaCarregadaId !== id;
 
-  if (!receita) {
+  useEffect(() => {
+    let ativo = true;
+
+    obterReceita(id)
+      .then((dados) => {
+        if (!ativo) return;
+        setReceita(dados);
+        setErroReceita("");
+        setImagemComErro("");
+        setReceitaCarregadaId(id);
+      })
+      .catch((erro) => {
+        if (!ativo) return;
+        setReceita(null);
+        setErroReceita(erro.message);
+        setReceitaCarregadaId(id);
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, [id]);
+
+  useEffect(() => {
+    function atualizar() {
+      atualizarFavoritos((versao) => versao + 1);
+    }
+
+    window.addEventListener(EVENTO_FAVORITOS_ATUALIZADOS, atualizar);
+    window.addEventListener("storage", atualizar);
+    return () => {
+      window.removeEventListener(EVENTO_FAVORITOS_ATUALIZADOS, atualizar);
+      window.removeEventListener("storage", atualizar);
+    };
+  }, []);
+
+  const favoritado = receita ? estaFavorito(receita.id, usuario?.email) : false;
+
+  if (carregandoReceita || erroReceita || !receita) {
     return (
       <>
         <Navbar />
 
         <main className="receita-page">
           <section className="receita-nao-encontrada">
-            <h1>Receita não encontrada</h1>
+            <h1>
+              {carregandoReceita
+                ? "Carregando receita..."
+                : erroReceita
+                  ? "Não foi possível carregar a receita"
+                  : "Receita não encontrada"}
+            </h1>
+            {erroReceita && <p role="alert">{erroReceita}</p>}
 
             <Link to="/" className="receita-voltar">
               ← Voltar para a página inicial
@@ -63,12 +113,13 @@ function Receita() {
       }));
 
   function handleFavorito() {
-    if (!estaLogado()) {
+    if (carregando) return;
+    if (!usuario) {
       navigate("/login");
       return;
     }
 
-    setFavoritado(alternarFavorito(receita.id));
+    alternarFavorito(receita.id, usuario.email);
   }
 
   return (
@@ -99,6 +150,7 @@ function Receita() {
 
           <div className="receita-conteudo">
             <span className="receita-categoria">{receita.categoria}</span>
+            <TagBadges tags={receita.tags} context="detalhe" />
 
             <div className="receita-titulo-linha">
               <h1>{receita.titulo}</h1>
@@ -106,6 +158,7 @@ function Receita() {
                 type="button"
                 className={`receita-favorito-botao${favoritado ? " favoritado" : ""}`}
                 onClick={handleFavorito}
+                disabled={carregando}
                 aria-label={
                   favoritado
                     ? `Remover ${receita.titulo} dos favoritos`

@@ -32,8 +32,20 @@ type Nutrientes = {
   fiber: number | null;
 };
 
+export type NutrienteMacro = keyof Nutrientes;
+export type NutrienteMicro = "calcium" | "iron" | "phosphorus";
+
+export interface NutrientesAusentes {
+  macros: NutrienteMacro[];
+  micros: NutrienteMicro[];
+}
+
 export interface RefeicaoCalculada {
   items: Array<{ id: number; grams: number; kcal: number | null }>;
+  // Valores sem representação numérica são explicitados para que subtotais
+  // nunca pareçam completos; inclui campos TACO NA, Tr, * ou vazios.
+  // APIs externas antigas podem não fornecer essa metadata.
+  unavailableNutrients?: NutrientesAusentes;
   totals: {
     grams: number;
     macros: Nutrientes;

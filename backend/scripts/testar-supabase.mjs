@@ -1,8 +1,18 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import pg from "pg";
 
+const backendDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({
+  path: [
+    resolve(backendDirectory, ".env.local"),
+    resolve(backendDirectory, ".env"),
+  ],
+});
+
 if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("SENHA@")) {
-  throw new Error("Configure DATABASE_URL real no backend/.env.");
+  throw new Error("Configure DATABASE_URL no backend/.env.local ou backend/.env.");
 }
 const cliente = new pg.Client({ connectionString: process.env.DATABASE_URL });
 try {

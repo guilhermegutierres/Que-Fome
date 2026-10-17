@@ -80,6 +80,73 @@
   font-weight: 600;
 }
 
+.tags-selecao {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tags-selecao legend {
+  margin-bottom: 7px;
+  color: #444;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tags-selecao > small {
+  margin-bottom: 9px;
+  color: #888;
+  font-size: 12px;
+}
+
+.tags-selecao-opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  max-width: 100%;
+}
+
+.tag-selecao-chip {
+  max-width: 100%;
+  padding: 5px 9px;
+  border: 1px solid #dddddd;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #555555;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.tag-selecao-chip.selecionada {
+  border-color: #bfe8cc;
+  background: #e5f8eb;
+  color: #267541;
+}
+
+.tag-selecao-chip:focus-visible {
+  outline: 2px solid #64cd87;
+  outline-offset: 2px;
+}
+
+body.modo-escuro .tags-selecao legend {
+  color: #dddddd;
+}
+
+body.modo-escuro .tag-selecao-chip {
+  border-color: #444444;
+  background: #292929;
+  color: #dddddd;
+}
+
+body.modo-escuro .tag-selecao-chip.selecionada {
+  border-color: #375d43;
+  background: #1f3326;
+  color: #8ee6a8;
+}
+
 .campo small {
   margin-bottom: 7px;
 

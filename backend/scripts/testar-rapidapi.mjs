@@ -1,4 +1,15 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const backendDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({
+  path: [
+    resolve(backendDirectory, ".env.local"),
+    resolve(backendDirectory, ".env"),
+  ],
+});
+
 const base = (process.env.TEST_API_URL || "http://localhost:3000").replace(
   /\/$/,
   "",

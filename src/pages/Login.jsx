@@ -10,25 +10,34 @@ function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     setErro("");
 
-    if (!email || !senha) {
+    if (!email.trim() || !senha) {
       setErro("Preencha seu e-mail e sua senha.");
       return;
     }
 
-    const sucesso = login(email, senha);
+    setEnviando(true);
+    try {
+      const resultado = await login(email.trim(), senha);
+      if (!resultado.sucesso) {
+        setErro(resultado.mensagem);
+        return;
+      }
 
-    if (!sucesso) {
-      setErro("E-mail ou senha incorretos.");
-      return;
+      navigate("/");
+    } catch {
+      setErro(
+        "Não foi possível entrar. Verifique sua conexão e tente novamente.",
+      );
+    } finally {
+      setEnviando(false);
     }
-
-    navigate("/");
   }
 
   return (
@@ -66,7 +75,9 @@ function Login() {
 
             {erro && <p className="login-erro">{erro}</p>}
 
-            <button type="submit">Entrar</button>
+            <button type="submit" disabled={enviando}>
+              Entrar
+            </button>
           </form>
 
           <p className="login-cadastro">

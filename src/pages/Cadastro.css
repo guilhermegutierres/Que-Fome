@@ -103,6 +103,15 @@
   font-size: 13px;
 }
 
+.cadastro-sucesso {
+  margin: -3px 0 15px;
+
+  color: #258448;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .cadastro-card button {
   width: 100%;
 

@@ -3,6 +3,9 @@ import { AlimentosRepository } from "./alimentos.repository.js";
 import type {
   AlimentoBusca,
   AlimentoRow,
+  NutrienteMacro,
+  NutrienteMicro,
+  NutrientesAusentes,
   RefeicaoCalculada,
 } from "./alimentos.types.js";
 import type { CalcularAlimentosDto } from "./dto/calcular-alimentos.dto.js";
@@ -14,6 +17,40 @@ function numero(valor: string | number | null): number | null {
 }
 
 type LinhaPonderada = { alimento: AlimentoRow; grams: number };
+
+const CAMPOS_NUTRIENTES = {
+  macros: {
+    kcal: "energia_kcal",
+    protein: "proteina_g",
+    carbohydrate: "carboidratos_g",
+    lipids: "lipidios_g",
+    fiber: "fibras_g",
+  },
+  micros: {
+    calcium: "calcio_mg",
+    iron: "ferro_mg",
+    phosphorus: "fosforo_mg",
+  },
+} as const;
+
+function encontrarNutrientesSemValorNumerico(
+  linhas: LinhaPonderada[],
+): NutrientesAusentes {
+  const ausentes: NutrientesAusentes = { macros: [], micros: [] };
+
+  for (const [nutriente, campo] of Object.entries(CAMPOS_NUTRIENTES.macros)) {
+    if (linhas.some(({ alimento }) => numero(alimento[campo]) === null)) {
+      ausentes.macros.push(nutriente as NutrienteMacro);
+    }
+  }
+  for (const [nutriente, campo] of Object.entries(CAMPOS_NUTRIENTES.micros)) {
+    if (linhas.some(({ alimento }) => numero(alimento[campo]) === null)) {
+      ausentes.micros.push(nutriente as NutrienteMicro);
+    }
+  }
+
+  return ausentes;
+}
 
 // Retorna null quando todos os valores da fonte estão ausentes;
 // se algum ingrediente não tem dado, não o confundimos com zero medido.
@@ -71,6 +108,7 @@ export class AlimentosService {
         grams,
         kcal: somarPorPeso([{ alimento, grams }], "energia_kcal"),
       })),
+      unavailableNutrients: encontrarNutrientesSemValorNumerico(linhas),
       totals: {
         grams: dados.items.reduce((total, item) => total + item.grams, 0),
         macros: {

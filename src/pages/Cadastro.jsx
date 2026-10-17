@@ -12,15 +12,18 @@ function Cadastro() {
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     setErro("");
+    setSucesso("");
 
     const nomeLimpo = nome.trim();
 
-    if (!nomeLimpo || !email || !senha || !confirmarSenha) {
+    if (!nomeLimpo || !email.trim() || !senha || !confirmarSenha) {
       setErro("Preencha todos os campos.");
       return;
     }
@@ -35,14 +38,27 @@ function Cadastro() {
       return;
     }
 
-    const resultado = cadastrar(nomeLimpo, email, senha);
+    setEnviando(true);
+    try {
+      const resultado = await cadastrar(nomeLimpo, email.trim(), senha);
+      if (!resultado.sucesso) {
+        setErro(resultado.mensagem);
+        return;
+      }
 
-    if (!resultado.sucesso) {
-      setErro(resultado.mensagem);
-      return;
+      if (resultado.sessaoLiberada) {
+        navigate("/");
+        return;
+      }
+
+      setSucesso(
+        "Conta criada. Verifique seu e-mail para confirmar o cadastro antes de entrar.",
+      );
+    } catch {
+      setErro("Não foi possível criar sua conta. Tente novamente.");
+    } finally {
+      setEnviando(false);
     }
-
-    navigate("/login");
   }
 
   return (
@@ -100,8 +116,11 @@ function Cadastro() {
             />
 
             {erro && <p className="cadastro-erro">{erro}</p>}
+            {sucesso && <p className="cadastro-sucesso">{sucesso}</p>}
 
-            <button type="submit">Criar conta</button>
+            <button type="submit" disabled={enviando}>
+              Criar conta
+            </button>
           </form>
 
           <p className="cadastro-login">

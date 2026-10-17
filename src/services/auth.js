@@ -1,72 +1,87 @@
-function obterUsuarios() {
-  return JSON.parse(localStorage.getItem("usuarios")) || [];
+import { supabase, supabaseConfigured } from "./supabase";
+
+function mensagemErro(erro, acao) {
+  if (!supabaseConfigured) {
+    return "Configure VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY para usar a autenticação.";
+  }
+
+  const codigo = erro?.code || erro?.name;
+
+  if (acao === "login" && codigo === "invalid_credentials") {
+    return "E-mail ou senha incorretos.";
+  }
+  if (codigo === "user_already_exists" || codigo === "email_exists") {
+    return "Este e-mail já está cadastrado.";
+  }
+  if (codigo === "weak_password") {
+    return "A senha não atende aos requisitos de segurança do Supabase.";
+  }
+  if (codigo === "email_address_invalid") {
+    return "Informe um endereço de e-mail válido.";
+  }
+
+  return acao === "cadastro"
+    ? "Não foi possível criar sua conta. Tente novamente."
+    : "Não foi possível entrar. Verifique sua conexão e tente novamente.";
 }
 
-function cadastrar(nome, email, senha) {
-  const usuarios = obterUsuarios();
-
-  const emailExiste = usuarios.some(
-    (usuario) => usuario.email.toLowerCase() === email.toLowerCase(),
-  );
-
-  if (emailExiste) {
+async function login(email, senha) {
+  if (!supabase) {
     return {
       sucesso: false,
-      mensagem: "Este e-mail já está cadastrado.",
+      mensagem: mensagemErro(null, "login"),
     };
   }
 
-  const novoUsuario = {
-    id: Date.now(),
-    nome,
+  const { error } = await supabase.auth.signInWithPassword({
     email,
-    senha,
-  };
+    password: senha,
+  });
+  if (error) {
+    return { sucesso: false, mensagem: mensagemErro(error, "login") };
+  }
 
-  usuarios.push(novoUsuario);
+  return { sucesso: true };
+}
 
-  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+async function cadastrar(nome, email, senha) {
+  if (!supabase) {
+    return {
+      sucesso: false,
+      mensagem: mensagemErro(null, "cadastro"),
+    };
+  }
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password: senha,
+    options: { data: { nome } },
+  });
+
+  if (error) {
+    return { sucesso: false, mensagem: mensagemErro(error, "cadastro") };
+  }
 
   return {
     sucesso: true,
-    mensagem: "Conta criada com sucesso.",
+    sessaoLiberada: Boolean(data.session),
   };
 }
 
-function login(email, senha) {
-  const usuarios = obterUsuarios();
+async function logout() {
+  if (!supabase) return { sucesso: true };
 
-  const usuario = usuarios.find(
-    (item) =>
-      item.email.toLowerCase() === email.toLowerCase() && item.senha === senha,
-  );
-
-  if (!usuario) {
-    return false;
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+  } catch {
+    return {
+      sucesso: false,
+      mensagem: "Não foi possível encerrar sua sessão. Tente novamente.",
+    };
   }
 
-  localStorage.setItem(
-    "usuario",
-    JSON.stringify({
-      id: usuario.id,
-      nome: usuario.nome,
-      email: usuario.email,
-    }),
-  );
-
-  return true;
+  return { sucesso: true };
 }
 
-function logout() {
-  localStorage.removeItem("usuario");
-}
-
-function estaLogado() {
-  return localStorage.getItem("usuario") !== null;
-}
-
-function getUsuario() {
-  return JSON.parse(localStorage.getItem("usuario"));
-}
-
-export { cadastrar, login, logout, estaLogado, getUsuario };
+export { cadastrar, login, logout };

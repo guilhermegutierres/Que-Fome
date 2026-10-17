@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ReceitaCard from "../components/ReceitaCard";
@@ -7,14 +7,16 @@ import imagemSalada from "../assets/home/salada-hero.jpg";
 import imagemChurrasco from "../assets/home/churrasco-hero.jpg";
 import imagemFrutosDoMar from "../assets/home/frutos-do-mar-hero.jpg";
 import { obterReceitas } from "../services/receitas";
+import {
+  atualizarParametrosTag,
+  obterRotuloFiltroTag,
+  receitaCorrespondeTags,
+} from "../data/tagsReceitas";
+import {
+  receitaCorrespondeBusca,
+  receitaCorrespondeCategoria,
+} from "../services/filtros-receitas";
 import "./Home.css";
-
-function normalizarTexto(texto) {
-  return texto
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
 
 function converterTempoParaMinutos(tempo) {
   const valor = String(tempo || "")
@@ -37,18 +39,24 @@ function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const busca = searchParams.get("busca") || "";
   const categoriaSelecionada = searchParams.get("categoria") || "";
+  const tagSelecionada = searchParams.get("tag") || "";
   const tempoSelecionado = searchParams.get("tempo") || "";
   const custoSelecionado = searchParams.get("custo") || "";
   const dificuldadeSelecionada = searchParams.get("dificuldade") || "";
   const chaveFiltros = JSON.stringify([
     busca,
     categoriaSelecionada,
+    tagSelecionada,
     tempoSelecionado,
     custoSelecionado,
     dificuldadeSelecionada,
   ]);
   const [sorteio, setSorteio] = useState(null);
   const [slideAtual, setSlideAtual] = useState(0);
+  const [receitas, setReceitas] = useState([]);
+  const [carregandoReceitas, setCarregandoReceitas] = useState(true);
+  const [erroReceitas, setErroReceitas] = useState("");
+  const [tentativaCarregamento, setTentativaCarregamento] = useState(0);
   const imagensHero = [
     {
       src: imagemSalada,
@@ -63,6 +71,27 @@ function Home() {
       alt: "Frutos do mar grelhados servidos sobre uma tábua",
     },
   ];
+
+  useEffect(() => {
+    let ativo = true;
+    obterReceitas()
+      .then((dados) => {
+        if (ativo) setReceitas(dados);
+      })
+      .catch((erro) => {
+        if (ativo) {
+          setReceitas([]);
+          setErroReceitas(erro.message);
+        }
+      })
+      .finally(() => {
+        if (ativo) setCarregandoReceitas(false);
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, [tentativaCarregamento]);
 
   function navegarSlide(direcao) {
     setSlideAtual(
@@ -82,27 +111,20 @@ function Home() {
     );
   }
 
-  const receitas = obterReceitas();
+  function filtrarAtalhoTag(tag) {
+    setSearchParams((atuais) => atualizarParametrosTag(atuais, tag), {
+      replace: true,
+    });
+  }
 
-  const termo = normalizarTexto(busca.trim());
+  const termo = busca.trim();
 
   const receitasFiltradas = receitas.filter((receita) => {
-    const correspondeCategoria =
-      !categoriaSelecionada ||
-      normalizarTexto(receita.categoria) ===
-        normalizarTexto(categoriaSelecionada);
-
-    const titulo = normalizarTexto(receita.titulo);
-
-    const descricao = normalizarTexto(receita.descricao || "");
-
-    const ingredientes = normalizarTexto(receita.ingredientes.join(" "));
-
-    const correspondeBusca =
-      !termo ||
-      titulo.includes(termo) ||
-      descricao.includes(termo) ||
-      ingredientes.includes(termo);
+    const correspondeCategoria = receitaCorrespondeCategoria(
+      receita,
+      categoriaSelecionada,
+    );
+    const correspondeBusca = receitaCorrespondeBusca(receita, termo);
 
     const tempoEmMinutos = converterTempoParaMinutos(receita.tempo);
     const correspondeTempo =
@@ -119,6 +141,7 @@ function Home() {
     return (
       correspondeCategoria &&
       correspondeBusca &&
+      receitaCorrespondeTags(receita, tagSelecionada) &&
       correspondeTempo &&
       correspondeCusto &&
       correspondeDificuldade
@@ -148,6 +171,7 @@ function Home() {
   const possuiFiltro =
     termo !== "" ||
     categoriaSelecionada !== "" ||
+    tagSelecionada !== "" ||
     tempoSelecionado !== "" ||
     custoSelecionado !== "" ||
     dificuldadeSelecionada !== "";
@@ -163,6 +187,12 @@ function Home() {
     filtrosAtivos.push({
       parametro: "categoria",
       rotulo: categoriaSelecionada,
+    });
+  }
+  if (tagSelecionada) {
+    filtrosAtivos.push({
+      parametro: "tag",
+      rotulo: `Tag: ${obterRotuloFiltroTag(tagSelecionada)}`,
     });
   }
   if (tempoSelecionado) {
@@ -194,6 +224,7 @@ function Home() {
         const proximos = new URLSearchParams(atuais);
         proximos.delete("busca");
         proximos.delete("categoria");
+        proximos.delete("tag");
         proximos.delete("tempo");
         proximos.delete("custo");
         proximos.delete("dificuldade");
@@ -203,11 +234,18 @@ function Home() {
     );
   }
 
+  function tentarCarregarReceitas() {
+    setCarregandoReceitas(true);
+    setErroReceitas("");
+    setTentativaCarregamento((valor) => valor + 1);
+  }
+
   return (
     <>
       <Navbar
         busca={busca}
         onBuscaChange={(termo) => atualizarParametro("busca", termo)}
+        onTagAtalho={filtrarAtalhoTag}
         onCategoriaChange={(categoria) =>
           atualizarParametro("categoria", categoria)
         }
@@ -404,13 +442,26 @@ function Home() {
               </div>
             </div>
 
-            <span>
-              {receitasFiltradas.length}{" "}
-              {receitasFiltradas.length === 1 ? "receita" : "receitas"}
+            <span aria-live="polite">
+              {carregandoReceitas
+                ? "Carregando receitas..."
+                : `${receitasFiltradas.length} ${receitasFiltradas.length === 1 ? "receita" : "receitas"}`}
             </span>
           </div>
 
-          {receitasFiltradas.length > 0 ? (
+          {carregandoReceitas ? (
+            <div className="sem-resultados" role="status">
+              <p>Carregando receitas...</p>
+            </div>
+          ) : erroReceitas ? (
+            <div className="sem-resultados" role="alert">
+              <h2>Não foi possível carregar as receitas</h2>
+              <p>{erroReceitas}</p>
+              <button type="button" onClick={tentarCarregarReceitas}>
+                Tentar novamente
+              </button>
+            </div>
+          ) : receitasFiltradas.length > 0 ? (
             <div className="receitas-grid">
               {receitasFiltradas.map((receita) => (
                 <ReceitaCard key={receita.id} receita={receita} />
