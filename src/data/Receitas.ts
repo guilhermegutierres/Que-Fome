@@ -1,4 +1,18 @@
-const receitas = [
+interface ReceitaBase {
+  id: number;
+  titulo: string;
+  categoria: string;
+  descricao: string;
+  descricaoCompleta: string;
+  tempo: string;
+  dificuldade: string;
+  custo: string;
+  imagem: string;
+  ingredientes: string[];
+  modoPreparo: string[];
+}
+
+const receitas: ReceitaBase[] = [
   {
     id: 1,
     titulo: "Mousse de Limão",

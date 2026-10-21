@@ -3,7 +3,38 @@ import { apiConfigurada, calcularNutricao } from "../services/nutricao";
 import { avaliarCompletudeNutricional } from "../services/nutricao-completude";
 import "./InformacaoNutricional.css";
 
-const NUTRIENTES = [
+type ResultadoRefeicao = NonNullable<
+  Awaited<ReturnType<typeof calcularNutricao>>
+>;
+type ChaveMacro = keyof ResultadoRefeicao["totals"]["macros"];
+type ChaveMicro = keyof ResultadoRefeicao["totals"]["micros"];
+type ChaveNutriente = ChaveMacro | ChaveMicro;
+
+interface IngredienteNutricional {
+  tacoId?: number | null;
+  gramas?: unknown;
+  nome?: string;
+  quantidade?: string | null;
+  tacoDescricao?: string | null;
+}
+
+interface InformacaoNutricionalProps {
+  ingredientes: IngredienteNutricional[];
+}
+
+interface ResultadoSalvo {
+  chave: string;
+  status: "sucesso" | "erro";
+  dados?: ResultadoRefeicao | null;
+  erro?: string;
+}
+
+const NUTRIENTES: Array<{
+  grupo: "macros" | "micros";
+  chave: Exclude<ChaveMacro, "kcal"> | ChaveMicro;
+  nome: string;
+  unidade: string;
+}> = [
   { grupo: "macros", chave: "protein", nome: "Proteínas", unidade: "g" },
   {
     grupo: "macros",
@@ -18,7 +49,7 @@ const NUTRIENTES = [
   { grupo: "micros", chave: "phosphorus", nome: "Fósforo", unidade: "mg" },
 ];
 
-const NOMES_NUTRIENTES = {
+const NOMES_NUTRIENTES: Record<ChaveNutriente, string> = {
   kcal: "calorias",
   protein: "proteínas",
   carbohydrate: "carboidratos",
@@ -29,7 +60,7 @@ const NOMES_NUTRIENTES = {
   phosphorus: "fósforo",
 };
 
-function formatarNumero(valor, casasDecimais = 1) {
+function formatarNumero(valor: unknown, casasDecimais = 1): string {
   if (typeof valor !== "number" || !Number.isFinite(valor)) return "—";
 
   return valor.toLocaleString("pt-BR", {
@@ -37,11 +68,13 @@ function formatarNumero(valor, casasDecimais = 1) {
   });
 }
 
-function estaVinculado(ingrediente) {
+function estaVinculado(
+  ingrediente: IngredienteNutricional,
+): ingrediente is IngredienteNutricional & { tacoId: number } {
   return Boolean(ingrediente.tacoId) && Number(ingrediente.gramas) > 0;
 }
 
-function InformacaoNutricional({ ingredientes }) {
+function InformacaoNutricional({ ingredientes }: InformacaoNutricionalProps) {
   const vinculados = ingredientes.filter(estaVinculado);
   const possuiIngredienteSemVinculo = vinculados.length < ingredientes.length;
   const itens = vinculados.map((ingrediente) => ({
@@ -52,11 +85,13 @@ function InformacaoNutricional({ ingredientes }) {
 
   // O resultado guarda a chave dos itens calculados; se os itens mudarem,
   // o resultado antigo é ignorado até a nova resposta chegar.
-  const [resultadoSalvo, setResultadoSalvo] = useState(null);
+  const [resultadoSalvo, setResultadoSalvo] = useState<ResultadoSalvo | null>(
+    null,
+  );
   const resultado =
     resultadoSalvo?.chave === chaveItens
       ? resultadoSalvo
-      : { status: "carregando" };
+      : { status: "carregando" as const };
 
   useEffect(() => {
     const itensParaCalcular = JSON.parse(chaveItens);
@@ -67,15 +102,19 @@ function InformacaoNutricional({ ingredientes }) {
     calcularNutricao(itensParaCalcular)
       .then((dados) => {
         if (!cancelado) {
-          setResultadoSalvo({ chave: chaveItens, status: "sucesso", dados });
+          setResultadoSalvo({
+            chave: chaveItens,
+            status: "sucesso",
+            dados,
+          });
         }
       })
-      .catch((falha) => {
+      .catch((falha: unknown) => {
         if (!cancelado) {
           setResultadoSalvo({
             chave: chaveItens,
             status: "erro",
-            erro: falha.message,
+            erro: (falha as Error).message,
           });
         }
       });
@@ -109,9 +148,10 @@ function InformacaoNutricional({ ingredientes }) {
   } else if (resultado.status === "erro") {
     conteudo = <p className="nutricao-erro">{resultado.erro}</p>;
   } else {
-    const { items: itensCalculados = [], totals } = resultado.dados;
+    const dados = resultado.dados!;
+    const { items: itensCalculados = [], totals } = dados;
     const completude = avaliarCompletudeNutricional(
-      resultado.dados,
+      dados,
       possuiIngredienteSemVinculo,
     );
 
@@ -161,7 +201,7 @@ function InformacaoNutricional({ ingredientes }) {
 
             <tfoot>
               <tr>
-                <th scope="row" colSpan="2">
+                <th scope="row" colSpan={2}>
                   {completude.incompleto
                     ? "Subtotal dos dados nutricionais disponíveis"
                     : "Totais da receita"}
@@ -189,7 +229,15 @@ function InformacaoNutricional({ ingredientes }) {
             <div key={chave}>
               <dt>{nome}</dt>
               <dd>
-                {formatarNumero(totals[grupo]?.[chave])} {unidade}
+                {formatarNumero(
+                  (
+                    totals as unknown as Record<
+                      string,
+                      Record<string, number | null>
+                    >
+                  )[grupo]?.[chave],
+                )}{" "}
+                {unidade}
               </dd>
             </div>
           ))}

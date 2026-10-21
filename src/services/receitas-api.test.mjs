@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { criarServicoReceitas } from "./receitas.js";
+import { criarServicoReceitas } from "./receitas.ts";
 
 function criarResposta(dados, status = 200) {
   return new Response(dados == null ? null : JSON.stringify(dados), { status });

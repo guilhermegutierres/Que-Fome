@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "../contexts/auth-context";
 import { logout } from "../services/auth";
 import {
@@ -13,7 +13,20 @@ import {
 } from "../services/favoritos";
 import "./Navbar.css";
 
-function TemaBotao({ modoEscuro, alternarModoEscuro }) {
+interface TemaBotaoProps {
+  modoEscuro: boolean;
+  alternarModoEscuro: () => void;
+}
+
+interface NavbarProps {
+  busca?: string;
+  onBuscaChange?: (valor: string) => void;
+  onTagAtalho?: (tag: string) => void;
+  onCategoriaChange?: (categoria: string) => void;
+  compact?: boolean;
+}
+
+function TemaBotao({ modoEscuro, alternarModoEscuro }: TemaBotaoProps) {
   return (
     <button
       type="button"
@@ -67,7 +80,7 @@ function Navbar({
   onTagAtalho = () => {},
   onCategoriaChange = () => {},
   compact = false,
-}) {
+}: NavbarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -76,7 +89,10 @@ function Navbar({
     () => searchParams.get("busca") || "",
   );
 
-  const { usuario, carregando: carregandoSessao } = useAuth();
+  const { usuario, carregando: carregandoSessao } = useAuth() as {
+    usuario: { email: string; nome?: string | null } | null;
+    carregando: boolean;
+  };
   const usuarioLogado = Boolean(usuario);
   const [possuiFavoritos, setPossuiFavoritos] = useState(false);
 
@@ -89,7 +105,7 @@ function Navbar({
   useEffect(() => {
     document.body.classList.toggle("modo-escuro", modoEscuro);
 
-    localStorage.setItem("modoEscuro", modoEscuro);
+    localStorage.setItem("modoEscuro", modoEscuro as unknown as string);
   }, [modoEscuro]);
 
   useEffect(() => {
@@ -113,7 +129,7 @@ function Navbar({
     };
   }, [usuario?.email]);
 
-  function selecionarCategoria(categoria) {
+  function selecionarCategoria(categoria: string) {
     if (estaNaHome) {
       onCategoriaChange(categoria);
       return;
@@ -131,7 +147,7 @@ function Navbar({
     });
   }
 
-  function selecionarAtalhoTag(tag) {
+  function selecionarAtalhoTag(tag: string) {
     if (estaNaHome) {
       onTagAtalho(tag);
       return;
@@ -147,12 +163,12 @@ function Navbar({
     });
   }
 
-  function atualizarBusca(valor) {
+  function atualizarBusca(valor: string) {
     if (estaNaHome) onBuscaChange(valor);
     else setBuscaLocal(valor);
   }
 
-  function confirmarBusca(event) {
+  function confirmarBusca(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (estaNaHome) return;
 

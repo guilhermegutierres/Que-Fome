@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ReceitaCard from "../components/ReceitaCard";
@@ -6,9 +6,12 @@ import { useAuth } from "../contexts/auth-context";
 import { excluirReceita, obterReceitasPorAutor } from "../services/receitas";
 import "./Perfil.css";
 
+type ReceitaPerfil = Awaited<ReturnType<typeof obterReceitasPorAutor>>[number];
+type ReceitaParaExcluir = ComponentProps<typeof ReceitaCard>["receita"];
+
 function Perfil() {
   const { usuario, carregando } = useAuth();
-  const [receitas, setReceitas] = useState([]);
+  const [receitas, setReceitas] = useState<ReceitaPerfil[]>([]);
   const [revisaoReceitas, setRevisaoReceitas] = useState(0);
   const [chaveReceitasCarregadas, setChaveReceitasCarregadas] = useState("");
   const [erro, setErro] = useState("");
@@ -31,7 +34,7 @@ function Perfil() {
       .catch((falha) => {
         if (!ativo) return;
         setReceitas([]);
-        setErro(falha.message);
+        setErro((falha as Error).message);
         setChaveReceitasCarregadas(chaveCarregamento);
       });
 
@@ -40,7 +43,7 @@ function Perfil() {
     };
   }, [usuarioId, chaveCarregamento]);
 
-  async function excluir(receita) {
+  async function excluir(receita: ReceitaParaExcluir) {
     if (receita.tipo !== "usuario" || receita.autorId !== usuarioId) {
       setErro("Somente suas próprias receitas podem ser excluídas.");
       return;
@@ -51,11 +54,13 @@ function Perfil() {
     if (!confirmou) return;
 
     try {
-      await excluirReceita(receita.id);
+      await excluirReceita(receita.id as string);
       setReceitas((atuais) => atuais.filter((item) => item.id !== receita.id));
       setErro("");
     } catch (falha) {
-      setErro(falha.message || "Não foi possível excluir esta receita.");
+      setErro(
+        (falha as Error).message || "Não foi possível excluir esta receita.",
+      );
     }
   }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import InformacaoNutricional from "../components/InformacaoNutricional";
 import Navbar from "../components/Navbar";
@@ -18,13 +18,38 @@ const IMAGEM_FALLBACK =
     '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000"><rect width="800" height="1000" fill="#eeeeee"/><path d="M250 590l120-130 95 100 75-75 110 105H250z" fill="#c7c7c7"/><circle cx="520" cy="350" r="55" fill="#c7c7c7"/><text x="400" y="700" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" fill="#666666">Imagem indisponível</text></svg>',
   );
 
+type IngredienteNutricional = ComponentProps<
+  typeof InformacaoNutricional
+>["ingredientes"][number];
+
+type ReceitaDetalhe = Omit<
+  Awaited<ReturnType<typeof obterReceita>>,
+  "ingredientes" | "modoPreparo" | "ingredientesDetalhados"
+> & {
+  id: string;
+  titulo: string;
+  categoria?: string | null;
+  tags?: unknown;
+  descricaoCompleta?: string | null;
+  descricao?: string | null;
+  tempo?: string | number | null;
+  dificuldade?: string | null;
+  custo?: string | null;
+  autorNome?: unknown;
+  imagem?: unknown;
+  ingredientes?: string[];
+  modoPreparo?: string[];
+  ingredientesDetalhados?: IngredienteNutricional[];
+};
 function Receita() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { usuario, carregando } = useAuth();
 
-  const [receita, setReceita] = useState(null);
-  const [receitaCarregadaId, setReceitaCarregadaId] = useState(null);
+  const [receita, setReceita] = useState<ReceitaDetalhe | null>(null);
+  const [receitaCarregadaId, setReceitaCarregadaId] = useState<
+    string | null | undefined
+  >(null);
   const [erroReceita, setErroReceita] = useState("");
   const [imagemComErro, setImagemComErro] = useState("");
   const [, atualizarFavoritos] = useState(0);
@@ -33,10 +58,10 @@ function Receita() {
   useEffect(() => {
     let ativo = true;
 
-    obterReceita(id)
+    obterReceita(id as string)
       .then((dados) => {
         if (!ativo) return;
-        setReceita(dados);
+        setReceita(dados as unknown as ReceitaDetalhe);
         setErroReceita("");
         setImagemComErro("");
         setReceitaCarregadaId(id);
@@ -44,7 +69,7 @@ function Receita() {
       .catch((erro) => {
         if (!ativo) return;
         setReceita(null);
-        setErroReceita(erro.message);
+        setErroReceita((erro as Error).message);
         setReceitaCarregadaId(id);
       });
 
@@ -119,7 +144,7 @@ function Receita() {
       return;
     }
 
-    alternarFavorito(receita.id, usuario.email);
+    alternarFavorito(receita!.id, usuario.email);
   }
 
   return (

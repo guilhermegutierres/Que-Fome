@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ComponentProps,
+  type FormEvent,
+} from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BuscaAlimento from "../components/BuscaAlimento";
 import Navbar from "../components/Navbar";
@@ -14,25 +21,95 @@ import {
 } from "../services/receitas";
 import "./AdicionarReceita.css";
 
-function transformarLista(texto) {
+type UsuarioFormulario = NonNullable<ReturnType<typeof useAuth>["usuario"]>;
+type AlimentoSelecionado = NonNullable<
+  ComponentProps<typeof BuscaAlimento>["alimento"]
+>;
+type ReceitaApiFormulario = Awaited<
+  ReturnType<typeof obterReceitasPorAutor>
+>[number];
+type ReceitaFormulario = ReceitaApiFormulario & {
+  tipo?: unknown;
+  autorId?: unknown;
+  titulo?: string;
+  categoria?: string;
+  tempoMinutos?: number | null;
+  tempo?: string | number | null;
+  dificuldade?: string;
+  custo?: string | null;
+  imagem?: string | null;
+  descricao?: string | null;
+  descricaoCompleta?: string | null;
+  ingredientes?: unknown[];
+  modoPreparo?: unknown[];
+  tags?: unknown[];
+};
+
+interface IngredienteDetalhadoApi {
+  nome?: string | null;
+  quantidade?: string | null;
+  textoExibicao?: string | null;
+  tacoId?: number | null;
+  tacoDescricao?: string | null;
+  gramas?: number | null;
+  gramasEstimadas?: boolean | null;
+}
+
+interface IngredienteFormulario {
+  nome: string;
+  quantidade: string;
+  textoExibicao: string | null;
+  alimentoTaco: AlimentoSelecionado | null;
+  gramas: string;
+  gramasEstimadas: boolean;
+}
+
+type CampoIngrediente = "nome" | "quantidade" | "alimentoTaco" | "gramas";
+type ErroFormulario =
+  | "titulo"
+  | "categoria"
+  | "imagem"
+  | "tempo"
+  | "dificuldade"
+  | "ingredientes"
+  | "modoPreparo";
+type ErrosFormulario = Partial<Record<ErroFormulario, string>>;
+
+interface FormularioReceitaProps {
+  usuario: UsuarioFormulario;
+}
+
+interface FormularioReceitaCamposProps extends FormularioReceitaProps {
+  receitaOriginal: ReceitaFormulario | null;
+}
+
+function transformarLista(texto: string): string[] {
   return texto
     .split(/\n+/)
     .map((item) => item.trim())
     .filter((item) => item !== "");
 }
 
-function converterIngredientesParaFormulario(receita) {
+function converterIngredientesParaFormulario(
+  receita: ReceitaFormulario | null,
+): IngredienteFormulario[] {
   if (Array.isArray(receita?.ingredientesDetalhados)) {
-    return receita.ingredientesDetalhados.map((ingrediente) => ({
-      nome: ingrediente.nome || "",
-      quantidade: ingrediente.quantidade || "",
-      textoExibicao: ingrediente.textoExibicao || null,
-      alimentoTaco: ingrediente.tacoId
-        ? { id: ingrediente.tacoId, descricao: ingrediente.tacoDescricao || "" }
-        : null,
-      gramas: ingrediente.gramas ? String(ingrediente.gramas) : "",
-      gramasEstimadas: Boolean(ingrediente.gramasEstimadas),
-    }));
+    return receita.ingredientesDetalhados.map((registro) => {
+      const ingrediente = registro as IngredienteDetalhadoApi;
+      return {
+        nome: ingrediente.nome || "",
+        quantidade: ingrediente.quantidade || "",
+        textoExibicao: ingrediente.textoExibicao || null,
+        alimentoTaco: ingrediente.tacoId
+          ? {
+              id: ingrediente.tacoId,
+              descricao: ingrediente.tacoDescricao || "",
+            }
+          : null,
+        gramas: ingrediente.gramas ? String(ingrediente.gramas) : "",
+        gramasEstimadas: Boolean(ingrediente.gramasEstimadas),
+      };
+    });
   }
 
   return (Array.isArray(receita?.ingredientes) ? receita.ingredientes : []).map(
@@ -62,7 +139,6 @@ function converterIngredientesParaFormulario(receita) {
     },
   );
 }
-
 function AdicionarReceita() {
   const { usuario, carregando } = useAuth();
 
@@ -99,10 +175,13 @@ function AdicionarReceita() {
   return <FormularioReceita usuario={usuario} />;
 }
 
-function FormularioReceita({ usuario }) {
+function FormularioReceita({ usuario }: FormularioReceitaProps) {
   const { id } = useParams();
-  const [receitaOriginal, setReceitaOriginal] = useState(null);
-  const [receitaCarregadaId, setReceitaCarregadaId] = useState(null);
+  const [receitaOriginal, setReceitaOriginal] =
+    useState<ReceitaFormulario | null>(null);
+  const [receitaCarregadaId, setReceitaCarregadaId] = useState<string | null>(
+    null,
+  );
   const [erroCarregamento, setErroCarregamento] = useState("");
   const carregandoReceita = Boolean(id) && receitaCarregadaId !== id;
 
@@ -119,13 +198,15 @@ function FormularioReceita({ usuario }) {
             receita.tipo === "usuario" &&
             receita.autorId === usuario.id,
         );
-        setReceitaOriginal(encontrada || null);
+        setReceitaOriginal(
+          (encontrada as ReceitaFormulario | undefined) || null,
+        );
         setErroCarregamento("");
         setReceitaCarregadaId(id);
       })
       .catch((erro) => {
         if (!ativo) return;
-        setErroCarregamento(erro.message);
+        setErroCarregamento((erro as Error).message);
         setReceitaOriginal(null);
         setReceitaCarregadaId(id);
       });
@@ -177,7 +258,10 @@ function FormularioReceita({ usuario }) {
   );
 }
 
-function FormularioReceitaCampos({ usuario, receitaOriginal }) {
+function FormularioReceitaCampos({
+  usuario,
+  receitaOriginal,
+}: FormularioReceitaCamposProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const origemNavegacao =
@@ -192,10 +276,10 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
       String(receitaOriginal?.tempo || "").replace(/\s*min$/i, ""),
   );
   const modoPreparoOriginal = Array.isArray(receitaOriginal?.modoPreparo)
-    ? receitaOriginal.modoPreparo.join("\n")
+    ? receitaOriginal!.modoPreparo.join("\n")
     : "";
   const tagsOriginais = Array.isArray(receitaOriginal?.tags)
-    ? receitaOriginal.tags
+    ? (receitaOriginal.tags as string[])
     : [];
   const [titulo, setTitulo] = useState(receitaOriginal?.titulo || "");
   const [categoria, setCategoria] = useState(receitaOriginal?.categoria || "");
@@ -206,16 +290,16 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
   const [custo, setCusto] = useState(receitaOriginal?.custo || "");
   const [imagem, setImagem] = useState(receitaOriginal?.imagem || "");
   const [imagemAlterada, setImagemAlterada] = useState(false);
-  const [arquivoImagem, setArquivoImagem] = useState(null);
+  const [arquivoImagem, setArquivoImagem] = useState<File | null>(null);
   const [descricao, setDescricao] = useState(descricaoOriginal);
   const [ingredientes, setIngredientes] = useState(ingredientesOriginais);
   const [modoPreparo, setModoPreparo] = useState(modoPreparoOriginal);
-  const [tags, setTags] = useState(tagsOriginais);
-  const [erros, setErros] = useState({});
+  const [tags, setTags] = useState<string[]>(tagsOriginais);
+  const [erros, setErros] = useState<ErrosFormulario>({});
   const [erroGeral, setErroGeral] = useState("");
   const [sucesso, setSucesso] = useState("");
   const [publicando, setPublicando] = useState(false);
-  const imagemInputRef = useRef(null);
+  const imagemInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(
     () => () => {
@@ -264,11 +348,15 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
     }
   }
 
-  function atualizarIngrediente(index, campo, valor) {
+  function atualizarIngrediente<K extends CampoIngrediente>(
+    index: number,
+    campo: K,
+    valor: IngredienteFormulario[K],
+  ) {
     setIngredientes((atuais) =>
       atuais.map((ingrediente, itemIndex) =>
         itemIndex === index
-          ? {
+          ? ({
               ...ingrediente,
               [campo]: valor,
               ...(["nome", "quantidade"].includes(campo)
@@ -277,13 +365,12 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
               ...(["alimentoTaco", "gramas"].includes(campo)
                 ? { gramasEstimadas: false }
                 : {}),
-            }
+            } as IngredienteFormulario)
           : ingrediente,
       ),
     );
   }
-
-  function selecionarImagem(event) {
+  function selecionarImagem(event: ChangeEvent<HTMLInputElement>) {
     const arquivo = event.target.files?.[0];
     if (!arquivo) return;
 
@@ -319,11 +406,11 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
     if (imagemInputRef.current) imagemInputRef.current.value = "";
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setErroGeral("");
 
-    const novosErros = {};
+    const novosErros: ErrosFormulario = {};
     const tituloLimpo = titulo.trim();
     const tempoNumerico = Number(tempo);
     const ingredientesPreenchidos = ingredientes.filter(
@@ -402,7 +489,7 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
       const ingredientesDetalhados =
         modoEdicao &&
         JSON.stringify(ingredientes) === JSON.stringify(ingredientesOriginais)
-          ? receitaOriginal.ingredientesDetalhados
+          ? receitaOriginal!.ingredientesDetalhados
           : ingredientesValidos.map(
               ({
                 nome,
@@ -425,8 +512,8 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
       const descricaoReceita =
         modoEdicao && descricao === descricaoOriginal
           ? {
-              descricao: receitaOriginal.descricao,
-              descricaoCompleta: receitaOriginal.descricaoCompleta,
+              descricao: receitaOriginal!.descricao,
+              descricaoCompleta: receitaOriginal!.descricaoCompleta,
             }
           : {
               descricao:
@@ -436,7 +523,7 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
             };
       const modoPreparoSalvo =
         modoEdicao && modoPreparo === modoPreparoOriginal
-          ? receitaOriginal.modoPreparo
+          ? receitaOriginal!.modoPreparo
           : passos;
       const dadosReceita = {
         titulo: tituloLimpo,
@@ -452,7 +539,7 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
       };
 
       if (modoEdicao) {
-        await atualizarReceita(receitaOriginal.id, dadosReceita);
+        await atualizarReceita(receitaOriginal!.id, dadosReceita);
         setSucesso("Receita atualizada com sucesso! Voltando ao perfil...");
         window.setTimeout(() => navigate("/perfil"), 1200);
       } else {
@@ -468,9 +555,9 @@ function FormularioReceitaCampos({ usuario, receitaOriginal }) {
           1200,
         );
       }
-    } catch (erro) {
+    } catch (erro: unknown) {
       setErroGeral(
-        erro.message ||
+        (erro as Error).message ||
           "Não foi possível salvar a receita. Verifique o espaço disponível no navegador e tente novamente.",
       );
     } finally {

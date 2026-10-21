@@ -1,5 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
+} from "react";
 import "./Select.css";
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface SelectProps {
+  id: string;
+  value: string;
+  options: SelectOption[];
+  placeholder?: string;
+  onChange: (value: string) => void;
+  invalid?: boolean;
+}
 
 function Select({
   id,
@@ -8,18 +28,18 @@ function Select({
   placeholder = "Selecione",
   onChange,
   invalid = false,
-}) {
+}: SelectProps) {
   const [aberto, setAberto] = useState(false);
   const [indiceAtivo, setIndiceAtivo] = useState(-1);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const typeaheadRef = useRef("");
-  const typeaheadTimeoutRef = useRef(null);
+  const typeaheadTimeoutRef = useRef<number | null>(null);
   const options = [{ value: "", label: placeholder }, ...opcoes];
   const opcaoSelecionada = options.find((opcao) => opcao.value === value);
 
   useEffect(() => {
-    function fecharAoClicarFora(event) {
-      if (!containerRef.current?.contains(event.target)) {
+    function fecharAoClicarFora(event: globalThis.MouseEvent) {
+      if (!containerRef.current?.contains(event.target as Node | null)) {
         setAberto(false);
       }
     }
@@ -27,7 +47,7 @@ function Select({
     document.addEventListener("mousedown", fecharAoClicarFora);
     return () => {
       document.removeEventListener("mousedown", fecharAoClicarFora);
-      window.clearTimeout(typeaheadTimeoutRef.current);
+      window.clearTimeout(typeaheadTimeoutRef.current ?? undefined);
     };
   }, []);
 
@@ -36,12 +56,12 @@ function Select({
     setAberto(true);
   }
 
-  function escolher(opcao) {
+  function escolher(opcao: SelectOption) {
     onChange(opcao.value);
     setAberto(false);
   }
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       if (!aberto) abrir();
@@ -80,7 +100,7 @@ function Select({
       !event.altKey
     ) {
       typeaheadRef.current += event.key.toLocaleLowerCase();
-      window.clearTimeout(typeaheadTimeoutRef.current);
+      window.clearTimeout(typeaheadTimeoutRef.current ?? undefined);
       typeaheadTimeoutRef.current = window.setTimeout(() => {
         typeaheadRef.current = "";
       }, 700);
@@ -137,7 +157,9 @@ function Select({
               aria-selected={opcao.value === value}
               className={`select-custom-opcao${index === indiceAtivo ? " ativa" : ""}${opcao.value === value ? " selecionada" : ""}`}
               onMouseEnter={() => setIndiceAtivo(index)}
-              onMouseDown={(event) => event.preventDefault()}
+              onMouseDown={(event: ReactMouseEvent<HTMLDivElement>) =>
+                event.preventDefault()
+              }
               onClick={() => escolher(opcao)}
             >
               {opcao.label}

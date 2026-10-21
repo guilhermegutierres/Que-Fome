@@ -1,15 +1,58 @@
-import { supabase } from "./supabase.js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import { supabase } from "./supabase.ts";
 
 const URL_API = (import.meta.env?.VITE_API_URL || "/api").replace(/\/$/, "");
 const LIMITE_PAGINA = 100;
+
+interface ClienteSupabaseReceitas extends Pick<
+  SupabaseClient,
+  "auth" | "storage"
+> {}
+
+interface ReceitaApi {
+  [campo: string]: unknown;
+  id?: unknown;
+  imagemPath?: unknown;
+  imagem?: unknown;
+  ingredientes?: unknown;
+  ingredientesDetalhados?: unknown;
+  modoPreparo?: unknown;
+  tags?: unknown;
+}
+
+interface ReceitaNormalizada extends ReceitaApi {
+  id: string;
+  imagemPath: unknown;
+  imagem: string | null;
+  ingredientes: unknown[];
+  ingredientesDetalhados: Record<string, unknown>[];
+  modoPreparo: unknown[];
+  tags: unknown[];
+}
+
+interface RespostaPaginadaReceitas {
+  items?: unknown;
+  totalPages?: unknown;
+}
+
+interface OpcoesServicoReceitas {
+  baseUrl?: string;
+  fetchImpl?: typeof fetch;
+  supabaseClient?: ClienteSupabaseReceitas | null;
+  cryptoImpl?: Pick<Crypto, "randomUUID"> | null;
+}
+
+interface OpcoesRequisicao extends RequestInit {
+  autenticado?: boolean;
+}
 
 function criarServicoReceitas({
   baseUrl = "/api",
   fetchImpl = globalThis.fetch,
   supabaseClient = null,
   cryptoImpl = globalThis.crypto,
-} = {}) {
-  async function obterSessao() {
+}: OpcoesServicoReceitas = {}) {
+  async function obterSessao(): Promise<Session> {
     if (!supabaseClient) {
       throw new Error("A autenticação não está configurada neste navegador.");
     }
@@ -21,7 +64,10 @@ function criarServicoReceitas({
     return data.session;
   }
 
-  async function requisitar(caminho, { autenticado = false, ...opcoes } = {}) {
+  async function requisitar<T = unknown>(
+    caminho: string,
+    { autenticado = false, ...opcoes }: OpcoesRequisicao = {},
+  ): Promise<T | null> {
     const headers = new Headers(opcoes.headers || {});
     if (opcoes.body !== undefined) {
       headers.set("Content-Type", "application/json");
@@ -31,7 +77,7 @@ function criarServicoReceitas({
       headers.set("Authorization", `Bearer ${sessao.access_token}`);
     }
 
-    let resposta;
+    let resposta: Response;
     try {
       resposta = await fetchImpl(`${baseUrl}${caminho}`, {
         ...opcoes,
@@ -41,7 +87,7 @@ function criarServicoReceitas({
       throw new Error("Não foi possível conectar ao servidor de receitas.");
     }
 
-    let dados = null;
+    let dados: unknown = null;
     if (resposta.status !== 204) {
       try {
         dados = await resposta.json();
@@ -51,18 +97,20 @@ function criarServicoReceitas({
     }
 
     if (!resposta.ok) {
-      const mensagem = Array.isArray(dados?.message)
-        ? dados.message.join(" ")
-        : typeof dados?.message === "string"
-          ? dados.message
+      const mensagem = Array.isArray(
+        (dados as { message?: unknown } | null)?.message,
+      )
+        ? ((dados as { message?: unknown }).message as unknown[]).join(" ")
+        : typeof (dados as { message?: unknown } | null)?.message === "string"
+          ? ((dados as { message?: string }).message as string)
           : "Não foi possível concluir a operação de receitas.";
       throw new Error(mensagem);
     }
 
-    return dados;
+    return dados as T | null;
   }
 
-  function normalizarImagem(caminho) {
+  function normalizarImagem(caminho: unknown): string | null {
     if (typeof caminho !== "string" || !caminho.trim()) return null;
     const valor = caminho.trim();
     if (/^https?:\/\//i.test(valor) || valor.startsWith("/")) return valor;
@@ -74,7 +122,7 @@ function criarServicoReceitas({
     return data?.publicUrl || null;
   }
 
-  function normalizarReceita(receita) {
+  function normalizarReceita(receita: ReceitaApi): ReceitaNormalizada {
     const imagemPath = receita.imagemPath ?? receita.imagem ?? null;
     return {
       ...receita,
@@ -82,35 +130,40 @@ function criarServicoReceitas({
       imagemPath,
       imagem: normalizarImagem(imagemPath),
       ingredientes: Array.isArray(receita.ingredientes)
-        ? receita.ingredientes
+        ? (receita.ingredientes as unknown[])
         : [],
       ingredientesDetalhados: Array.isArray(receita.ingredientesDetalhados)
-        ? receita.ingredientesDetalhados.map((ingrediente) => ({
-            ...ingrediente,
+        ? (receita.ingredientesDetalhados as unknown[]).map((ingrediente) => ({
+            ...(ingrediente as object),
           }))
         : [],
       modoPreparo: Array.isArray(receita.modoPreparo)
-        ? receita.modoPreparo
+        ? (receita.modoPreparo as unknown[])
         : [],
-      tags: Array.isArray(receita.tags) ? receita.tags : [],
+      tags: Array.isArray(receita.tags) ? (receita.tags as unknown[]) : [],
     };
   }
 
-  async function listarTodasAsPaginas(caminho, autenticado = false) {
-    const receitas = new Map();
+  async function listarTodasAsPaginas(
+    caminho: string,
+    autenticado = false,
+  ): Promise<ReceitaNormalizada[]> {
+    const receitas = new Map<string, ReceitaNormalizada>();
     let pagina = 1;
     let totalPaginas = 1;
 
     do {
       const separador = caminho.includes("?") ? "&" : "?";
-      const resposta = await requisitar(
+      const resposta = await requisitar<RespostaPaginadaReceitas>(
         `${caminho}${separador}page=${pagina}&limit=${LIMITE_PAGINA}`,
         { autenticado },
       );
-      const itens = Array.isArray(resposta?.items) ? resposta.items : [];
+      const itens: unknown[] = Array.isArray(resposta?.items)
+        ? resposta.items
+        : [];
       for (const item of itens) {
-        if (item?.id != null) {
-          const normalizada = normalizarReceita(item);
+        if ((item as ReceitaApi | null | undefined)?.id != null) {
+          const normalizada = normalizarReceita(item as ReceitaApi);
           receitas.set(normalizada.id, normalizada);
         }
       }
@@ -124,45 +177,56 @@ function criarServicoReceitas({
     return [...receitas.values()];
   }
 
-  async function obterReceita(id) {
-    const resposta = await requisitar(`/recipes/${encodeURIComponent(id)}`);
-    return normalizarReceita(resposta);
+  async function obterReceita(id: string): Promise<ReceitaNormalizada> {
+    const resposta = await requisitar<ReceitaApi>(
+      `/recipes/${encodeURIComponent(id)}`,
+    );
+    return normalizarReceita(resposta as ReceitaApi);
   }
 
-  async function obterReceitas() {
+  async function obterReceitas(): Promise<ReceitaNormalizada[]> {
     return listarTodasAsPaginas("/recipes");
   }
 
-  async function obterReceitasPorAutor() {
+  async function obterReceitasPorAutor(): Promise<ReceitaNormalizada[]> {
     return listarTodasAsPaginas("/recipes/mine", true);
   }
 
-  async function salvarReceita(dados) {
-    const resposta = await requisitar("/recipes", {
+  async function salvarReceita(dados: unknown): Promise<ReceitaNormalizada> {
+    const resposta = await requisitar<ReceitaApi>("/recipes", {
       method: "POST",
       autenticado: true,
       body: JSON.stringify(dados),
     });
-    return normalizarReceita(resposta);
+    return normalizarReceita(resposta as ReceitaApi);
   }
 
-  async function atualizarReceita(id, dados) {
-    const resposta = await requisitar(`/recipes/${encodeURIComponent(id)}`, {
-      method: "PATCH",
-      autenticado: true,
-      body: JSON.stringify(dados),
-    });
-    return normalizarReceita(resposta);
+  async function atualizarReceita(
+    id: string,
+    dados: unknown,
+  ): Promise<ReceitaNormalizada> {
+    const resposta = await requisitar<ReceitaApi>(
+      `/recipes/${encodeURIComponent(id)}`,
+      {
+        method: "PATCH",
+        autenticado: true,
+        body: JSON.stringify(dados),
+      },
+    );
+    return normalizarReceita(resposta as ReceitaApi);
   }
 
-  async function excluirReceita(id) {
+  async function excluirReceita(id: string): Promise<void> {
     await requisitar(`/recipes/${encodeURIComponent(id)}`, {
       method: "DELETE",
       autenticado: true,
     });
   }
 
-  async function enviarImagem(arquivo, usuarioId) {
+  async function enviarImagem(
+    arquivo: Blob,
+    usuarioId: string | null | undefined,
+  ): Promise<string> {
     const sessao = await obterSessao();
     if (!usuarioId || sessao.user?.id !== usuarioId) {
       throw new Error("Não foi possível confirmar a autoria do upload.");
@@ -171,7 +235,7 @@ function criarServicoReceitas({
       throw new Error("Este navegador não oferece suporte ao upload seguro.");
     }
 
-    const extensoes = {
+    const extensoes: Record<string, string> = {
       "image/jpeg": "jpg",
       "image/png": "png",
       "image/webp": "webp",
@@ -182,7 +246,7 @@ function criarServicoReceitas({
     }
 
     const caminho = `${sessao.user.id}/${cryptoImpl.randomUUID()}.${extensao}`;
-    const { error } = await supabaseClient.storage
+    const { error } = await supabaseClient!.storage
       .from("receitas")
       .upload(caminho, arquivo, {
         cacheControl: "3600",

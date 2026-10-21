@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { cadastrar } from "../services/auth";
@@ -15,7 +15,7 @@ function Cadastro() {
   const [sucesso, setSucesso] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setErro("");

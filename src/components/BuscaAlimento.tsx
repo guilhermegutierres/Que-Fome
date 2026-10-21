@@ -1,9 +1,28 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent,
+} from "react";
 import { apiConfigurada, buscarAlimentos } from "../services/nutricao";
 import "./BuscaAlimento.css";
 
 const TAMANHO_MINIMO_BUSCA = 3;
 const ATRASO_BUSCA_MS = 500;
+
+type ResultadoBuscaAlimento = Awaited<
+  ReturnType<typeof buscarAlimentos>
+>[number];
+type AlimentoSelecionado = Pick<ResultadoBuscaAlimento, "id" | "descricao">;
+
+interface BuscaAlimentoProps {
+  id: string;
+  alimento: AlimentoSelecionado | null;
+  nomeIngrediente?: string;
+  onSelecionar: (alimento: AlimentoSelecionado | null) => void;
+  invalid?: boolean;
+}
 
 function BuscaAlimento({
   id,
@@ -11,20 +30,20 @@ function BuscaAlimento({
   nomeIngrediente = "",
   onSelecionar,
   invalid = false,
-}) {
+}: BuscaAlimentoProps) {
   const [termo, setTermo] = useState("");
-  const [resultados, setResultados] = useState([]);
+  const [resultados, setResultados] = useState<ResultadoBuscaAlimento[]>([]);
   const [aberto, setAberto] = useState(false);
   const [consultaIniciada, setConsultaIniciada] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const [indiceAtivo, setIndiceAtivo] = useState(-1);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const termoValido = termo.trim().length >= TAMANHO_MINIMO_BUSCA;
 
   useEffect(() => {
-    function fecharAoClicarFora(event) {
-      if (!containerRef.current?.contains(event.target)) {
+    function fecharAoClicarFora(event: globalThis.MouseEvent) {
+      if (!containerRef.current?.contains(event.target as Node | null)) {
         setAberto(false);
       }
     }
@@ -50,10 +69,10 @@ function BuscaAlimento({
         setResultados(encontrados);
         setErro("");
         setIndiceAtivo(encontrados.length > 0 ? 0 : -1);
-      } catch (falha) {
+      } catch (falha: unknown) {
         if (cancelado) return;
         setResultados([]);
-        setErro(falha.message);
+        setErro((falha as Error).message);
       } finally {
         if (!cancelado) setCarregando(false);
       }
@@ -65,13 +84,13 @@ function BuscaAlimento({
     };
   }, [termo]);
 
-  function escolher(opcao) {
+  function escolher(opcao: ResultadoBuscaAlimento) {
     onSelecionar({ id: opcao.id, descricao: opcao.descricao });
     setTermo("");
     setAberto(false);
   }
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown" && termoValido && resultados.length > 0) {
       event.preventDefault();
       setAberto(true);
@@ -145,7 +164,7 @@ function BuscaAlimento({
             ? `${id}-resultado-${indiceAtivo}`
             : undefined
         }
-        onChange={(event) => {
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
           const novoTermo = event.target.value;
           const novoTermoValido =
             novoTermo.trim().length >= TAMANHO_MINIMO_BUSCA;

@@ -1,9 +1,19 @@
 import { TAGS_RECEITAS } from "../data/tagsReceitas";
 
-function TagSelector({ value = [], onChange, disabled = false }) {
+interface TagSelectorProps {
+  value?: string[];
+  onChange: (value: string[]) => void;
+  disabled?: boolean;
+}
+
+function TagSelector({
+  value = [],
+  onChange,
+  disabled = false,
+}: TagSelectorProps) {
   const selecionadas = new Set(value);
 
-  function alternarTag(tagId) {
+  function alternarTag(tagId: string) {
     onChange(
       selecionadas.has(tagId)
         ? value.filter((tag) => tag !== tagId)

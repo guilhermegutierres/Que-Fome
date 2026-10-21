@@ -1,6 +1,23 @@
 import { supabase, supabaseConfigured } from "./supabase";
 
-function mensagemErro(erro, acao) {
+type AcaoAutenticacao = "login" | "cadastro";
+
+interface ErroAutenticacao {
+  code?: string;
+  name?: string;
+}
+
+type ResultadoFalha = { sucesso: false; mensagem: string };
+type ResultadoLogin = ResultadoFalha | { sucesso: true };
+type ResultadoCadastro =
+  | ResultadoFalha
+  | { sucesso: true; sessaoLiberada: boolean };
+type ResultadoLogout = ResultadoFalha | { sucesso: true };
+
+function mensagemErro(
+  erro: ErroAutenticacao | null | undefined,
+  acao: AcaoAutenticacao,
+): string {
   if (!supabaseConfigured) {
     return "Configure VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY para usar a autenticação.";
   }
@@ -25,7 +42,7 @@ function mensagemErro(erro, acao) {
     : "Não foi possível entrar. Verifique sua conexão e tente novamente.";
 }
 
-async function login(email, senha) {
+async function login(email: string, senha: string): Promise<ResultadoLogin> {
   if (!supabase) {
     return {
       sucesso: false,
@@ -44,7 +61,11 @@ async function login(email, senha) {
   return { sucesso: true };
 }
 
-async function cadastrar(nome, email, senha) {
+async function cadastrar(
+  nome: string,
+  email: string,
+  senha: string,
+): Promise<ResultadoCadastro> {
   if (!supabase) {
     return {
       sucesso: false,
@@ -68,7 +89,7 @@ async function cadastrar(nome, email, senha) {
   };
 }
 
-async function logout() {
+async function logout(): Promise<ResultadoLogout> {
   if (!supabase) return { sucesso: true };
 
   try {

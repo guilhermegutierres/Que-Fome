@@ -18,7 +18,32 @@ import {
 } from "../services/filtros-receitas";
 import "./Home.css";
 
-function converterTempoParaMinutos(tempo) {
+interface ReceitaHome {
+  id: string;
+  titulo: string;
+  categoria?: string | null;
+  descricao?: string | null;
+  descricaoCompleta?: string | null;
+  tempo?: string | number | null;
+  dificuldade?: string | null;
+  custo?: string | null;
+  tags?: unknown;
+  ingredientes?: unknown;
+  ingredientesDetalhados?: unknown;
+  modoPreparo?: unknown;
+}
+
+interface SorteioReceita {
+  id: string;
+  chaveFiltros: string;
+}
+
+interface FiltroAtivo {
+  parametro: string;
+  rotulo: string;
+}
+
+function converterTempoParaMinutos(tempo: unknown): number | null {
   const valor = String(tempo || "")
     .trim()
     .toLowerCase();
@@ -31,7 +56,7 @@ function converterTempoParaMinutos(tempo) {
   return null;
 }
 
-function obterIndiceAleatorio(tamanho) {
+function obterIndiceAleatorio(tamanho: number): number {
   return Math.floor(Math.random() * tamanho);
 }
 
@@ -51,9 +76,9 @@ function Home() {
     custoSelecionado,
     dificuldadeSelecionada,
   ]);
-  const [sorteio, setSorteio] = useState(null);
+  const [sorteio, setSorteio] = useState<SorteioReceita | null>(null);
   const [slideAtual, setSlideAtual] = useState(0);
-  const [receitas, setReceitas] = useState([]);
+  const [receitas, setReceitas] = useState<ReceitaHome[]>([]);
   const [carregandoReceitas, setCarregandoReceitas] = useState(true);
   const [erroReceitas, setErroReceitas] = useState("");
   const [tentativaCarregamento, setTentativaCarregamento] = useState(0);
@@ -76,12 +101,12 @@ function Home() {
     let ativo = true;
     obterReceitas()
       .then((dados) => {
-        if (ativo) setReceitas(dados);
+        if (ativo) setReceitas(dados as unknown as ReceitaHome[]);
       })
       .catch((erro) => {
         if (ativo) {
           setReceitas([]);
-          setErroReceitas(erro.message);
+          setErroReceitas((erro as Error).message);
         }
       })
       .finally(() => {
@@ -93,13 +118,13 @@ function Home() {
     };
   }, [tentativaCarregamento]);
 
-  function navegarSlide(direcao) {
+  function navegarSlide(direcao: number) {
     setSlideAtual(
       (atual) => (atual + direcao + imagensHero.length) % imagensHero.length,
     );
   }
 
-  function atualizarParametro(nome, valor) {
+  function atualizarParametro(nome: string, valor: string) {
     setSearchParams(
       (atuais) => {
         const proximos = new URLSearchParams(atuais);
@@ -111,7 +136,7 @@ function Home() {
     );
   }
 
-  function filtrarAtalhoTag(tag) {
+  function filtrarAtalhoTag(tag: string) {
     setSearchParams((atuais) => atualizarParametrosTag(atuais, tag), {
       replace: true,
     });
@@ -176,7 +201,7 @@ function Home() {
     custoSelecionado !== "" ||
     dificuldadeSelecionada !== "";
 
-  const filtrosAtivos = [];
+  const filtrosAtivos: FiltroAtivo[] = [];
   if (busca.trim()) {
     filtrosAtivos.push({
       parametro: "busca",
@@ -196,7 +221,7 @@ function Home() {
     });
   }
   if (tempoSelecionado) {
-    const opcoesTempo = {
+    const opcoesTempo: Record<string, string> = {
       10: "Até 10 min",
       20: "Até 20 min",
       30: "Até 30 min",

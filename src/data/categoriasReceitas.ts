@@ -1,4 +1,4 @@
-const CATEGORIAS_RECEITAS = [
+const CATEGORIAS_RECEITAS: string[] = [
   "Entradas",
   "Pratos principais",
   "Acompanhamentos",
@@ -16,7 +16,7 @@ const CATEGORIAS_RECEITAS = [
   "Sucos",
 ];
 
-const GRUPOS_CATEGORIAS = {
+const GRUPOS_CATEGORIAS: Record<string, string[]> = {
   entradas: ["Saladas", "Sopas", "Petiscos"],
   sobremesas: ["Bolos", "Doces"],
   bebidas: ["Bebidas", "Sucos"],

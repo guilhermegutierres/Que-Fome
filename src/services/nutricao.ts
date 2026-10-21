@@ -7,14 +7,54 @@ const FONTE =
   import.meta.env.VITE_ALIMENTOS_SOURCE === "rapidapi"
     ? "/alimentos/rapidapi"
     : "/alimentos";
-const consultasPendentes = new Map();
+
+type NutrienteMacro =
+  | "kcal"
+  | "protein"
+  | "carbohydrate"
+  | "lipids"
+  | "fiber";
+type NutrienteMicro = "calcium" | "iron" | "phosphorus";
+
+interface AlimentoBusca {
+  id: number;
+  descricao: string;
+  kcal: number | null;
+}
+
+interface ItemCalculoNutricional {
+  id: number;
+  grams: number;
+}
+
+interface RefeicaoCalculada {
+  items: Array<{ id: number; grams: number; kcal: number | null }>;
+  unavailableNutrients?: {
+    macros: NutrienteMacro[];
+    micros: NutrienteMicro[];
+  };
+  totals: {
+    grams: number;
+    macros: Record<NutrienteMacro, number | null>;
+    micros: Record<NutrienteMicro, number | null>;
+  };
+}
+
+interface OpcoesRequisicao extends Omit<RequestInit, "headers"> {
+  headers?: Record<string, string>;
+}
+
+const consultasPendentes = new Map<string, Promise<unknown>>();
 
 // Mantém a assinatura pública dos componentes enquanto migramos os serviços.
-function apiConfigurada() {
+function apiConfigurada(): boolean {
   return true;
 }
 
-async function requisitar(caminho, opcoes = {}) {
+async function requisitar<T>(
+  caminho: string,
+  opcoes: OpcoesRequisicao = {},
+): Promise<T> {
   let resposta;
   try {
     resposta = await fetch(`${URL_API}${caminho}`, {
@@ -41,20 +81,23 @@ async function requisitar(caminho, opcoes = {}) {
     }
     throw new Error("Não foi possível consultar a tabela TACO no momento.");
   }
-  return resposta.json();
+  return resposta.json() as Promise<T>;
 }
 
-function consultarUmaVez(chave, consultar) {
+function consultarUmaVez<T>(
+  chave: string,
+  consultar: () => Promise<T>,
+): Promise<T> {
   if (!consultasPendentes.has(chave)) {
     consultasPendentes.set(
       chave,
       consultar().finally(() => consultasPendentes.delete(chave)),
     );
   }
-  return consultasPendentes.get(chave);
+  return consultasPendentes.get(chave) as Promise<T>;
 }
 
-function buscarAlimentos(termo) {
+function buscarAlimentos(termo: string): Promise<AlimentoBusca[]> {
   const busca = termo.trim();
   if (!busca) return Promise.resolve([]);
   return consultarUmaVez(`busca:${busca.toLowerCase()}`, () =>
@@ -62,7 +105,9 @@ function buscarAlimentos(termo) {
   );
 }
 
-function calcularNutricao(itens) {
+function calcularNutricao(
+  itens: ItemCalculoNutricional[],
+): Promise<RefeicaoCalculada | null> {
   if (itens.length === 0) return Promise.resolve(null);
   return consultarUmaVez(`calculo:${JSON.stringify(itens)}`, () =>
     requisitar(`${FONTE}/calcular`, {

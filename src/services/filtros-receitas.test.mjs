@@ -4,12 +4,12 @@ import test from "node:test";
 import {
   atualizarParametrosTag,
   receitaCorrespondeTags,
-} from "../data/tagsReceitas.js";
-import { CATEGORIAS_RECEITAS } from "../data/categoriasReceitas.js";
+} from "../data/tagsReceitas.ts";
+import { CATEGORIAS_RECEITAS } from "../data/categoriasReceitas.ts";
 import {
   receitaCorrespondeBusca,
   receitaCorrespondeCategoria,
-} from "./filtros-receitas.js";
+} from "./filtros-receitas.ts";
 
 test("atalhos filtram por tags e preservam categoria e demais filtros", () => {
   const atuais = new URLSearchParams(

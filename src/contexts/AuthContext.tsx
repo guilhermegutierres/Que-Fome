@@ -1,8 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ContextType, type ReactNode } from "react";
+import type { User } from "@supabase/supabase-js";
 import { AuthContext } from "./auth-context";
 import { supabase, supabaseConfigured } from "../services/supabase";
 
-function formatarUsuario(authUser) {
+type UsuarioAutenticado = NonNullable<
+  ContextType<typeof AuthContext>
+>["usuario"];
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+function formatarUsuario(
+  authUser: User | null | undefined,
+): UsuarioAutenticado {
   if (!authUser) return null;
 
   const metadata = authUser.user_metadata || {};
@@ -19,8 +30,8 @@ function formatarUsuario(authUser) {
   };
 }
 
-function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(null);
+function AuthProvider({ children }: AuthProviderProps) {
+  const [usuario, setUsuario] = useState<UsuarioAutenticado>(null);
   const [carregando, setCarregando] = useState(supabaseConfigured);
 
   useEffect(() => {

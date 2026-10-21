@@ -10,10 +10,14 @@ import {
 import { obterReceitas } from "../services/receitas";
 import "./Favoritos.css";
 
+type IdFavorito = string | number;
+
 function Favoritos() {
   const { usuario, carregando } = useAuth();
-  const [favoritos, setFavoritos] = useState([]);
-  const [receitas, setReceitas] = useState([]);
+  const [favoritos, setFavoritos] = useState<IdFavorito[]>([]);
+  const [receitas, setReceitas] = useState<
+    Awaited<ReturnType<typeof obterReceitas>>
+  >([]);
   const [chaveReceitasCarregadas, setChaveReceitasCarregadas] = useState("");
   const [erroReceitas, setErroReceitas] = useState("");
   const [tentativaCarregamento, setTentativaCarregamento] = useState(0);
@@ -53,7 +57,7 @@ function Favoritos() {
       .catch((erro) => {
         if (!ativo) return;
         setReceitas([]);
-        setErroReceitas(erro.message);
+        setErroReceitas((erro as Error).message);
         setChaveReceitasCarregadas(chaveCarregamento);
       });
 
