@@ -14,3 +14,11 @@ Nesta fase, apenas o módulo **alimentos/nutrição** foi migrado para a API. Re
 ## Integração com Supabase + RapidAPI
 
 Para configurar as duas fontes sem expor senhas no frontend, consulte [CONECTAR-SUPABASE-E-RAPIDAPI.md](CONECTAR-SUPABASE-E-RAPIDAPI.md). Nesta etapa o backend oferece duas rotas de consulta independentes e o React escolhe uma delas por `VITE_ALIMENTOS_SOURCE`.
+
+## Docker
+
+```bash
+docker compose up --build   # abre em http://localhost:8080
+```
+
+Opcional: copie `.env.example` para `.env` para configurar Supabase/RapidAPI. Sem isso, o app sobe com os alimentos do arquivo TACO local.
