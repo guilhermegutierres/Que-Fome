@@ -1,0 +1,33 @@
+{
+  "name": "que-fome",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "docker:prepare": "node docker/prepare.mjs",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test src/services/*.test.mjs",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/scripts/**/*.{js,jsx,ts,tsx,mjs}\" \"vite.config.js\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/src/**/*.{js,jsx,ts,tsx,mjs}\" \"backend/scripts/**/*.{js,jsx,ts,tsx,mjs}\" \"vite.config.js\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "prettier": "^3.9.9",
+    "supabase": "^2.120.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  }
+}
