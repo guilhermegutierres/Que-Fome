@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Segredos locais e artefatos TypeScript
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+
+# Imagens enviadas pelos usuarios (dados persistentes fora do Git)
+backend/uploads/
+
+# Dados e credenciais de transporte do Docker (não publicar).
+.env.docker
+docker/local-data/
+docker/secrets/

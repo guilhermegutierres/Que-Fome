@@ -1,0 +1,58 @@
+{
+  "tags": [
+    { "id": "carne", "label": "Carne" },
+    { "id": "carne-seca", "label": "Carne-seca" },
+    { "id": "frango", "label": "Frango" },
+    { "id": "peixe", "label": "Peixe" },
+    { "id": "camarao", "label": "Camarão" },
+    { "id": "ovo", "label": "Ovo" },
+    { "id": "queijo", "label": "Queijo" },
+    { "id": "arroz", "label": "Arroz" },
+    { "id": "massa", "label": "Massa" },
+    { "id": "legumes", "label": "Legumes" },
+    { "id": "batata", "label": "Batata" },
+    { "id": "mandioca", "label": "Mandioca" },
+    { "id": "cogumelos", "label": "Cogumelos" },
+    { "id": "forno", "label": "Forno" },
+    { "id": "frito", "label": "Frito" },
+    { "id": "panela-unica", "label": "Panela única" },
+    { "id": "rapido", "label": "Rápido" },
+    { "id": "vegetariano", "label": "Vegetariano" },
+    { "id": "sobremesa", "label": "Sobremesa" },
+    { "id": "bebida", "label": "Bebida" },
+    { "id": "lanche", "label": "Lanche" },
+    { "id": "doce", "label": "Doce" },
+    { "id": "tomate", "label": "Tomate" }
+  ],
+  "atalhos": [
+    {
+      "id": "carnes",
+      "label": "Carnes",
+      "tags": ["carne", "carne-seca", "frango", "peixe", "camarao"]
+    },
+    { "id": "arroz", "label": "Arroz", "tags": ["arroz"] },
+    { "id": "legumes", "label": "Legumes", "tags": ["legumes"] },
+    { "id": "batatas", "label": "Batatas", "tags": ["batata"] }
+  ],
+  "aliases": {
+    "batatas": "batata",
+    "carne-bovina": "carne",
+    "carne-moida": "carne",
+    "carnes": "carne",
+    "camaroes": "camarao",
+    "cogumelo": "cogumelos",
+    "doces": "doce",
+    "frangos": "frango",
+    "legume": "legumes",
+    "massas": "massa",
+    "ovos": "ovo",
+    "peixes": "peixe",
+    "queijos": "queijo",
+    "sobremesas": "sobremesa",
+    "bebidas": "bebida",
+    "lanches": "lanche",
+    "vegetarianos": "vegetariano",
+    "rapidos": "rapido",
+    "fritos": "frito"
+  }
+}

@@ -1,0 +1,2022 @@
+[
+  {
+    "id": "a1256dc6-a8d1-5c9b-8178-fc7b04c65a66",
+    "tipo": "oficial",
+    "tags": ["sobremesa", "doce"],
+    "autorId": null,
+    "titulo": "Mousse de Limão",
+    "categoria": "Doces",
+    "descricao": "Sobremesa cremosa, refrescante e fácil de preparar.",
+    "descricaoCompleta": "Uma sobremesa simples e refrescante, perfeita para depois do almoço ou para um momento especial.",
+    "tempoMinutos": 15,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "imagemPath": "mousse-de-limao.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Leite condensado",
+        "quantidade": "1 lata",
+        "textoExibicao": "1 lata de leite condensado",
+        "tacoId": 453,
+        "gramas": 395,
+        "gramasEstimadas": true,
+        "observacao": "Peso líquido de lata convencional estimado; confirmar marca/embalagem."
+      },
+      {
+        "ordem": 2,
+        "nome": "Creme de leite",
+        "quantidade": "1 lata",
+        "textoExibicao": "1 lata de creme de leite",
+        "tacoId": 447,
+        "gramas": 300,
+        "gramasEstimadas": true,
+        "observacao": "Peso líquido de lata convencional estimado; confirmar marca/embalagem."
+      },
+      {
+        "ordem": 3,
+        "nome": "Suco de limão",
+        "quantidade": "Suco de 3 limões",
+        "textoExibicao": "Suco de 3 limões",
+        "tacoId": null,
+        "gramas": 105,
+        "gramasEstimadas": true,
+        "observacao": "Rendimento estimado; a variedade e o tamanho dos limões não estão especificados. A TACO não oferece correspondência adequada para suco de limão genérico."
+      },
+      {
+        "ordem": 4,
+        "nome": "Raspas de limão",
+        "quantidade": "para decorar",
+        "textoExibicao": "Raspas de limão para decorar",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada; sem vínculo nutricional."
+      }
+    ],
+    "modoPreparo": [
+      "Coloque o leite condensado e o creme de leite no liquidificador.",
+      "Adicione o suco de limão aos poucos.",
+      "Bata até obter uma mistura cremosa e homogênea.",
+      "Coloque em um recipiente e leve à geladeira por pelo menos 2 horas.",
+      "Finalize com raspas de limão antes de servir."
+    ],
+    "porcoes": null
+  },
+  {
+    "id": "ed2f05aa-a56e-5874-bd49-d8519c23b537",
+    "tipo": "oficial",
+    "tags": ["carne", "massa", "queijo", "forno"],
+    "autorId": null,
+    "titulo": "Lasanha à Bolonhesa",
+    "categoria": "Massas",
+    "descricao": "Lasanha tradicional com molho à bolonhesa e queijo.",
+    "descricaoCompleta": "Uma lasanha clássica e saborosa para reunir a família em volta da mesa.",
+    "tempoMinutos": 50,
+    "dificuldade": "Médio",
+    "custo": "Médio",
+    "imagemPath": "lasanha.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Carne moída",
+        "quantidade": "500 g",
+        "textoExibicao": "500 g de carne moída",
+        "tacoId": null,
+        "gramas": 500,
+        "gramasEstimadas": false,
+        "observacao": "A quantidade é explícita, mas o corte da carne moída não é; não associar ao acém moído da TACO sem confirmação."
+      },
+      {
+        "ordem": 2,
+        "nome": "Massa para lasanha",
+        "quantidade": "1 pacote",
+        "textoExibicao": "1 pacote de massa para lasanha",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Peso, composição e estado (seca/fresca) do pacote não especificados; não presumir massa de trigo simples."
+      },
+      {
+        "ordem": 3,
+        "nome": "Molho de tomate",
+        "quantidade": "1 lata",
+        "textoExibicao": "1 lata de molho de tomate",
+        "tacoId": 159,
+        "gramas": 340,
+        "gramasEstimadas": true,
+        "observacao": "Correspondência com molho de tomate industrializado; peso de lata convencional estimado e precisa de confirmação."
+      },
+      {
+        "ordem": 4,
+        "nome": "Muçarela",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de muçarela",
+        "tacoId": 463,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": "Correspondência direta com queijo mozarela da TACO."
+      },
+      {
+        "ordem": 5,
+        "nome": "Presunto",
+        "quantidade": "200 g",
+        "textoExibicao": "200 g de presunto",
+        "tacoId": null,
+        "gramas": 200,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade explícita, mas a TACO separa presunto com/sem capa de gordura e a receita não especifica."
+      },
+      {
+        "ordem": 6,
+        "nome": "Cebola",
+        "quantidade": "1 unidade, picada",
+        "textoExibicao": "1 cebola picada",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Cebola crua corresponde à TACO; peso de uma unidade média estimado."
+      },
+      {
+        "ordem": 7,
+        "nome": "Alho",
+        "quantidade": "2 dentes",
+        "textoExibicao": "2 dentes de alho",
+        "tacoId": 82,
+        "gramas": 6,
+        "gramasEstimadas": true,
+        "observacao": "Alho cru corresponde à TACO; peso de dois dentes estimado."
+      },
+      {
+        "ordem": 8,
+        "nome": "Sal",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada."
+      },
+      {
+        "ordem": 9,
+        "nome": "Pimenta-do-reino",
+        "quantidade": "a gosto",
+        "textoExibicao": "Pimenta-do-reino a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada e sem correspondência adequada confirmada."
+      }
+    ],
+    "modoPreparo": [
+      "Refogue a cebola e o alho em uma panela.",
+      "Adicione a carne moída e cozinhe até dourar.",
+      "Acrescente o molho de tomate e tempere a gosto.",
+      "Monte a lasanha em camadas de massa, molho, presunto e queijo.",
+      "Repita as camadas até finalizar os ingredientes.",
+      "Leve ao forno preaquecido a 180 °C por aproximadamente 30 minutos."
+    ],
+    "porcoes": null
+  },
+  {
+    "id": "b9acac73-45e7-53d3-b07c-7b3c3a73bbbe",
+    "tipo": "oficial",
+    "tags": ["frango", "forno"],
+    "autorId": null,
+    "titulo": "Frango Assado",
+    "categoria": "Aves",
+    "descricao": "Frango dourado e suculento para o almoço em família.",
+    "descricaoCompleta": "Um frango assado simples, bem temperado e perfeito para acompanhar arroz, batatas ou salada.",
+    "tempoMinutos": 60,
+    "dificuldade": "Fácil",
+    "custo": "Médio",
+    "imagemPath": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1000&q=80",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Frango",
+        "quantidade": "1 kg",
+        "textoExibicao": "1 kg de frango",
+        "tacoId": null,
+        "gramas": 1000,
+        "gramasEstimadas": false,
+        "observacao": "Peso informado, mas corte, pele, ossos e forma de preparo não estão definidos; as opções da TACO não são equivalência segura."
+      },
+      {
+        "ordem": 2,
+        "nome": "Alho",
+        "quantidade": "4 dentes",
+        "textoExibicao": "4 dentes de alho",
+        "tacoId": 82,
+        "gramas": 12,
+        "gramasEstimadas": true,
+        "observacao": "Alho cru corresponde à TACO; peso de quatro dentes estimado."
+      },
+      {
+        "ordem": 3,
+        "nome": "Suco de limão",
+        "quantidade": "Suco de 1 limão",
+        "textoExibicao": "Suco de 1 limão",
+        "tacoId": null,
+        "gramas": 35,
+        "gramasEstimadas": true,
+        "observacao": "Rendimento estimado; variedade e tamanho não especificados. Sem correspondência adequada para suco genérico."
+      },
+      {
+        "ordem": 4,
+        "nome": "Azeite",
+        "quantidade": "2 colheres de sopa",
+        "textoExibicao": "2 colheres de sopa de azeite",
+        "tacoId": 260,
+        "gramas": 27,
+        "gramasEstimadas": true,
+        "observacao": "Azeite de oliva extra virgem; conversão de duas colheres para gramas estimada."
+      },
+      {
+        "ordem": 5,
+        "nome": "Páprica",
+        "quantidade": "1 colher de chá",
+        "textoExibicao": "1 colher de chá de páprica",
+        "tacoId": null,
+        "gramas": 2,
+        "gramasEstimadas": true,
+        "observacao": "Peso de colher estimado; não há correspondência adequada confirmada na TACO."
+      },
+      {
+        "ordem": 6,
+        "nome": "Sal",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada."
+      },
+      {
+        "ordem": 7,
+        "nome": "Pimenta-do-reino",
+        "quantidade": "a gosto",
+        "textoExibicao": "Pimenta-do-reino a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada e sem correspondência adequada confirmada."
+      },
+      {
+        "ordem": 8,
+        "nome": "Ervas",
+        "quantidade": "a gosto",
+        "textoExibicao": "Ervas a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Tipo e quantidade não especificados."
+      }
+    ],
+    "modoPreparo": [
+      "Tempere o frango com alho, limão, azeite e os demais temperos.",
+      "Deixe marinar por pelo menos 30 minutos.",
+      "Coloque o frango em uma assadeira.",
+      "Leve ao forno preaquecido a 200 °C.",
+      "Asse até ficar dourado e completamente cozido.",
+      "Sirva ainda quente."
+    ],
+    "porcoes": null
+  },
+  {
+    "id": "3f9bfa40-0b16-52d1-a83a-985aa5f83c55",
+    "tipo": "oficial",
+    "tags": ["legumes", "queijo", "vegetariano", "rapido"],
+    "autorId": null,
+    "titulo": "Salada Mediterrânea",
+    "categoria": "Saladas",
+    "descricao": "Uma salada leve e colorida com ingredientes frescos.",
+    "descricaoCompleta": "Uma opção leve e saudável para acompanhar as refeições ou servir como uma refeição rápida.",
+    "tempoMinutos": 10,
+    "dificuldade": "Muito fácil",
+    "custo": "Baixo",
+    "imagemPath": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1000&q=80",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Tomate",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 tomate",
+        "tacoId": 157,
+        "gramas": 120,
+        "gramasEstimadas": true,
+        "observacao": "Tomate cru com semente; peso de unidade média estimado."
+      },
+      {
+        "ordem": 2,
+        "nome": "Pepino",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 pepino",
+        "tacoId": 142,
+        "gramas": 200,
+        "gramasEstimadas": true,
+        "observacao": "Pepino cru; peso de unidade média estimado."
+      },
+      {
+        "ordem": 3,
+        "nome": "Cebola roxa",
+        "quantidade": "1/2 unidade",
+        "textoExibicao": "1/2 cebola roxa",
+        "tacoId": null,
+        "gramas": 50,
+        "gramasEstimadas": true,
+        "observacao": "Meia unidade estimada em peso; TACO oferece cebola genérica, sem confirmar equivalência específica para cebola roxa."
+      },
+      {
+        "ordem": 4,
+        "nome": "Azeitonas",
+        "quantidade": "a gosto",
+        "textoExibicao": "Azeitonas a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade e variedade (verde/preta) não especificadas."
+      },
+      {
+        "ordem": 5,
+        "nome": "Folhas verdes",
+        "quantidade": "quantidade não especificada",
+        "textoExibicao": "Folhas verdes",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Tipo de folha e quantidade não especificados."
+      },
+      {
+        "ordem": 6,
+        "nome": "Queijo branco",
+        "quantidade": "a gosto",
+        "textoExibicao": "Queijo branco a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Tipo de queijo branco e quantidade não especificados."
+      },
+      {
+        "ordem": 7,
+        "nome": "Azeite",
+        "quantidade": "quantidade não especificada",
+        "textoExibicao": "Azeite",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Sem quantidade culinária; não é possível calcular gramas com segurança."
+      },
+      {
+        "ordem": 8,
+        "nome": "Sal",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada."
+      },
+      {
+        "ordem": 9,
+        "nome": "Limão",
+        "quantidade": "a gosto",
+        "textoExibicao": "Limão a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Pode significar suco ou outro uso; quantidade e variedade não especificadas."
+      }
+    ],
+    "modoPreparo": [
+      "Lave bem todos os vegetais.",
+      "Corte o tomate, o pepino e a cebola.",
+      "Misture os vegetais com as folhas verdes.",
+      "Adicione as azeitonas e o queijo.",
+      "Tempere com azeite, sal e limão.",
+      "Misture delicadamente e sirva."
+    ],
+    "porcoes": null
+  },
+  {
+    "id": "56947c03-6161-524c-961d-4524fe49a9f1",
+    "tipo": "oficial",
+    "tags": ["sobremesa", "doce", "forno"],
+    "autorId": null,
+    "titulo": "Bolo de Chocolate",
+    "categoria": "Bolos",
+    "descricao": "Bolo fofinho de chocolate para qualquer momento.",
+    "descricaoCompleta": "Um bolo de chocolate simples, macio e perfeito para o café da tarde ou para comemorações.",
+    "tempoMinutos": 45,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "imagemPath": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=80",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Farinha de trigo",
+        "quantidade": "2 xícaras",
+        "textoExibicao": "2 xícaras de farinha de trigo",
+        "tacoId": 35,
+        "gramas": 240,
+        "gramasEstimadas": true,
+        "observacao": "Conversão de xícaras para gramas estimada; depende da medida e do enchimento."
+      },
+      {
+        "ordem": 2,
+        "nome": "Açúcar",
+        "quantidade": "1 xícara",
+        "textoExibicao": "1 xícara de açúcar",
+        "tacoId": null,
+        "gramas": 200,
+        "gramasEstimadas": true,
+        "observacao": "Conversão estimada; tipo de açúcar não especificado, então sem vínculo TACO."
+      },
+      {
+        "ordem": 3,
+        "nome": "Chocolate em pó",
+        "quantidade": "1 xícara",
+        "textoExibicao": "1 xícara de chocolate em pó",
+        "tacoId": null,
+        "gramas": 90,
+        "gramasEstimadas": true,
+        "observacao": "Conversão estimada; a TACO não oferece correspondência adequada para chocolate em pó genérico (achocolatado não é equivalente)."
+      },
+      {
+        "ordem": 4,
+        "nome": "Ovos",
+        "quantidade": "3 unidades",
+        "textoExibicao": "3 ovos",
+        "tacoId": 489,
+        "gramas": 150,
+        "gramasEstimadas": true,
+        "observacao": "Estimativa de 50 g comestíveis por ovo; TACO corresponde a ovo inteiro cru."
+      },
+      {
+        "ordem": 5,
+        "nome": "Leite",
+        "quantidade": "1 xícara",
+        "textoExibicao": "1 xícara de leite",
+        "tacoId": null,
+        "gramas": 240,
+        "gramasEstimadas": true,
+        "observacao": "Conversão para gramas estimada; teor de gordura/tipo de leite não especificado, e a entrada integral da TACO contém valores especiais em nutrientes relevantes."
+      },
+      {
+        "ordem": 6,
+        "nome": "Óleo",
+        "quantidade": "1/2 xícara",
+        "textoExibicao": "1/2 xícara de óleo",
+        "tacoId": null,
+        "gramas": 110,
+        "gramasEstimadas": true,
+        "observacao": "Conversão estimada; tipo de óleo não especificado."
+      },
+      {
+        "ordem": 7,
+        "nome": "Fermento em pó",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de fermento",
+        "tacoId": 513,
+        "gramas": 12,
+        "gramasEstimadas": true,
+        "observacao": "Correspondência com fermento químico em pó; peso de colher estimado."
+      }
+    ],
+    "modoPreparo": [
+      "Misture os ovos, o açúcar e o óleo.",
+      "Acrescente o leite e o chocolate em pó.",
+      "Adicione a farinha aos poucos.",
+      "Misture o fermento delicadamente.",
+      "Coloque a massa em uma forma untada.",
+      "Asse em forno preaquecido a 180 °C por aproximadamente 35 minutos."
+    ],
+    "porcoes": null
+  },
+  {
+    "id": "8d360de1-da56-53d9-a63d-851fd2f6e4d0",
+    "tipo": "oficial",
+    "tags": ["bebida", "rapido"],
+    "autorId": null,
+    "titulo": "Suco de Laranja",
+    "categoria": "Sucos",
+    "descricao": "Bebida gelada, simples e perfeita para dias quentes.",
+    "descricaoCompleta": "Um suco natural e refrescante que combina com o café da manhã, almoço ou lanche da tarde.",
+    "tempoMinutos": 5,
+    "dificuldade": "Muito fácil",
+    "custo": "Baixo",
+    "imagemPath": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=1000&q=80",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Laranjas (suco)",
+        "quantidade": "4 unidades",
+        "textoExibicao": "4 laranjas",
+        "tacoId": 215,
+        "gramas": 300,
+        "gramasEstimadas": true,
+        "observacao": "Estimativa de 300 g de suco extraído (não do peso das frutas inteiras). Como a receita não informa a variedade, foi usado Laranja, pêra, suco (TACO 215) como aproximação; o valor nutricional pode variar conforme a variedade real."
+      },
+      {
+        "ordem": 2,
+        "nome": "Água gelada",
+        "quantidade": "500 ml",
+        "textoExibicao": "500 ml de água gelada",
+        "tacoId": null,
+        "gramas": 500,
+        "gramasEstimadas": false,
+        "observacao": "Conversão padrão de volume de água para massa; sem contribuição nutricional a vincular."
+      },
+      {
+        "ordem": 3,
+        "nome": "Açúcar",
+        "quantidade": "a gosto",
+        "textoExibicao": "Açúcar a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada e tipo de açúcar não informado."
+      },
+      {
+        "ordem": 4,
+        "nome": "Gelo",
+        "quantidade": "a gosto",
+        "textoExibicao": "Gelo a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada; sem vínculo nutricional."
+      }
+    ],
+    "modoPreparo": [
+      "Corte as laranjas ao meio.",
+      "Esprema todas as laranjas.",
+      "Misture o suco com a água gelada.",
+      "Adoce a gosto.",
+      "Adicione gelo e sirva imediatamente."
+    ],
+    "porcoes": null
+  },
+  {
+    "id": "2037e7f9-e0e2-5578-94ae-eec70628087e",
+    "tipo": "oficial",
+    "tags": ["queijo", "lanche", "vegetariano", "rapido"],
+    "autorId": null,
+    "titulo": "Tapioca de queijo e tomate",
+    "categoria": "Lanches",
+    "descricao": "Tapioca dourada com queijo derretido e tomate fresco.",
+    "descricaoCompleta": "Uma opção rápida para o café da manhã ou lanche, feita na frigideira e servida ainda quente.",
+    "tempoMinutos": 20,
+    "dificuldade": "Muito fácil",
+    "custo": "Baixo",
+    "porcoes": 2,
+    "imagemPath": "tapioca-de-queijo-e-tomate.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Goma de tapioca hidratada",
+        "quantidade": "200 g",
+        "textoExibicao": "200 g de goma de tapioca hidratada",
+        "tacoId": null,
+        "gramas": 200,
+        "gramasEstimadas": false,
+        "observacao": "A TACO contém polvilho seco, que não equivale à goma hidratada."
+      },
+      {
+        "ordem": 2,
+        "nome": "Queijo muçarela",
+        "quantidade": "100 g",
+        "textoExibicao": "100 g de queijo muçarela",
+        "tacoId": 463,
+        "gramas": 100,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 3,
+        "nome": "Tomate",
+        "quantidade": "1 unidade pequena",
+        "textoExibicao": "1 tomate pequeno em rodelas",
+        "tacoId": 157,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para tomate pequeno."
+      },
+      {
+        "ordem": 4,
+        "nome": "Orégano",
+        "quantidade": "a gosto",
+        "textoExibicao": "Orégano a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 5,
+        "nome": "Sal",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Aqueça uma frigideira antiaderente em fogo médio.",
+      "Espalhe a goma formando um disco uniforme e cozinhe até unir.",
+      "Vire o disco, distribua a muçarela e o tomate em uma metade e tempere com orégano e sal.",
+      "Dobre a tapioca, tampe por um minuto para derreter o queijo e sirva."
+    ]
+  },
+  {
+    "id": "fcf012f2-a4a5-50c4-a191-c808659fa701",
+    "tipo": "oficial",
+    "tags": ["ovo", "legumes", "queijo", "vegetariano"],
+    "autorId": null,
+    "titulo": "Omelete de legumes e queijo",
+    "categoria": "Lanches",
+    "descricao": "Omelete macia com legumes coloridos e queijo derretido.",
+    "descricaoCompleta": "Uma refeição simples de frigideira, com ovos, vegetais picados e muçarela.",
+    "tempoMinutos": 25,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "porcoes": 2,
+    "imagemPath": "omelete-de-legumes-e-queijo.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Ovos",
+        "quantidade": "3 unidades",
+        "textoExibicao": "3 ovos",
+        "tacoId": 489,
+        "gramas": 150,
+        "gramasEstimadas": true,
+        "observacao": "Estimativa de 50 g comestíveis por ovo."
+      },
+      {
+        "ordem": 2,
+        "nome": "Cenoura",
+        "quantidade": "1/2 unidade",
+        "textoExibicao": "1/2 cenoura ralada",
+        "tacoId": 110,
+        "gramas": 40,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para meia cenoura média."
+      },
+      {
+        "ordem": 3,
+        "nome": "Abobrinha italiana",
+        "quantidade": "1/2 unidade",
+        "textoExibicao": "1/2 abobrinha italiana em cubos",
+        "tacoId": 71,
+        "gramas": 80,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para meia abobrinha média."
+      },
+      {
+        "ordem": 4,
+        "nome": "Tomate",
+        "quantidade": "1 unidade pequena",
+        "textoExibicao": "1 tomate pequeno picado",
+        "tacoId": 157,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para tomate pequeno."
+      },
+      {
+        "ordem": 5,
+        "nome": "Queijo muçarela",
+        "quantidade": "80 g",
+        "textoExibicao": "80 g de queijo muçarela",
+        "tacoId": 463,
+        "gramas": 80,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 6,
+        "nome": "Azeite de oliva",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de azeite",
+        "tacoId": 260,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 7,
+        "nome": "Sal e pimenta-do-reino",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal e pimenta-do-reino a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Bata os ovos com uma pitada de sal e pimenta.",
+      "Aqueça o azeite em uma frigideira e cozinhe a cenoura e a abobrinha por alguns minutos.",
+      "Junte o tomate e despeje os ovos batidos.",
+      "Distribua a muçarela, tampe e cozinhe em fogo baixo até firmar.",
+      "Dobre ao meio e sirva."
+    ]
+  },
+  {
+    "id": "6d6c7d73-f17b-5ad0-b8e0-30fd60c2608b",
+    "tipo": "oficial",
+    "tags": ["massa", "rapido", "vegetariano"],
+    "autorId": null,
+    "titulo": "Macarrão alho e óleo",
+    "categoria": "Massas",
+    "descricao": "Massa envolvida em óleo aromatizado com alho dourado.",
+    "descricaoCompleta": "Um clássico rápido de despensa, finalizado com salsinha e servido logo após o preparo.",
+    "tempoMinutos": 25,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "porcoes": 4,
+    "imagemPath": "macarrao-alho-e-oleo.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Macarrão de trigo seco",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de macarrão de trigo seco sem ovos",
+        "tacoId": 40,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": "A receita especifica massa de trigo seca sem ovos, compatível com a entrada genérica de macarrão de trigo cru."
+      },
+      {
+        "ordem": 2,
+        "nome": "Alho",
+        "quantidade": "4 dentes",
+        "textoExibicao": "4 dentes de alho fatiados",
+        "tacoId": 82,
+        "gramas": 12,
+        "gramasEstimadas": true,
+        "observacao": "Peso de quatro dentes estimado."
+      },
+      {
+        "ordem": 3,
+        "nome": "Óleo de soja",
+        "quantidade": "3 colheres de sopa",
+        "textoExibicao": "3 colheres de sopa de óleo de soja",
+        "tacoId": 272,
+        "gramas": 40,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 4,
+        "nome": "Salsinha",
+        "quantidade": "2 colheres de sopa",
+        "textoExibicao": "2 colheres de sopa de salsinha picada",
+        "tacoId": 153,
+        "gramas": 8,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado; sem vínculo específico confirmado na TACO."
+      },
+      {
+        "ordem": 5,
+        "nome": "Sal",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Cozinhe o macarrão em água fervente com sal até ficar al dente; reserve uma concha da água e escorra.",
+      "Aqueça o óleo em fogo baixo e doure o alho sem deixá-lo queimar.",
+      "Acrescente o macarrão e um pouco da água reservada, misturando para envolver a massa.",
+      "Finalize com salsinha e ajuste o sal."
+    ]
+  },
+  {
+    "id": "18d5391c-b1f5-5937-8812-5065671eff72",
+    "tipo": "oficial",
+    "tags": ["vegetariano", "panela-unica"],
+    "autorId": null,
+    "titulo": "Farofa de banana",
+    "categoria": "Acompanhamentos",
+    "descricao": "Farofa tostada com banana-da-terra e cebola dourada.",
+    "descricaoCompleta": "Acompanhamento agridoce que combina com pratos assados e refeições do dia a dia.",
+    "tempoMinutos": 25,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "porcoes": 6,
+    "imagemPath": "farofa-de-banana.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Banana-da-terra",
+        "quantidade": "2 unidades",
+        "textoExibicao": "2 bananas-da-terra maduras",
+        "tacoId": 175,
+        "gramas": 360,
+        "gramasEstimadas": true,
+        "observacao": "Peso comestível estimado para duas bananas médias."
+      },
+      {
+        "ordem": 2,
+        "nome": "Farinha de mandioca torrada",
+        "quantidade": "200 g",
+        "textoExibicao": "200 g de farinha de mandioca torrada",
+        "tacoId": 122,
+        "gramas": 200,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 3,
+        "nome": "Cebola",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 cebola picada",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola média."
+      },
+      {
+        "ordem": 4,
+        "nome": "Manteiga com sal",
+        "quantidade": "40 g",
+        "textoExibicao": "40 g de manteiga com sal",
+        "tacoId": 261,
+        "gramas": 40,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 5,
+        "nome": "Cheiro-verde",
+        "quantidade": "2 colheres de sopa",
+        "textoExibicao": "2 colheres de sopa de cheiro-verde",
+        "tacoId": null,
+        "gramas": 10,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado; mistura de ervas sem correspondência única na TACO."
+      },
+      {
+        "ordem": 6,
+        "nome": "Sal",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Descasque as bananas e corte em rodelas.",
+      "Derreta metade da manteiga em uma frigideira e doure as bananas dos dois lados; reserve.",
+      "Na mesma frigideira, derreta o restante da manteiga e refogue a cebola até ficar macia.",
+      "Acrescente a farinha aos poucos, mexendo até dourar.",
+      "Volte as bananas à frigideira, misture o cheiro-verde e ajuste o sal."
+    ]
+  },
+  {
+    "id": "e9986f08-5da7-5864-a040-f4d70d02d7a2",
+    "tipo": "oficial",
+    "tags": ["legumes", "batata", "panela-unica", "vegetariano"],
+    "autorId": null,
+    "titulo": "Sopa de legumes",
+    "categoria": "Sopas",
+    "descricao": "Sopa leve de legumes cozidos em caldo caseiro.",
+    "descricaoCompleta": "Uma panela de legumes em cubos, temperada de forma simples e servida bem quente.",
+    "tempoMinutos": 45,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "porcoes": 4,
+    "imagemPath": "sopa-de-legumes.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Batata inglesa",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de batata inglesa descascada",
+        "tacoId": 92,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Cenoura",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de cenoura",
+        "tacoId": 110,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 3,
+        "nome": "Chuchu",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de chuchu",
+        "tacoId": 113,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 4,
+        "nome": "Abobrinha italiana",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de abobrinha italiana",
+        "tacoId": 71,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 5,
+        "nome": "Cebola",
+        "quantidade": "1 unidade pequena",
+        "textoExibicao": "1 cebola pequena picada",
+        "tacoId": 107,
+        "gramas": 70,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola pequena."
+      },
+      {
+        "ordem": 6,
+        "nome": "Alho",
+        "quantidade": "2 dentes",
+        "textoExibicao": "2 dentes de alho",
+        "tacoId": 82,
+        "gramas": 6,
+        "gramasEstimadas": true,
+        "observacao": "Peso de dois dentes estimado."
+      },
+      {
+        "ordem": 7,
+        "nome": "Azeite de oliva",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de azeite",
+        "tacoId": 260,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 8,
+        "nome": "Água",
+        "quantidade": "1 litro",
+        "textoExibicao": "1 litro de água",
+        "tacoId": null,
+        "gramas": 1000,
+        "gramasEstimadas": false,
+        "observacao": "Água não contribui com nutrientes da TACO."
+      },
+      {
+        "ordem": 9,
+        "nome": "Sal e salsinha",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal e salsinha a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Aqueça o azeite em uma panela e refogue a cebola até ficar translúcida.",
+      "Junte o alho e mexa por alguns segundos.",
+      "Acrescente a batata, a cenoura e o chuchu, cubra com a água e cozinhe por 15 minutos.",
+      "Adicione a abobrinha e cozinhe até todos os legumes ficarem macios.",
+      "Ajuste o sal, finalize com salsinha e sirva."
+    ]
+  },
+  {
+    "id": "c2805bab-5312-550b-aa31-9959bfc67c58",
+    "tipo": "oficial",
+    "tags": ["frango", "panela-unica"],
+    "autorId": null,
+    "titulo": "Estrogonofe de frango",
+    "categoria": "Aves",
+    "descricao": "Frango cremoso com molho de tomate, creme e champignons.",
+    "descricaoCompleta": "Cubos de peito de frango dourados e cozidos em um molho cremoso, para servir com arroz.",
+    "tempoMinutos": 40,
+    "dificuldade": "Médio",
+    "custo": "Médio",
+    "porcoes": 4,
+    "imagemPath": "estrogonofe-de-frango.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Peito de frango sem pele",
+        "quantidade": "600 g",
+        "textoExibicao": "600 g de peito de frango sem pele em cubos",
+        "tacoId": 409,
+        "gramas": 600,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Cebola",
+        "quantidade": "1 unidade média",
+        "textoExibicao": "1 cebola média picada",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola média."
+      },
+      {
+        "ordem": 3,
+        "nome": "Alho",
+        "quantidade": "2 dentes",
+        "textoExibicao": "2 dentes de alho picados",
+        "tacoId": 82,
+        "gramas": 6,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado."
+      },
+      {
+        "ordem": 4,
+        "nome": "Champignon",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de champignons fatiados",
+        "tacoId": null,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": "A TACO não possui correspondência adequada para champignon em conserva."
+      },
+      {
+        "ordem": 5,
+        "nome": "Creme de leite",
+        "quantidade": "200 g",
+        "textoExibicao": "200 g de creme de leite",
+        "tacoId": 447,
+        "gramas": 200,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 6,
+        "nome": "Molho de tomate",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de molho de tomate industrializado",
+        "tacoId": 159,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 7,
+        "nome": "Óleo de soja",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de óleo de soja",
+        "tacoId": 272,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 8,
+        "nome": "Sal e pimenta-do-reino",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal e pimenta-do-reino a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Aqueça o óleo em uma panela e doure os cubos de frango em etapas para não juntar água.",
+      "Junte a cebola e refogue até amaciar; acrescente o alho e mexa brevemente.",
+      "Adicione o molho de tomate e os champignons. Cozinhe em fogo baixo até o frango ficar completamente cozido.",
+      "Desligue o fogo, misture o creme de leite e ajuste sal e pimenta.",
+      "Sirva quente."
+    ]
+  },
+  {
+    "id": "6c812152-45f3-5758-9995-b19b1ac7370b",
+    "tipo": "oficial",
+    "tags": ["carne", "ovo", "massa"],
+    "autorId": null,
+    "titulo": "Panqueca de carne moída",
+    "categoria": "Massas",
+    "descricao": "Panquecas finas recheadas com patinho e molho de tomate.",
+    "descricaoCompleta": "Massa caseira macia, recheio de carne bem temperado e molho aquecido no forno.",
+    "tempoMinutos": 55,
+    "dificuldade": "Médio",
+    "custo": "Médio",
+    "porcoes": 4,
+    "imagemPath": "panqueca-de-carne-moida.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Patinho bovino moído sem gordura",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de patinho moído sem gordura",
+        "tacoId": 376,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Farinha de trigo",
+        "quantidade": "1 xícara",
+        "textoExibicao": "1 xícara de farinha de trigo",
+        "tacoId": 35,
+        "gramas": 120,
+        "gramasEstimadas": true,
+        "observacao": "Conversão de xícara estimada."
+      },
+      {
+        "ordem": 3,
+        "nome": "Ovos",
+        "quantidade": "2 unidades",
+        "textoExibicao": "2 ovos",
+        "tacoId": 489,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Estimativa de 50 g comestíveis por ovo."
+      },
+      {
+        "ordem": 4,
+        "nome": "Leite integral",
+        "quantidade": "1 xícara",
+        "textoExibicao": "1 xícara de leite integral",
+        "tacoId": null,
+        "gramas": 240,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado; TACO tem leite integral UHT, mas faltam valores relevantes e não é correspondência segura para este cálculo."
+      },
+      {
+        "ordem": 5,
+        "nome": "Cebola",
+        "quantidade": "1 unidade pequena",
+        "textoExibicao": "1 cebola pequena picada",
+        "tacoId": 107,
+        "gramas": 70,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola pequena."
+      },
+      {
+        "ordem": 6,
+        "nome": "Molho de tomate",
+        "quantidade": "200 g",
+        "textoExibicao": "200 g de molho de tomate",
+        "tacoId": 159,
+        "gramas": 200,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 7,
+        "nome": "Óleo de soja",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de óleo de soja",
+        "tacoId": 272,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 8,
+        "nome": "Sal e pimenta-do-reino",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal e pimenta-do-reino a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Bata a farinha, os ovos, o leite e uma pitada de sal até obter massa lisa; deixe descansar por 10 minutos.",
+      "Doure a carne em uma panela, junte a cebola e cozinhe até ficar macia; tempere e reserve.",
+      "Prepare discos finos em frigideira antiaderente untada, virando quando as bordas soltarem.",
+      "Recheie e enrole os discos, disponha em um refratário e cubra com o molho de tomate.",
+      "Aqueça no forno por cerca de 10 minutos e sirva."
+    ]
+  },
+  {
+    "id": "9509bc58-a5fe-59cd-a836-8b75dd86f153",
+    "tipo": "oficial",
+    "tags": ["carne", "carne-seca", "arroz", "panela-unica"],
+    "autorId": null,
+    "titulo": "Arroz carreteiro",
+    "categoria": "Pratos principais",
+    "descricao": "Arroz cozido com charque, tomate e pimentão em uma só panela.",
+    "descricaoCompleta": "Um prato de panela com carne-seca dessalgada, arroz e temperos simples, ideal para compartilhar.",
+    "tempoMinutos": 55,
+    "dificuldade": "Médio",
+    "custo": "Médio",
+    "porcoes": 6,
+    "imagemPath": "arroz-carreteiro.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Arroz tipo 1",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de arroz tipo 1 cru",
+        "tacoId": 4,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Carne bovina charque",
+        "quantidade": "300 g antes da dessalga",
+        "textoExibicao": "300 g de charque cru, para dessalgar",
+        "tacoId": 339,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": "Peso do charque cru antes da dessalga; o preparo remove parte do sódio, então esse nutriente pode divergir da TACO."
+      },
+      {
+        "ordem": 3,
+        "nome": "Cebola",
+        "quantidade": "1 unidade média",
+        "textoExibicao": "1 cebola média picada",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola média."
+      },
+      {
+        "ordem": 4,
+        "nome": "Alho",
+        "quantidade": "3 dentes",
+        "textoExibicao": "3 dentes de alho",
+        "tacoId": 82,
+        "gramas": 9,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado."
+      },
+      {
+        "ordem": 5,
+        "nome": "Tomate",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 tomate picado",
+        "tacoId": 157,
+        "gramas": 120,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para tomate médio."
+      },
+      {
+        "ordem": 6,
+        "nome": "Pimentão verde",
+        "quantidade": "1/2 unidade",
+        "textoExibicao": "1/2 pimentão verde",
+        "tacoId": 144,
+        "gramas": 60,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para meia unidade média."
+      },
+      {
+        "ordem": 7,
+        "nome": "Óleo de soja",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de óleo de soja",
+        "tacoId": 272,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 8,
+        "nome": "Cheiro-verde e pimenta",
+        "quantidade": "a gosto",
+        "textoExibicao": "Cheiro-verde e pimenta a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Dessalgue o charque em água, trocando-a algumas vezes; cozinhe até ficar macio e corte em cubos.",
+      "Aqueça o óleo em uma panela e doure o charque.",
+      "Junte a cebola, o alho, o tomate e o pimentão e refogue.",
+      "Acrescente o arroz cru, misture e cubra com água quente suficiente para cozinhar.",
+      "Cozinhe em fogo baixo com a panela parcialmente tampada até o arroz ficar macio; finalize com cheiro-verde."
+    ]
+  },
+  {
+    "id": "2044f5d7-5a64-5d51-81dc-708a07b69b13",
+    "tipo": "oficial",
+    "tags": ["peixe", "legumes", "batata", "forno"],
+    "autorId": null,
+    "titulo": "Peixe assado com legumes",
+    "categoria": "Peixes",
+    "descricao": "Filés de merluza assados com batata, cenoura e abobrinha.",
+    "descricaoCompleta": "Uma assadeira colorida de peixe e legumes temperados com limão e ervas.",
+    "tempoMinutos": 50,
+    "dificuldade": "Fácil",
+    "custo": "Médio",
+    "porcoes": 4,
+    "imagemPath": "peixe-assado-com-legumes.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Filé de merluza",
+        "quantidade": "600 g",
+        "textoExibicao": "600 g de filé de merluza cru",
+        "tacoId": 302,
+        "gramas": 600,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Batata inglesa",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de batata inglesa",
+        "tacoId": 92,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 3,
+        "nome": "Cenoura",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de cenoura",
+        "tacoId": 110,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 4,
+        "nome": "Abobrinha italiana",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de abobrinha italiana",
+        "tacoId": 71,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 5,
+        "nome": "Cebola",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 cebola em rodelas",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola média."
+      },
+      {
+        "ordem": 6,
+        "nome": "Azeite de oliva",
+        "quantidade": "2 colheres de sopa",
+        "textoExibicao": "2 colheres de sopa de azeite",
+        "tacoId": 260,
+        "gramas": 27,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 7,
+        "nome": "Suco de limão",
+        "quantidade": "1 unidade",
+        "textoExibicao": "Suco de 1 limão",
+        "tacoId": null,
+        "gramas": 35,
+        "gramasEstimadas": true,
+        "observacao": "Rendimento estimado; não há correspondência adequada para suco genérico."
+      },
+      {
+        "ordem": 8,
+        "nome": "Sal, pimenta e ervas",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal, pimenta e ervas a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Aqueça o forno a 200 °C e corte a batata, a cenoura e a abobrinha em pedaços semelhantes.",
+      "Disponha os legumes e a cebola em uma assadeira, regue com parte do azeite e tempere.",
+      "Coloque os filés por cima, regue com o restante do azeite e o suco de limão.",
+      "Cubra com papel-alumínio e asse por 25 minutos; retire o papel e asse até o peixe ficar opaco e os legumes macios.",
+      "Sirva em seguida."
+    ]
+  },
+  {
+    "id": "fdfc771d-3293-59b2-a33e-4b723df2c932",
+    "tipo": "oficial",
+    "tags": ["carne-seca", "mandioca", "queijo", "forno"],
+    "autorId": null,
+    "titulo": "Escondidinho de carne-seca",
+    "categoria": "Pratos principais",
+    "descricao": "Purê de mandioca cobre carne-seca refogada e gratinada.",
+    "descricaoCompleta": "Camadas de mandioca macia e carne-seca desfiada, finalizadas com queijo dourado no forno.",
+    "tempoMinutos": 85,
+    "dificuldade": "Médio",
+    "custo": "Médio",
+    "porcoes": 6,
+    "imagemPath": "escondidinho-de-carne-seca.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Mandioca",
+        "quantidade": "1 kg",
+        "textoExibicao": "1 kg de mandioca crua descascada",
+        "tacoId": 130,
+        "gramas": 1000,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Carne bovina charque",
+        "quantidade": "500 g antes da dessalga",
+        "textoExibicao": "500 g de charque cru, para dessalgar",
+        "tacoId": 339,
+        "gramas": 500,
+        "gramasEstimadas": false,
+        "observacao": "Peso do charque cru antes da dessalga; o preparo remove parte do sódio, então esse nutriente pode divergir da TACO."
+      },
+      {
+        "ordem": 3,
+        "nome": "Cebola",
+        "quantidade": "1 unidade média",
+        "textoExibicao": "1 cebola média picada",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola média."
+      },
+      {
+        "ordem": 4,
+        "nome": "Alho",
+        "quantidade": "2 dentes",
+        "textoExibicao": "2 dentes de alho",
+        "tacoId": 82,
+        "gramas": 6,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado."
+      },
+      {
+        "ordem": 5,
+        "nome": "Manteiga com sal",
+        "quantidade": "50 g",
+        "textoExibicao": "50 g de manteiga com sal",
+        "tacoId": 261,
+        "gramas": 50,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 6,
+        "nome": "Queijo muçarela",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de queijo muçarela",
+        "tacoId": 463,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 7,
+        "nome": "Sal e pimenta-do-reino",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal e pimenta-do-reino a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Dessalgue o charque, cozinhe até ficar macio e desfie.",
+      "Cozinhe a mandioca em água até ficar muito macia; escorra e amasse ainda quente com a manteiga.",
+      "Refogue a cebola e o alho, junte o charque desfiado e tempere.",
+      "Em um refratário, espalhe metade do purê, distribua a carne e cubra com o restante do purê.",
+      "Finalize com muçarela e leve ao forno a 200 °C até gratinar."
+    ]
+  },
+  {
+    "id": "48a5bb44-f4b9-511f-888f-107f64dd25fe",
+    "tipo": "oficial",
+    "tags": ["arroz", "cogumelos", "queijo", "panela-unica", "vegetariano"],
+    "autorId": null,
+    "titulo": "Risoto de cogumelos",
+    "categoria": "Massas",
+    "descricao": "Arroz cremoso com cogumelos, manteiga e parmesão.",
+    "descricaoCompleta": "Risoto preparado aos poucos com caldo quente, cogumelos salteados e queijo parmesão no final.",
+    "tempoMinutos": 50,
+    "dificuldade": "Médio",
+    "custo": "Alto",
+    "porcoes": 4,
+    "imagemPath": "risoto-de-cogumelos.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Arroz tipo 1",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de arroz tipo 1 cru",
+        "tacoId": 4,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Cogumelos frescos",
+        "quantidade": "250 g",
+        "textoExibicao": "250 g de cogumelos frescos fatiados",
+        "tacoId": null,
+        "gramas": 250,
+        "gramasEstimadas": false,
+        "observacao": "A TACO não apresenta correspondência adequada para o mix de cogumelos frescos escolhido."
+      },
+      {
+        "ordem": 3,
+        "nome": "Cebola",
+        "quantidade": "1 unidade pequena",
+        "textoExibicao": "1 cebola pequena picada",
+        "tacoId": 107,
+        "gramas": 70,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola pequena."
+      },
+      {
+        "ordem": 4,
+        "nome": "Alho",
+        "quantidade": "1 dente",
+        "textoExibicao": "1 dente de alho",
+        "tacoId": 82,
+        "gramas": 3,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado."
+      },
+      {
+        "ordem": 5,
+        "nome": "Manteiga com sal",
+        "quantidade": "40 g",
+        "textoExibicao": "40 g de manteiga com sal",
+        "tacoId": 261,
+        "gramas": 40,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 6,
+        "nome": "Queijo parmesão",
+        "quantidade": "50 g",
+        "textoExibicao": "50 g de queijo parmesão ralado",
+        "tacoId": 464,
+        "gramas": 50,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 7,
+        "nome": "Azeite de oliva",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de azeite",
+        "tacoId": 260,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 8,
+        "nome": "Caldo de legumes",
+        "quantidade": "1 litro",
+        "textoExibicao": "1 litro de caldo de legumes caseiro",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Caldo preparado com ingredientes variados; composição e nutrientes não podem ser atribuídos a um único item TACO."
+      }
+    ],
+    "modoPreparo": [
+      "Mantenha o caldo aquecido em uma panela separada.",
+      "Salteie os cogumelos com metade da manteiga e reserve.",
+      "Na mesma panela, aqueça o azeite e refogue a cebola e o alho.",
+      "Junte o arroz e mexa por um minuto; acrescente o caldo quente aos poucos, mexendo e esperando o líquido ser absorvido antes de cada adição.",
+      "Quando o arroz estiver cremoso e al dente, incorpore os cogumelos, o restante da manteiga e o parmesão.",
+      "Ajuste o sal e sirva imediatamente."
+    ]
+  },
+  {
+    "id": "086714fe-796f-5301-83e2-aa8045811063",
+    "tipo": "oficial",
+    "tags": ["sobremesa", "doce", "panela-unica", "rapido"],
+    "autorId": null,
+    "titulo": "Brigadeiro de panela",
+    "categoria": "Doces",
+    "descricao": "Brigadeiro cremoso de colher preparado em uma panela.",
+    "descricaoCompleta": "Doce de chocolate feito com leite condensado, cacau e manteiga, cozido até atingir o ponto desejado.",
+    "tempoMinutos": 25,
+    "dificuldade": "Fácil",
+    "custo": "Baixo",
+    "porcoes": 20,
+    "imagemPath": "brigadeiro-de-panela.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Leite condensado",
+        "quantidade": "1 lata",
+        "textoExibicao": "1 lata de leite condensado",
+        "tacoId": 453,
+        "gramas": 395,
+        "gramasEstimadas": true,
+        "observacao": "Peso líquido estimado para embalagem convencional."
+      },
+      {
+        "ordem": 2,
+        "nome": "Cacau em pó",
+        "quantidade": "3 colheres de sopa",
+        "textoExibicao": "3 colheres de sopa de cacau em pó 100%",
+        "tacoId": null,
+        "gramas": 24,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado; a TACO não tem correspondência adequada para cacau em pó puro."
+      },
+      {
+        "ordem": 3,
+        "nome": "Manteiga com sal",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de manteiga com sal",
+        "tacoId": 261,
+        "gramas": 14,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 4,
+        "nome": "Chocolate granulado",
+        "quantidade": "para finalizar",
+        "textoExibicao": "Chocolate granulado para finalizar",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade não especificada e produto não corresponde a item simples da TACO."
+      }
+    ],
+    "modoPreparo": [
+      "Coloque o leite condensado, o cacau e a manteiga em uma panela de fundo grosso.",
+      "Cozinhe em fogo baixo, mexendo continuamente e raspando o fundo e as laterais.",
+      "Quando o creme engrossar e se soltar lentamente do fundo, desligue.",
+      "Sirva morno ou frio, com chocolate granulado se desejar."
+    ]
+  },
+  {
+    "id": "e282c1d2-8ee1-5363-bc7f-4f0cfef9f418",
+    "tipo": "oficial",
+    "tags": ["sobremesa", "doce", "forno"],
+    "autorId": null,
+    "titulo": "Pudim de leite condensado",
+    "categoria": "Doces",
+    "descricao": "Pudim liso com calda de caramelo e textura delicada.",
+    "descricaoCompleta": "Sobremesa assada em banho-maria, feita com leite condensado, leite e ovos, e servida gelada.",
+    "tempoMinutos": 100,
+    "dificuldade": "Médio",
+    "custo": "Baixo",
+    "porcoes": 10,
+    "imagemPath": "pudim-leite-condensado.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Leite condensado",
+        "quantidade": "1 lata",
+        "textoExibicao": "1 lata de leite condensado",
+        "tacoId": 453,
+        "gramas": 395,
+        "gramasEstimadas": true,
+        "observacao": "Peso líquido estimado para embalagem convencional."
+      },
+      {
+        "ordem": 2,
+        "nome": "Leite integral",
+        "quantidade": "2 latas-medida",
+        "textoExibicao": "2 medidas da lata de leite integral",
+        "tacoId": null,
+        "gramas": 790,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado; o leite integral da TACO contém campos especiais ausentes em nutrientes relevantes, então fica sem vínculo."
+      },
+      {
+        "ordem": 3,
+        "nome": "Ovos",
+        "quantidade": "3 unidades",
+        "textoExibicao": "3 ovos",
+        "tacoId": 489,
+        "gramas": 150,
+        "gramasEstimadas": true,
+        "observacao": "Estimativa de 50 g comestíveis por ovo."
+      },
+      {
+        "ordem": 4,
+        "nome": "Açúcar refinado",
+        "quantidade": "1 xícara",
+        "textoExibicao": "1 xícara de açúcar refinado para a calda",
+        "tacoId": 494,
+        "gramas": 200,
+        "gramasEstimadas": true,
+        "observacao": "Conversão de xícara estimada."
+      },
+      {
+        "ordem": 5,
+        "nome": "Água",
+        "quantidade": "1/2 xícara",
+        "textoExibicao": "1/2 xícara de água para a calda",
+        "tacoId": null,
+        "gramas": 120,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada; água sem contribuição nutricional."
+      }
+    ],
+    "modoPreparo": [
+      "Derreta o açúcar em fogo baixo até formar um caramelo âmbar; acrescente a água com cuidado e mexa até dissolver os torrões.",
+      "Espalhe a calda em uma forma de pudim.",
+      "Bata rapidamente o leite condensado, o leite e os ovos, sem incorporar muita espuma, e despeje na forma.",
+      "Cubra com papel-alumínio e asse em banho-maria a 180 °C por cerca de 1 hora, até firmar.",
+      "Espere esfriar, leve à geladeira por pelo menos 4 horas e desenforme."
+    ]
+  },
+  {
+    "id": "f7bc0fe1-cdc8-5d1f-bb34-6345db91c0ec",
+    "tipo": "oficial",
+    "tags": ["bebida", "rapido"],
+    "autorId": null,
+    "titulo": "Limonada suíça",
+    "categoria": "Bebidas",
+    "descricao": "Bebida cítrica batida com limão, água e leite condensado.",
+    "descricaoCompleta": "Limonada cremosa e refrescante, batida rapidamente para preservar o sabor fresco do limão.",
+    "tempoMinutos": 15,
+    "dificuldade": "Muito fácil",
+    "custo": "Baixo",
+    "porcoes": 4,
+    "imagemPath": "limonada-suica.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Limões-taiti",
+        "quantidade": "4 unidades",
+        "textoExibicao": "4 limões-taiti lavados",
+        "tacoId": 220,
+        "gramas": 320,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado; a fruta é batida com casca e coada, então a porção comestível não corresponde com segurança à entrada TACO do fruto inteiro."
+      },
+      {
+        "ordem": 2,
+        "nome": "Água gelada",
+        "quantidade": "700 ml",
+        "textoExibicao": "700 ml de água gelada",
+        "tacoId": null,
+        "gramas": 700,
+        "gramasEstimadas": false,
+        "observacao": "Água sem contribuição nutricional."
+      },
+      {
+        "ordem": 3,
+        "nome": "Leite condensado",
+        "quantidade": "1/2 lata",
+        "textoExibicao": "1/2 lata de leite condensado",
+        "tacoId": 453,
+        "gramas": 197.5,
+        "gramasEstimadas": true,
+        "observacao": "Metade de embalagem convencional estimada."
+      },
+      {
+        "ordem": 4,
+        "nome": "Gelo",
+        "quantidade": "a gosto",
+        "textoExibicao": "Gelo a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Lave os limões, corte as pontas e depois corte cada um em quatro partes.",
+      "Bata os limões com a água por poucos segundos, apenas até soltar o suco.",
+      "Coe imediatamente para retirar cascas e sementes.",
+      "Volte o líquido ao liquidificador com o leite condensado e algumas pedras de gelo; bata brevemente.",
+      "Sirva na hora."
+    ]
+  },
+  {
+    "id": "92b9caab-b683-59d9-a4af-9396e0448681",
+    "tipo": "oficial",
+    "tags": ["frango", "arroz", "panela-unica"],
+    "autorId": null,
+    "titulo": "Galinhada",
+    "categoria": "Pratos principais",
+    "descricao": "Arroz de uma panela com frango, milho e temperos.",
+    "descricaoCompleta": "Prato completo de arroz cozido junto com frango e legumes, finalizado com cheiro-verde.",
+    "tempoMinutos": 65,
+    "dificuldade": "Médio",
+    "custo": "Médio",
+    "porcoes": 6,
+    "imagemPath": "galinhada.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Peito de frango sem pele",
+        "quantidade": "500 g",
+        "textoExibicao": "500 g de peito de frango sem pele em cubos",
+        "tacoId": 409,
+        "gramas": 500,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 2,
+        "nome": "Arroz tipo 1",
+        "quantidade": "300 g",
+        "textoExibicao": "300 g de arroz tipo 1 cru",
+        "tacoId": 4,
+        "gramas": 300,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 3,
+        "nome": "Milho verde enlatado drenado",
+        "quantidade": "150 g",
+        "textoExibicao": "150 g de milho verde enlatado drenado",
+        "tacoId": 45,
+        "gramas": 150,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 4,
+        "nome": "Tomate",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 tomate picado",
+        "tacoId": 157,
+        "gramas": 120,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para tomate médio."
+      },
+      {
+        "ordem": 5,
+        "nome": "Cebola",
+        "quantidade": "1 unidade média",
+        "textoExibicao": "1 cebola média picada",
+        "tacoId": 107,
+        "gramas": 100,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para cebola média."
+      },
+      {
+        "ordem": 6,
+        "nome": "Alho",
+        "quantidade": "3 dentes",
+        "textoExibicao": "3 dentes de alho",
+        "tacoId": 82,
+        "gramas": 9,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado."
+      },
+      {
+        "ordem": 7,
+        "nome": "Pimentão verde",
+        "quantidade": "1/2 unidade",
+        "textoExibicao": "1/2 pimentão verde",
+        "tacoId": 144,
+        "gramas": 60,
+        "gramasEstimadas": true,
+        "observacao": "Peso estimado para meia unidade média."
+      },
+      {
+        "ordem": 8,
+        "nome": "Azeite de oliva",
+        "quantidade": "1 colher de sopa",
+        "textoExibicao": "1 colher de sopa de azeite",
+        "tacoId": 260,
+        "gramas": 13.5,
+        "gramasEstimadas": true,
+        "observacao": "Conversão volumétrica estimada."
+      },
+      {
+        "ordem": 9,
+        "nome": "Água ou caldo caseiro",
+        "quantidade": "1,2 litro",
+        "textoExibicao": "1,2 litro de água ou caldo caseiro",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "A água não contribui com nutrientes; caldo caseiro varia de composição e não tem vínculo único."
+      },
+      {
+        "ordem": 10,
+        "nome": "Sal, açafrão-da-terra e cheiro-verde",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal, açafrão-da-terra e cheiro-verde a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Tempere o frango com sal e açafrão-da-terra.",
+      "Aqueça o azeite em uma panela grande e doure o frango.",
+      "Junte a cebola, o alho, o tomate e o pimentão e refogue.",
+      "Acrescente o arroz e o milho, misture e cubra com água quente.",
+      "Cozinhe tampado em fogo baixo até o arroz ficar macio e o líquido ser absorvido; deixe repousar por cinco minutos.",
+      "Finalize com cheiro-verde e sirva."
+    ]
+  },
+  {
+    "id": "1e7de690-cdc7-5f23-a543-d585df9ca8e2",
+    "tipo": "oficial",
+    "tags": ["camarao", "ovo", "frito"],
+    "autorId": null,
+    "titulo": "Camarão empanado crocante",
+    "categoria": "Petiscos",
+    "descricao": "Camarões empanados em farinha de rosca e fritos até dourar.",
+    "descricaoCompleta": "Petisco crocante por fora e macio por dentro, servido logo após a fritura com limão.",
+    "tempoMinutos": 40,
+    "dificuldade": "Médio",
+    "custo": "Alto",
+    "porcoes": 4,
+    "imagemPath": "camarao-empanado-crocante.jpg",
+    "ingredientes": [
+      {
+        "ordem": 1,
+        "nome": "Camarão Rio Grande grande cru",
+        "quantidade": "500 g",
+        "textoExibicao": "500 g de camarão grande limpo",
+        "tacoId": null,
+        "gramas": 500,
+        "gramasEstimadas": false,
+        "observacao": "TACO descreve camarão Rio Grande grande cru; confirme variedade e estado limpo antes da carga."
+      },
+      {
+        "ordem": 2,
+        "nome": "Ovo",
+        "quantidade": "1 unidade",
+        "textoExibicao": "1 ovo",
+        "tacoId": 489,
+        "gramas": 50,
+        "gramasEstimadas": true,
+        "observacao": "Estimativa de 50 g comestíveis."
+      },
+      {
+        "ordem": 3,
+        "nome": "Farinha de trigo",
+        "quantidade": "100 g",
+        "textoExibicao": "100 g de farinha de trigo para empanar",
+        "tacoId": 35,
+        "gramas": 100,
+        "gramasEstimadas": false,
+        "observacao": ""
+      },
+      {
+        "ordem": 4,
+        "nome": "Farinha de rosca",
+        "quantidade": "100 g",
+        "textoExibicao": "100 g de farinha de rosca",
+        "tacoId": 34,
+        "gramas": 100,
+        "gramasEstimadas": false,
+        "observacao": "Quantidade efetivamente aderida estimada; parte da farinha pode sobrar no empanamento."
+      },
+      {
+        "ordem": 5,
+        "nome": "Óleo de soja",
+        "quantidade": "quantidade para fritura",
+        "textoExibicao": "Óleo de soja suficiente para fritar",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": "A absorção varia durante a fritura; não atribuir todo o óleo da panela à receita."
+      },
+      {
+        "ordem": 6,
+        "nome": "Sal, pimenta e limão",
+        "quantidade": "a gosto",
+        "textoExibicao": "Sal, pimenta e limão a gosto",
+        "tacoId": null,
+        "gramas": null,
+        "gramasEstimadas": false,
+        "observacao": ""
+      }
+    ],
+    "modoPreparo": [
+      "Seque os camarões e tempere com sal e pimenta.",
+      "Passe cada camarão pela farinha de trigo, pelo ovo batido e pela farinha de rosca.",
+      "Aqueça o óleo em uma panela funda e frite poucos camarões por vez até dourarem.",
+      "Escorra em papel absorvente e sirva imediatamente com limão."
+    ]
+  }
+]
