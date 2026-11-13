@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-test -s /restore/que-fome.dump || {
-  echo 'Backup ausente. Execute node docker/prepare.mjs na máquina de origem antes de iniciar.' >&2
-  exit 1
-}
+dump=/opt/que-fome/que-fome-dev.dump
+if [[ -s /restore/que-fome.dump ]]; then
+  dump=/restore/que-fome.dump
+fi
 
 # Executado somente na primeira inicialização de um volume PostgreSQL vazio.
 # Sem --clean e sem --create: restaura somente no banco novo criado pelo container.
 pg_restore --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" \
-  --no-owner --no-privileges --exit-on-error --single-transaction /restore/que-fome.dump
+  --no-owner --no-privileges --exit-on-error --single-transaction "$dump"
 
 psql --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" \
   --set ON_ERROR_STOP=1 --file /opt/que-fome/runtime-role.sql
