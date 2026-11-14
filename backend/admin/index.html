@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administração · Que Fome</title>
+  <link rel="stylesheet" href="/panel.css">
+  <script type="module" src="/panel.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <span class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 3V10M8 3V10M11 3V10M8 10V21M17 3V21M17 3C19.2 3 21 4.8 21 7V10C21 12.2 19.2 14 17 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Que Fome!
+      </span>
+      <span class="header-label">Administração</span>
+      <button id="logout" hidden>Sair</button>
+    </div>
+  </header>
+  <main>
+    <p id="status" role="status" hidden></p>
+    <form id="login" class="card" hidden>
+      <div><h1>Acesso administrativo</h1><p class="login-copy">Entre com sua conta de administrador.</p></div>
+      <label>Usuário<input name="username" required autocomplete="username" maxlength="100"></label>
+      <label>Senha<input name="password" type="password" required autocomplete="current-password" maxlength="256"></label>
+      <button class="primary">Entrar</button>
+    </form>
+    <section id="catalog" hidden>
+      <div class="toolbar catalog-heading"><div><h1>Receitas</h1><p id="total"></p></div><button id="new" class="primary">+ Nova receita</button></div>
+      <ul id="recipes"></ul>
+      <nav aria-label="Paginação"><button id="prev">Anterior</button><span id="page"></span><button id="next">Próxima</button></nav>
+    </section>
+    <form id="editor" class="card" hidden>
+      <div class="toolbar"><h1 id="editor-title"></h1><button type="button" id="cancel">Voltar</button></div>
+      <div class="fields">
+        <label>Título<input name="titulo" required maxlength="150"></label>
+        <label>Categoria<input name="categoria" required maxlength="100"></label>
+        <label>Tempo em minutos<input name="tempo" required type="number" min="3"></label>
+        <label>Porções<input name="porcoes" type="number" min="1" max="1000"></label>
+        <label>Dificuldade<select name="dificuldade"><option>Muito fácil</option><option>Fácil</option><option>Médio</option><option>Difícil</option></select></label>
+        <label>Custo<select name="custo"><option value="">Sem valor</option><option>Baixo</option><option>Médio</option><option>Alto</option></select></label>
+      </div>
+      <label>Caminho da imagem<input name="imagemPath" maxlength="500"></label>
+      <label>Tags separadas por vírgula<input name="tags"></label>
+      <label>Descrição breve<textarea name="descricao" maxlength="10000"></textarea></label>
+      <label>Descrição completa<textarea name="descricaoCompleta" maxlength="20000"></textarea></label>
+      <fieldset>
+        <legend>Ingredientes</legend>
+        <div id="ingredients"></div>
+        <button type="button" id="add-ingredient">Adicionar ingrediente</button>
+      </fieldset>
+      <label>Modo de preparo, uma etapa por linha<textarea name="modoPreparo" rows="5" required></textarea></label>
+      <div class="editor-footer"><button class="primary">Salvar receita</button></div>
+    </form>
+  </main>
+  <template id="ingredient">
+    <div class="ingredient">
+      <div class="fields">
+        <label>Nome<input data-field="nome" required maxlength="150"></label>
+        <label>Quantidade<input data-field="quantidade" required maxlength="100"></label>
+      </div>
+      <details>
+        <summary>Exibição e dados nutricionais</summary>
+        <div class="fields">
+          <label>Texto de exibição<input data-field="textoExibicao" maxlength="300"></label>
+          <label>Código TACO<input data-field="tacoId" type="number" min="1"></label>
+          <label>Gramas<input data-field="gramas" type="number" min="0.001" step="0.001" max="999999999.999"></label>
+          <label class="check"><input data-field="gramasEstimadas" type="checkbox"> Peso estimado</label>
+        </div>
+      </details>
+      <button type="button" data-remove>Remover ingrediente</button>
+    </div>
+  </template>
+</body>
+</html>

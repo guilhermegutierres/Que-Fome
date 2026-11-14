@@ -392,7 +392,7 @@ describe("Recipes API", () => {
       sql.includes("INSERT INTO public.receitas"),
     );
     assert.ok(insert);
-    assert.match(insert.sql, /'usuario'/);
+    assert.equal(insert.params[11], "usuario");
     assert.deepEqual(insert.params[10], ["legumes", "vegetariano"]);
     assert.deepEqual(insert.params.slice(0, 2), [authorId, "Salada de teste"]);
     assert.equal(insert.params[6], 4);

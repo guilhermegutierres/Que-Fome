@@ -9,7 +9,7 @@ const loaderPath = new URL(
   import.meta.url,
 );
 const migrationPath = new URL(
-  "../../supabase/migrations/20261016040000_add_recipe_tags.sql",
+  "../migrations/20261016040000_add_recipe_tags.sql",
   import.meta.url,
 );
 

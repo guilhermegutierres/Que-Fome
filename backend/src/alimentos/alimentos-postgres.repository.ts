@@ -8,7 +8,7 @@ import {
 } from "./alimentos.repository.js";
 import type { AlimentoBuscaRow, AlimentoRow } from "./alimentos.types.js";
 
-// A extensão unaccent não é obrigatória no Supabase. Usamos translate para
+// Usamos translate para
 // normalizar acentos comuns tanto nos registros como no termo buscado.
 const DESCRICAO_NORMALIZADA = `translate(lower(descricao),
   'áàâãäéèêëíìîïóòôõöúùûüç', 'aaaaaeeeeiiiiooooouuuuc')`;

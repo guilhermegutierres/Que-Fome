@@ -67,12 +67,12 @@ export class UpdateRecipeDto {
   @Min(3)
   tempo?: number;
 
-  @ValidateIf(whenProvided)
+  @ValidateIf((_object, value) => value !== undefined && value !== null)
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(1000)
-  porcoes?: number;
+  porcoes?: number | null;
 
   @ValidateIf(whenProvided)
   @Transform(({ value }: { value: unknown }) =>

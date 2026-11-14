@@ -1,6 +1,6 @@
 // O React fala somente com o NestJS. Nenhuma chave do banco/API é enviada ao navegador.
 const URL_API = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
-// `supabase` (padrão): usa os alimentos do PostgreSQL via NestJS.
+// `postgres` (padrão): usa os alimentos do PostgreSQL via NestJS.
 // `rapidapi`: usa a API externa via proxy seguro do NestJS.
 // Não misture IDs entre fontes em uma mesma receita.
 const FONTE =

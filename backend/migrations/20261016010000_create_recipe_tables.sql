@@ -82,23 +82,20 @@ END;
 $function$;
 
 REVOKE ALL ON FUNCTION public.set_receitas_updated_at()
-  FROM PUBLIC, anon, authenticated, service_role;
+  FROM PUBLIC;
 
 CREATE TRIGGER receitas_set_updated_at
   BEFORE UPDATE ON public.receitas
   FOR EACH ROW
   EXECUTE FUNCTION public.set_receitas_updated_at();
 
-ALTER TABLE public.receitas ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.receita_ingredientes ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.receita_etapas ENABLE ROW LEVEL SECURITY;
 
 REVOKE ALL ON TABLE public.receitas
-  FROM PUBLIC, anon, authenticated, service_role;
+  FROM PUBLIC;
 REVOKE ALL ON TABLE public.receita_ingredientes
-  FROM PUBLIC, anon, authenticated, service_role;
+  FROM PUBLIC;
 REVOKE ALL ON TABLE public.receita_etapas
-  FROM PUBLIC, anon, authenticated, service_role;
+  FROM PUBLIC;
 
 COMMENT ON TABLE public.receitas IS
   'Receitas oficiais e de usuários; acesso realizado exclusivamente pela API NestJS.';
@@ -109,7 +106,7 @@ COMMENT ON COLUMN public.receitas.autor_id IS
 COMMENT ON COLUMN public.receitas.updated_at IS
   'Atualizado automaticamente pelo trigger receitas_set_updated_at.';
 COMMENT ON COLUMN public.receitas.imagem_path IS
-  'Caminho futuro do objeto no Supabase Storage; não armazena Data URL ou Base64.';
+  'Caminho do arquivo de imagem servido pela aplicação.';
 COMMENT ON TABLE public.receita_ingredientes IS
   'Ingredientes ordenados da receita; o vínculo TACO é opcional.';
 COMMENT ON COLUMN public.receita_ingredientes.taco_id IS

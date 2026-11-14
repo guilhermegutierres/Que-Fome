@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { AppModule } from "./app.module.js";
+import { startAdmin } from "./admin/start-admin.js";
 import { configureApp } from "./configure-app.js";
 
 const backendDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -24,6 +25,7 @@ async function bootstrap(): Promise<void> {
     throw new Error("PORT precisa ser uma porta válida de 1 a 65535.");
   }
   await app.listen(port, process.env.HOST || "127.0.0.1");
+  await startAdmin();
 }
 
 void bootstrap();

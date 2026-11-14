@@ -8,21 +8,8 @@ function criarResposta(dados, status = 200) {
 
 test("consulta receitas públicas sem sessão e percorre todas as páginas", async () => {
   const chamadas = [];
-  const clienteSupabase = {
-    storage: {
-      from(bucket) {
-        assert.equal(bucket, "receitas");
-        return {
-          getPublicUrl(path) {
-            return { data: { publicUrl: `https://storage.test/${path}` } };
-          },
-        };
-      },
-    },
-  };
   const servico = criarServicoReceitas({
     baseUrl: "/api",
-    supabaseClient: clienteSupabase,
     fetchImpl: async (url, options) => {
       chamadas.push({ url, options });
       const page = Number(
@@ -83,24 +70,10 @@ test("consulta detalhe público preservando o UUID como string sem token", async
   assert.equal(chamada.options.headers.has("Authorization"), false);
 });
 
-test("usa token de sessão em /recipes/mine e nas operações de escrita", async () => {
+test("usa cookie de sessão em /recipes/mine e nas operações de escrita", async () => {
   const chamadas = [];
   const servico = criarServicoReceitas({
     baseUrl: "/api",
-    supabaseClient: {
-      auth: {
-        async getSession() {
-          return {
-            data: {
-              session: {
-                access_token: "token-de-teste",
-                user: { id: "usuario-uuid" },
-              },
-            },
-          };
-        },
-      },
-    },
     fetchImpl: async (url, options) => {
       chamadas.push({ url, options });
       return options.method === "DELETE"
@@ -126,107 +99,30 @@ test("usa token de sessão em /recipes/mine e nas operações de escrita", async
     chamadas.map(({ options }) => options.method || "GET"),
     ["GET", "POST", "PATCH", "DELETE"],
   );
-  assert.ok(
-    chamadas.every(
-      ({ options }) =>
-        options.headers.get("Authorization") === "Bearer token-de-teste",
-    ),
-  );
+  assert.ok(chamadas.every(({ options }) => options.credentials === "include"));
   assert.match(chamadas[0].url, /\/recipes\/mine\?/);
 });
 
-test("não envia operações protegidas quando não há sessão", async () => {
+test("exibe a mensagem do backend quando a sessão é inválida", async () => {
   let chamadas = 0;
   const servico = criarServicoReceitas({
-    supabaseClient: {
-      auth: {
-        async getSession() {
-          return { data: { session: null }, error: null };
-        },
-      },
-    },
     fetchImpl: async () => {
       chamadas += 1;
-      return criarResposta({ id: "nao-esperado" });
+      return criarResposta({ message: "Sua sessão expirou." }, 401);
     },
   });
 
   await assert.rejects(servico.salvarReceita({}), /sessão expirou/i);
-  assert.equal(chamadas, 0);
+  assert.equal(chamadas, 1);
 });
 
-test("envia imagens com caminho exclusivo do usuário e sem sobrescrita", async () => {
-  let upload;
-  const servico = criarServicoReceitas({
-    supabaseClient: {
-      auth: {
-        async getSession() {
-          return {
-            data: {
-              session: {
-                access_token: "token",
-                user: { id: "usuario-uuid" },
-              },
-            },
-          };
-        },
-      },
-      storage: {
-        from(bucket) {
-          assert.equal(bucket, "receitas");
-          return {
-            async upload(path, file, options) {
-              upload = { path, file, options };
-              return { error: null };
-            },
-          };
-        },
-      },
-    },
-    cryptoImpl: { randomUUID: () => "uuid-unico" },
-  });
-
-  const caminho = await servico.enviarImagem(
-    { type: "image/jpeg" },
-    "usuario-uuid",
-  );
-
-  assert.equal(caminho, "usuario-uuid/uuid-unico.jpg");
-  assert.equal(upload.path, caminho);
-  assert.equal(upload.options.upsert, false);
-  assert.equal(upload.options.contentType, "image/jpeg");
-  await assert.rejects(
-    servico.enviarImagem({ type: "image/jpeg" }, "outro-usuario"),
-    /confirmar a autoria/i,
-  );
-});
-
-test("usa cookie nas operacoes protegidas com a API local", async () => {
-  const chamadas = [];
-  const servico = criarServicoReceitas({
-    baseUrl: "/api",
-    fetchImpl: async (url, options) => {
-      chamadas.push({ url, options });
-      return criarResposta(
-        url.includes("/mine") ? { items: [{ id: "receita-uuid" }], totalPages: 1 } : { id: "receita-uuid" },
-      );
-    },
-  });
-  await servico.obterReceitasPorAutor();
-  await servico.salvarReceita({ titulo: "Teste" });
-  assert.equal(chamadas.length, 2);
-  assert.ok(chamadas.every(({ options }) => options.credentials === "include"));
-  assert.ok(chamadas.every(({ options }) => !options.headers.has("Authorization")));
-});
-
-test("envia imagem para o backend local sem Supabase Storage", async () => {
+test("envia imagem para o backend local", async () => {
   let chamada;
   const servico = criarServicoReceitas({
     fetchImpl: async (url, init) => {
       chamada = { url, init };
       return criarResposta({ imagemPath: "/uploads/receitas/uuid/foto.jpg" });
     },
-    cryptoImpl: { randomUUID: () => "uuid" },
   });
   const imagemPath = await servico.enviarImagem(new Blob(["abc"], { type: "image/jpeg" }), "uuid");
   assert.equal(imagemPath, "/uploads/receitas/uuid/foto.jpg");

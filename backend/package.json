@@ -14,7 +14,7 @@
     "test:auth": "tsx --test test/local-auth.spec.ts test/profiles.spec.ts",
     "test:recipes": "tsx --test test/recipes.spec.ts test/recipe-tags-catalog.spec.mjs test/receitas-oficiais-nutricao.test.mjs",
     "test:api": "node scripts/testar-api.mjs",
-    "test:supabase": "node scripts/testar-supabase.mjs",
+    "test:postgres": "node scripts/testar-postgres.mjs",
     "test:rapidapi": "node scripts/testar-rapidapi.mjs"
   },
   "dependencies": {

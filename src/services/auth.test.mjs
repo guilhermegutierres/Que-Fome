@@ -8,7 +8,7 @@ import {
   AUTH_EVENT,
 } from "./auth.ts";
 
-test("login e cadastro usam cookies e nunca dependem de token do Supabase", async (t) => {
+test("login e cadastro usam cookies da API local", async (t) => {
   const originalWindow = globalThis.window;
   globalThis.window = new EventTarget();
   t.after(() => {

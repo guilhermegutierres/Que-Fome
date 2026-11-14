@@ -1,0 +1,74 @@
+:root {
+  --background: #f5f5f5;
+  --surface: #fff;
+  --text: #222;
+  --muted: #5e665f;
+  --line: #e3e7e3;
+  --green: #64cd87;
+  --green-dark: #22623b;
+  --green-light: #eaf8ee;
+  --danger: #a12f2f;
+  --shadow: 0 8px 24px rgb(0 0 0 / 7%);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; min-height: 100vh; background: var(--background); color: var(--text); font: 1rem/1.5 Arial, sans-serif; }
+header { position: sticky; top: 0; z-index: 1; background: var(--surface); border-bottom: 1px solid var(--line); }
+.header-inner { min-height: 72px; max-width: 70rem; margin: auto; padding: .75rem 1.25rem; display: flex; align-items: center; gap: .9rem; }
+.brand { display: inline-flex; align-items: center; gap: .45rem; color: var(--green-dark); white-space: nowrap; font-size: 1.3rem; font-weight: 700; }
+.brand svg { color: var(--green-dark); }
+.header-label { color: var(--muted); border-left: 1px solid var(--line); padding-left: .9rem; font-size: .875rem; }
+#logout { margin-left: auto; }
+main { max-width: 70rem; margin: clamp(1.4rem, 5vw, 3.5rem) auto; padding: 0 1.25rem; }
+h1 { margin: 0; line-height: 1.15; font-size: clamp(1.55rem, 4vw, 2.1rem); }
+.card, #catalog { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
+.card { padding: clamp(1rem, 4vw, 2.5rem); display: grid; gap: 1.15rem; }
+#login { max-width: 430px; margin: 0 auto; border-top: 4px solid var(--green); }
+body[data-view="login"] main { max-width: 470px; margin-top: clamp(2rem, 8vh, 5rem); }
+#login h1 { text-align: center; font-size: 1.75rem; }
+.login-copy { margin: .5rem 0 .45rem; text-align: center; color: var(--muted); font-size: .9rem; }
+#login .primary { margin-top: .25rem; }
+label { display: grid; gap: .35rem; color: #444; font-size: .875rem; font-weight: 600; }
+input, select, textarea, button { font: inherit; color: inherit; border: 1px solid #d7ddd7; border-radius: 10px; padding: .65rem .85rem; background: white; }
+input, select, textarea { width: 100%; min-width: 0; font-weight: 400; }
+textarea { resize: vertical; }
+:focus-visible { outline: 3px solid #2b8750; outline-offset: 2px; }
+button { cursor: pointer; font-size: .875rem; font-weight: 700; min-height: 42px; }
+button:hover:not(:disabled) { border-color: #a4d5b3; background: var(--green-light); }
+button:disabled { opacity: .55; cursor: default; }
+button.primary { background: var(--green); color: #173b24; border-color: var(--green); }
+button.primary:hover:not(:disabled) { background: #55bf79; }
+button.danger { color: var(--danger); }
+button.danger:hover:not(:disabled) { background: #fff1f1; border-color: #e7b8b8; }
+.fields { display: grid; gap: .9rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.toolbar, nav, .recipe-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+.toolbar, nav { justify-content: space-between; }
+.catalog-heading { padding: clamp(1rem, 4vw, 2rem); }
+.catalog-heading p { margin: .4rem 0 0; color: var(--muted); font-size: .875rem; }
+#recipes { list-style: none; padding: 0; margin: 0; }
+#recipes li { padding: .9rem clamp(1rem, 4vw, 2rem); border-top: 1px solid var(--line); }
+#recipes li:hover { background: #fafdfb; }
+.recipe-info { flex: 1 1 15rem; min-width: 0; overflow-wrap: anywhere; }
+.recipe-info strong { display: block; margin-bottom: .25rem; }
+.recipe-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; color: var(--muted); }
+.recipe-kind { padding: .12rem .55rem; border-radius: 999px; background: #f0f1f0; color: #4a514a; font-size: .75rem; font-weight: 700; }
+.recipe-kind.official { color: var(--green-dark); background: var(--green-light); }
+nav { padding: 1rem clamp(1rem, 4vw, 2rem); border-top: 1px solid var(--line); color: var(--muted); font-size: .875rem; }
+fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 1rem; min-width: 0; }
+legend { padding: 0 .4rem; font-weight: 700; }
+.ingredient { background: #fafcfa; border: 1px solid var(--line); border-radius: 12px; padding: .9rem; margin-bottom: .75rem; }
+details { margin-block: .65rem; }
+summary { cursor: pointer; color: var(--green-dark); font-size: .875rem; }
+details .fields { margin-top: .65rem; }
+.check { display: flex; align-items: center; }
+.check input { width: auto; accent-color: var(--green-dark); }
+.editor-footer { display: flex; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--line); }
+#status { margin: 0 0 1rem; background: var(--green-light); color: var(--green-dark); border: 1px solid #c6e7cf; border-radius: 10px; padding: .75rem 1rem; overflow-wrap: anywhere; }
+#status[data-error="true"] { background: #fff1f1; color: var(--danger); border-color: #eccaca; }
+@media (max-width: 420px) {
+  .header-inner, main { padding-inline: .85rem; }
+  .header-inner { gap: .55rem; }
+  .header-label { padding-left: .55rem; font-size: .75rem; }
+  .brand { font-size: 1.05rem; }
+  .editor-footer button { width: 100%; }
+}

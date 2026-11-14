@@ -1,7 +1,7 @@
 import type { AlimentoBuscaRow, AlimentoRow } from "./alimentos.types.js";
 
 // Contrato de acesso aos dados. O Service não precisa saber se a fonte é
-// um arquivo local (modo desenvolvimento) ou o PostgreSQL do Supabase.
+// um arquivo local (modo desenvolvimento) ou o PostgreSQL.
 export abstract class AlimentosRepository {
   abstract buscar(busca: string): Promise<AlimentoBuscaRow[]>;
   abstract obterPorIds(ids: number[]): Promise<AlimentoRow[]>;

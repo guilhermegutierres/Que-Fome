@@ -179,10 +179,10 @@ export class RecipesService {
   }
 
   async create(
-    authorId: string,
+    authorId: string | null,
     dto: CreateRecipeDto,
   ): Promise<RecipeResponse> {
-    this.validateImageOwner(dto.imagemPath, authorId);
+    if (authorId !== null) this.validateImageOwner(dto.imagemPath, authorId);
     try {
       const created = await this.database.transaction(async (client) => {
         const inserted = await client.query<IdRow>(
@@ -190,7 +190,7 @@ export class RecipesService {
              tipo, autor_id, titulo, categoria, descricao,
              descricao_completa, tempo_minutos, porcoes, dificuldade, custo, imagem_path, tags
            ) VALUES (
-             'usuario', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+             $12, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
            )
            RETURNING id`,
           [
@@ -205,6 +205,7 @@ export class RecipesService {
             dto.custo ?? null,
             dto.imagemPath ?? null,
             dto.tags ?? [],
+            authorId === null ? "oficial" : "usuario",
           ],
         );
         const id = inserted.rows[0].id;
@@ -226,10 +227,10 @@ export class RecipesService {
 
   async update(
     id: string,
-    authorId: string,
+    authorId: string | null,
     dto: UpdateRecipeDto,
   ): Promise<RecipeResponse> {
-    this.validateImageOwner(dto.imagemPath, authorId);
+    if (authorId !== null) this.validateImageOwner(dto.imagemPath, authorId);
     if (
       dto.ingredientes !== undefined &&
       dto.ingredientesDetalhados === undefined
@@ -258,7 +259,7 @@ export class RecipesService {
 
     try {
       const updatedRecipe = await this.database.transaction(async (client) => {
-        const values: unknown[] = [id, authorId];
+        const values: unknown[] = authorId === null ? [id] : [id, authorId];
         const assignments: string[] = [];
         const addAssignment = (column: string, value: unknown): void => {
           values.push(value);
@@ -285,7 +286,7 @@ export class RecipesService {
         const updated = await client.query<IdRow>(
           `UPDATE public.receitas
            SET ${assignments.join(", ")}
-           WHERE id = $1 AND tipo = 'usuario' AND autor_id = $2
+           WHERE id = $1${authorId === null ? "" : " AND tipo = 'usuario' AND autor_id = $2"}
            RETURNING id`,
           values,
         );
@@ -322,14 +323,14 @@ export class RecipesService {
     }
   }
 
-  async delete(id: string, authorId: string): Promise<void> {
+  async delete(id: string, authorId: string | null): Promise<void> {
     try {
       await this.database.transaction(async (client) => {
         const result = await client.query<IdRow>(
           `DELETE FROM public.receitas
-           WHERE id = $1 AND tipo = 'usuario' AND autor_id = $2
+           WHERE id = $1${authorId === null ? "" : " AND tipo = 'usuario' AND autor_id = $2"}
            RETURNING id`,
-          [id, authorId],
+          authorId === null ? [id] : [id, authorId],
         );
         if (!result.rows[0])
           throw new NotFoundException("Receita não encontrada.");

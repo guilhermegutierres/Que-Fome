@@ -6,26 +6,7 @@ CREATE TABLE public.profiles (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT pg_catalog.now()
 );
 
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
-REVOKE ALL ON TABLE public.profiles
-  FROM PUBLIC, anon, authenticated, service_role;
-GRANT SELECT (id, nome, avatar_path, created_at, updated_at)
-  ON TABLE public.profiles TO authenticated;
-GRANT UPDATE (nome, avatar_path) ON TABLE public.profiles TO authenticated;
-
-CREATE POLICY profiles_select_own
-  ON public.profiles
-  FOR SELECT
-  TO authenticated
-  USING ((SELECT auth.uid()) = id);
-
-CREATE POLICY profiles_update_own
-  ON public.profiles
-  FOR UPDATE
-  TO authenticated
-  USING ((SELECT auth.uid()) = id)
-  WITH CHECK ((SELECT auth.uid()) = id);
+REVOKE ALL ON TABLE public.profiles FROM PUBLIC;
 
 CREATE FUNCTION public.create_profile_for_new_user()
 RETURNS TRIGGER
@@ -50,7 +31,7 @@ END;
 $function$;
 
 REVOKE ALL ON FUNCTION public.create_profile_for_new_user()
-  FROM PUBLIC, anon, authenticated, service_role;
+  FROM PUBLIC;
 
 CREATE TRIGGER on_auth_user_created_create_profile
   AFTER INSERT ON auth.users
@@ -69,7 +50,7 @@ END;
 $function$;
 
 REVOKE ALL ON FUNCTION public.set_profile_updated_at()
-  FROM PUBLIC, anon, authenticated, service_role;
+  FROM PUBLIC;
 
 CREATE TRIGGER profiles_set_updated_at
   BEFORE UPDATE ON public.profiles

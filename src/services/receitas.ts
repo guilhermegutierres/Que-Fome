@@ -1,12 +1,5 @@
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
-
 const URL_API = (import.meta.env?.VITE_API_URL || "/api").replace(/\/$/, "");
 const LIMITE_PAGINA = 100;
-
-interface ClienteSupabaseReceitas extends Pick<
-  SupabaseClient,
-  "auth" | "storage"
-> {}
 
 interface ReceitaApi {
   [campo: string]: unknown;
@@ -37,44 +30,19 @@ interface RespostaPaginadaReceitas {
 interface OpcoesServicoReceitas {
   baseUrl?: string;
   fetchImpl?: typeof fetch;
-  supabaseClient?: ClienteSupabaseReceitas | null;
-  cryptoImpl?: Pick<Crypto, "randomUUID"> | null;
-}
-
-interface OpcoesRequisicao extends RequestInit {
-  autenticado?: boolean;
 }
 
 function criarServicoReceitas({
   baseUrl = "/api",
   fetchImpl = globalThis.fetch,
-  supabaseClient = null,
-  cryptoImpl = globalThis.crypto,
 }: OpcoesServicoReceitas = {}) {
-  async function obterSessao(): Promise<Session> {
-    if (!supabaseClient) {
-      throw new Error("A autenticação não está configurada neste navegador.");
-    }
-
-    const { data, error } = await supabaseClient.auth.getSession();
-    if (error || !data?.session?.access_token) {
-      throw new Error("Sua sessão expirou. Entre novamente para continuar.");
-    }
-    return data.session;
-  }
-
   async function requisitar<T = unknown>(
     caminho: string,
-    { autenticado = false, ...opcoes }: OpcoesRequisicao = {},
+    opcoes: RequestInit = {},
   ): Promise<T | null> {
     const headers = new Headers(opcoes.headers || {});
     if (opcoes.body !== undefined) {
       headers.set("Content-Type", "application/json");
-    }
-    if (autenticado && supabaseClient) {
-      // Compatibilidade com os testes antigos; o app usa cookie de sessão local.
-      const sessao = await obterSessao();
-      headers.set("Authorization", `Bearer ${sessao.access_token}`);
     }
 
     let resposta: Response;
@@ -118,12 +86,7 @@ function criarServicoReceitas({
     if (/^[^/\\]+\.(?:jpe?g|png|webp|gif|avif)$/i.test(valor)) {
       return `/images/receitas/${encodeURIComponent(valor)}`;
     }
-    // Links do Storage antigo precisam dos arquivos originais.
-    if (/^(data|blob):/i.test(valor) || !supabaseClient) return null;
-    const { data } = supabaseClient.storage
-      .from("receitas")
-      .getPublicUrl(valor);
-    return data?.publicUrl || null;
+    return null;
   }
 
   function normalizarReceita(receita: ReceitaApi): ReceitaNormalizada {
@@ -150,7 +113,6 @@ function criarServicoReceitas({
 
   async function listarTodasAsPaginas(
     caminho: string,
-    autenticado = false,
   ): Promise<ReceitaNormalizada[]> {
     const receitas = new Map<string, ReceitaNormalizada>();
     let pagina = 1;
@@ -160,7 +122,6 @@ function criarServicoReceitas({
       const separador = caminho.includes("?") ? "&" : "?";
       const resposta = await requisitar<RespostaPaginadaReceitas>(
         `${caminho}${separador}page=${pagina}&limit=${LIMITE_PAGINA}`,
-        { autenticado },
       );
       const itens: unknown[] = Array.isArray(resposta?.items)
         ? resposta.items
@@ -193,13 +154,12 @@ function criarServicoReceitas({
   }
 
   async function obterReceitasPorAutor(): Promise<ReceitaNormalizada[]> {
-    return listarTodasAsPaginas("/recipes/mine", true);
+    return listarTodasAsPaginas("/recipes/mine");
   }
 
   async function salvarReceita(dados: unknown): Promise<ReceitaNormalizada> {
     const resposta = await requisitar<ReceitaApi>("/recipes", {
       method: "POST",
-      autenticado: true,
       body: JSON.stringify(dados),
     });
     return normalizarReceita(resposta as ReceitaApi);
@@ -213,7 +173,6 @@ function criarServicoReceitas({
       `/recipes/${encodeURIComponent(id)}`,
       {
         method: "PATCH",
-        autenticado: true,
         body: JSON.stringify(dados),
       },
     );
@@ -223,7 +182,6 @@ function criarServicoReceitas({
   async function excluirReceita(id: string): Promise<void> {
     await requisitar(`/recipes/${encodeURIComponent(id)}`, {
       method: "DELETE",
-      autenticado: true,
     });
   }
 
@@ -232,36 +190,11 @@ function criarServicoReceitas({
     usuarioId: string | null | undefined,
   ): Promise<string> {
     if (!usuarioId) throw new Error("Entre na sua conta para enviar imagens.");
-    if (!cryptoImpl?.randomUUID) {
-      throw new Error("Seu navegador não oferece suporte ao upload seguro.");
-    }
     if (!["image/jpeg", "image/png", "image/webp"].includes(arquivo.type)) {
       throw new Error("Selecione uma imagem JPG, PNG ou WEBP válida.");
     }
     if (arquivo.size > 5 * 1024 * 1024) {
       throw new Error("A imagem deve ter até 5 MB.");
-    }
-    if (supabaseClient) {
-      // Mantido apenas para testes de compatibilidade da versão anterior.
-      const sessao = await obterSessao();
-      if (sessao.user?.id !== usuarioId)
-        throw new Error("Não foi possível confirmar a autoria do upload.");
-      const ext =
-        arquivo.type === "image/png"
-          ? "png"
-          : arquivo.type === "image/webp"
-            ? "webp"
-            : "jpg";
-      const caminho = `${usuarioId}/${cryptoImpl.randomUUID()}.${ext}`;
-      const { error } = await supabaseClient.storage
-        .from("receitas")
-        .upload(caminho, arquivo, {
-          cacheControl: "3600",
-          contentType: arquivo.type,
-          upsert: false,
-        });
-      if (error) throw new Error("Não foi possível enviar a imagem.");
-      return caminho;
     }
     const formulario = new FormData();
     formulario.append("image", arquivo, "receita.jpg");

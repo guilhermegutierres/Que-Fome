@@ -22,14 +22,14 @@ try {
   );
   if (!tabela.rows[0].nome) {
     throw new Error(
-      "Tabela public.alimentos não existe. Execute a migration no SQL Editor do Supabase.",
+      "Tabela public.alimentos não existe. Restaure o banco de desenvolvimento ou aplique a migração no PostgreSQL.",
     );
   }
   const contagem = await cliente.query(
     "SELECT COUNT(*)::integer AS total FROM public.alimentos",
   );
   console.log(
-    `Supabase conectado; alimentos cadastrados: ${contagem.rows[0].total}.`,
+    `PostgreSQL conectado; alimentos cadastrados: ${contagem.rows[0].total}.`,
   );
   if (contagem.rows[0].total === 0) {
     console.log("A tabela está vazia. Importe a TACO com: npm run import:taco");

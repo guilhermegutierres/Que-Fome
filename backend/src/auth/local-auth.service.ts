@@ -120,7 +120,7 @@ export class LocalAuthService {
       throw new UnauthorizedException("E-mail ou senha incorretos.");
     }
     try {
-      // A extensão pgcrypto preserva os hashes bcrypt vindos do Supabase.
+      // A extensão pgcrypto preserva os hashes bcrypt existentes.
       const result = await this.database.query<UserRow>(
         `SELECT u.id, u.email, p.nome
            FROM auth.users u
